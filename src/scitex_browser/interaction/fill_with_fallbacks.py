@@ -15,7 +15,7 @@ __FILE__ = __file__
 
 from playwright.async_api import Page
 
-from scitex import logging
+import logging
 
 logger = logging.getLogger(__name__)
 

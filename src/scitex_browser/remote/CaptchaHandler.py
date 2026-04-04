@@ -41,8 +41,8 @@ from typing import Any, Dict, Optional, Union
 import aiohttp
 from playwright.async_api import Frame, Page
 
-from scitex import logging
-from scitex.logging import ScholarError
+import logging
+from scitex_browser._compat import ScholarError
 
 logger = logging.getLogger(__name__)
 

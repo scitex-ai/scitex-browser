@@ -13,7 +13,7 @@ __DIR__ = os.path.dirname(__FILE__)
 
 from playwright.async_api import Page
 
-from scitex import logging
+import logging
 
 logger = logging.getLogger(__name__)
 

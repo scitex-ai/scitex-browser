@@ -25,8 +25,8 @@ from typing import Any, Dict, List, Optional
 
 import aiohttp
 
-from scitex import logging
-from scitex.logging import ScholarError
+import logging
+from scitex_browser._compat import ScholarError
 
 logger = logging.getLogger(__name__)
 

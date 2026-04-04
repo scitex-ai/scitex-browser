@@ -34,7 +34,7 @@ IO:
 import argparse
 
 import scitex as stx
-from scitex import logging
+import logging
 
 logger = logging.getLogger(__name__)
 

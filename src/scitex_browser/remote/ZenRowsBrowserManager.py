@@ -19,8 +19,11 @@ from typing import Any, Dict, Optional
 
 from playwright.async_api import Browser, BrowserContext, Page, async_playwright
 
-from scitex import logging
-from scitex.scholar.browser.local.utils._CookieAutoAcceptor import CookieAutoAcceptor
+import logging
+try:
+    from scitex.scholar.browser.local.utils._CookieAutoAcceptor import CookieAutoAcceptor
+except ImportError:
+    CookieAutoAcceptor = None
 
 from ._ZenRowsAPIBrowser import ZenRowsAPIBrowser
 

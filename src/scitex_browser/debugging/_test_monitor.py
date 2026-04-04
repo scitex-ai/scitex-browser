@@ -31,7 +31,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import TYPE_CHECKING, Optional
 
-from scitex.config import get_paths
+from scitex_browser._compat import get_paths
 
 if TYPE_CHECKING:
     from playwright.sync_api import Page

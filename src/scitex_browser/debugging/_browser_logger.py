@@ -33,8 +33,8 @@ import argparse
 from datetime import datetime
 from pathlib import Path
 
-from scitex import logging
-from scitex.config import get_paths
+import logging
+from scitex_browser._compat import get_paths
 
 logger = logging.getLogger(__name__)
 
