@@ -1,0 +1,42 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "scitex-browser"
+version = "0.1.0"
+description = "Browser automation for scholarly paper access in the SciTeX ecosystem"
+readme = "README.md"
+license = "AGPL-3.0"
+requires-python = ">=3.10"
+authors = [
+    { name = "Yusuke Watanabe", email = "ywatanabe@scitex.ai" }
+]
+dependencies = []
+
+[project.optional-dependencies]
+playwright = ["playwright"]
+dev = ["pytest", "pytest-cov"]
+
+[project.urls]
+Homepage = "https://github.com/ywatanabe1989/scitex-browser"
+Repository = "https://github.com/ywatanabe1989/scitex-browser"
+Issues = "https://github.com/ywatanabe1989/scitex-browser/issues"
+
+[project.entry-points."scitex_dev.docs"]
+scitex-browser = "scitex_browser"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/scitex_browser"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-v --tb=short"
+
+[tool.ruff]
+line-length = 88
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I"]
+ignore = ["E501"]
