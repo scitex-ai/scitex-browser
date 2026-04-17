@@ -18,6 +18,9 @@ from pathlib import Path
 from typing import Dict, Optional
 
 import logging
+
+from scitex_browser._compat import get_scholar_config
+
 try:
     from scitex.scholar.config import ScholarConfig
 except ImportError:
@@ -60,7 +63,7 @@ class ChromeProfileManager:
 
     def __init__(self, profile_name: str, config: Optional[ScholarConfig] = None):
         self.name = self.__class__.__name__
-        self.config = config or ScholarConfig()
+        self.config = config or get_scholar_config()
         # Allow dynamic profile names (e.g., worker_0, worker_1) for parallel downloads
         # assert profile_name in self.AVAILABLE_PROFILE_NAMES
 

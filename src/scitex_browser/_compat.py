@@ -44,4 +44,22 @@ try:
 except ImportError:
     pass
 
+
+class _StandaloneScholarConfig:
+    """Minimal ScholarConfig replacement used when scitex.scholar is unavailable."""
+
+    def get_cache_chrome_dir(self, profile_name: str) -> Path:
+        return _get_default_dir() / "cache" / "chrome" / profile_name
+
+
+def get_scholar_config():
+    """Return a ScholarConfig if scitex.scholar is importable, else a local fallback."""
+    try:
+        from scitex.scholar.config import ScholarConfig
+
+        return ScholarConfig()
+    except ImportError:
+        return _StandaloneScholarConfig()
+
+
 # EOF

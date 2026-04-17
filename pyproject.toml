@@ -28,6 +28,17 @@ scitex-browser = "scitex_browser"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/scitex_browser"]
+artifacts = ["src/scitex_browser/_skills/**"]
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "src/scitex_browser",
+    "src/scitex_browser/_skills/**",
+    "README.md",
+    "LICENSE",
+    "pyproject.toml",
+    "tests",
+]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
