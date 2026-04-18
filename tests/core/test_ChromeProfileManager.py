@@ -86,15 +86,21 @@ class TestChromeProfileManagerInit:
                 assert manager.profile_dir is not None
                 assert isinstance(manager.profile_dir, Path)
 
-    def test_init_with_custom_config(self):
-        """Should accept custom config."""
+    def test_init_with_chrome_cache_dir(self):
+        """Should accept explicit chrome_cache_dir without depending on scholar."""
         with tempfile.TemporaryDirectory() as tmpdir:
-            with patch.dict(os.environ, {"SCITEX_DIR": tmpdir}):
-                from scitex.scholar.config import ScholarConfig
+            manager = ChromeProfileManager("system", chrome_cache_dir=tmpdir)
+            assert manager.profile_dir == Path(tmpdir) / "system"
+            assert manager.profile_dir.exists()
 
-                config = ScholarConfig()
-                manager = ChromeProfileManager("system", config=config)
-                assert manager.config is config
+    def test_no_scholar_dependency(self):
+        """ChromeProfileManager source must not import scitex_scholar."""
+        import importlib
+
+        mod = importlib.import_module("scitex_browser.core.ChromeProfileManager")
+        src = Path(mod.__file__).read_text()
+        assert "scitex_scholar" not in src
+        assert "scitex.scholar" not in src
 
 
 class TestChromeProfileManagerExtensionStatuses:
@@ -295,29 +301,28 @@ class TestChromeProfileManagerExtensionArgs:
     def test_returns_empty_when_no_extensions(self):
         """Should return empty list when no extensions."""
         with tempfile.TemporaryDirectory() as tmpdir:
-            with patch.dict(os.environ, {"SCITEX_DIR": tmpdir}):
-                manager = ChromeProfileManager("system")
-                result = manager.get_extension_args()
-                assert result == []
+            manager = ChromeProfileManager(
+                "system", chrome_cache_dir=Path(tmpdir) / "chrome"
+            )
+            result = manager.get_extension_args()
+            assert result == []
 
     def test_returns_extension_args_when_installed(self):
         """Should return proper args when extensions installed."""
         with tempfile.TemporaryDirectory() as tmpdir:
-            with patch.dict(os.environ, {"SCITEX_DIR": tmpdir}):
-                manager = ChromeProfileManager("system")
+            manager = ChromeProfileManager(
+                "system", chrome_cache_dir=Path(tmpdir) / "chrome"
+            )
 
-                # Create fake extension
-                ext_id = manager.EXTENSIONS["zotero_connector"]["id"]
-                ext_path = (
-                    manager.profile_dir / "Default" / "Extensions" / ext_id / "1.0.0"
-                )
-                ext_path.mkdir(parents=True)
-                (ext_path / "manifest.json").write_text("{}")
+            ext_id = manager.EXTENSIONS["zotero_connector"]["id"]
+            ext_path = manager.profile_dir / "Default" / "Extensions" / ext_id / "1.0.0"
+            ext_path.mkdir(parents=True)
+            (ext_path / "manifest.json").write_text("{}")
 
-                result = manager.get_extension_args()
-                assert len(result) > 0
-                assert any("--load-extension=" in arg for arg in result)
-                assert any("--enable-extensions" in arg for arg in result)
+            result = manager.get_extension_args()
+            assert len(result) > 0
+            assert any("--load-extension=" in arg for arg in result)
+            assert any("--enable-extensions" in arg for arg in result)
 
 
 class TestChromeProfileManagerSyncFromProfile:
@@ -326,31 +331,24 @@ class TestChromeProfileManagerSyncFromProfile:
     def test_returns_false_for_missing_source(self):
         """Should return False when source profile doesn't exist."""
         with tempfile.TemporaryDirectory() as tmpdir:
-            with patch.dict(os.environ, {"SCITEX_DIR": tmpdir}):
-                manager = ChromeProfileManager("test_profile")
-                # Mock get_cache_chrome_dir to return a non-existent path
-                # (normally it creates the directory via _ensure_directory)
-                nonexistent_path = Path(tmpdir) / "nonexistent" / "path"
-                with patch.object(
-                    manager.config,
-                    "get_cache_chrome_dir",
-                    return_value=nonexistent_path,
-                ):
-                    result = manager.sync_from_profile("source_profile")
-                    assert result is False
+            manager = ChromeProfileManager(
+                "test_profile",
+                chrome_cache_dir=Path(tmpdir) / "chrome",
+            )
+            # "source_profile" was never created under chrome_cache_dir.
+            result = manager.sync_from_profile("source_profile")
+            assert result is False
 
     def test_creates_target_directory(self):
         """Should create target directory if needed."""
         with tempfile.TemporaryDirectory() as tmpdir:
             with patch.dict(os.environ, {"SCITEX_DIR": tmpdir}):
-                # Create source profile
-                from scitex.scholar.config import ScholarConfig
-
-                config = ScholarConfig()
-                source_dir = config.get_cache_chrome_dir("system")
+                source_dir = Path(tmpdir) / "chrome" / "system"
                 source_dir.mkdir(parents=True, exist_ok=True)
 
-                manager = ChromeProfileManager("new_profile", config=config)
+                manager = ChromeProfileManager(
+                    "new_profile", chrome_cache_dir=Path(tmpdir) / "chrome"
+                )
 
                 # Mock rsync to succeed
                 with patch("subprocess.run") as mock_run:
@@ -365,13 +363,12 @@ class TestChromeProfileManagerSyncFromProfile:
         """Should use rsync with correct arguments."""
         with tempfile.TemporaryDirectory() as tmpdir:
             with patch.dict(os.environ, {"SCITEX_DIR": tmpdir}):
-                from scitex.scholar.config import ScholarConfig
-
-                config = ScholarConfig()
-                source_dir = config.get_cache_chrome_dir("system")
+                source_dir = Path(tmpdir) / "chrome" / "system"
                 source_dir.mkdir(parents=True, exist_ok=True)
 
-                manager = ChromeProfileManager("target", config=config)
+                manager = ChromeProfileManager(
+                    "target", chrome_cache_dir=Path(tmpdir) / "chrome"
+                )
 
                 with patch("subprocess.run") as mock_run:
                     mock_run.return_value = MagicMock(
@@ -388,13 +385,12 @@ class TestChromeProfileManagerSyncFromProfile:
         """Should return True on successful sync."""
         with tempfile.TemporaryDirectory() as tmpdir:
             with patch.dict(os.environ, {"SCITEX_DIR": tmpdir}):
-                from scitex.scholar.config import ScholarConfig
-
-                config = ScholarConfig()
-                source_dir = config.get_cache_chrome_dir("system")
+                source_dir = Path(tmpdir) / "chrome" / "system"
                 source_dir.mkdir(parents=True, exist_ok=True)
 
-                manager = ChromeProfileManager("target", config=config)
+                manager = ChromeProfileManager(
+                    "target", chrome_cache_dir=Path(tmpdir) / "chrome"
+                )
 
                 with patch("subprocess.run") as mock_run:
                     mock_run.return_value = MagicMock(
@@ -410,13 +406,12 @@ class TestChromeProfileManagerSyncFromProfile:
             with patch.dict(os.environ, {"SCITEX_DIR": tmpdir}):
                 import subprocess
 
-                from scitex.scholar.config import ScholarConfig
-
-                config = ScholarConfig()
-                source_dir = config.get_cache_chrome_dir("system")
+                source_dir = Path(tmpdir) / "chrome" / "system"
                 source_dir.mkdir(parents=True, exist_ok=True)
 
-                manager = ChromeProfileManager("target", config=config)
+                manager = ChromeProfileManager(
+                    "target", chrome_cache_dir=Path(tmpdir) / "chrome"
+                )
 
                 with patch("subprocess.run") as mock_run:
                     error = subprocess.CalledProcessError(23, "rsync")

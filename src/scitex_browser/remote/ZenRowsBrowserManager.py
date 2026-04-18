@@ -15,13 +15,13 @@ __DIR__ = os.path.dirname(__FILE__)
 Browser manager specifically for the ZenRows Scraping Browser service.
 This provides cloud-based Chrome instances with built-in anti-bot bypass.
 """
+import logging
 from typing import Any, Dict, Optional
 
-from playwright.async_api import Browser, BrowserContext, Page, async_playwright
+from playwright.async_api import Browser, BrowserContext, async_playwright
 
-import logging
 try:
-    from scitex.scholar.browser.local.utils._CookieAutoAcceptor import CookieAutoAcceptor
+    from scitex_browser.automation.CookieHandler import CookieAutoAcceptor
 except ImportError:
     CookieAutoAcceptor = None
 
@@ -331,9 +331,7 @@ if __name__ == "__main__":
                     (
                         browser,
                         context,
-                    ) = (
-                        await browser_manager.get_authenticated_browser_and_context_async()
-                    )
+                    ) = await browser_manager.get_authenticated_browser_and_context_async()
                     pages_via_context = True
                 else:
                     # Direct browser access
@@ -412,20 +410,11 @@ if __name__ == "__main__":
         # Store all results
         all_results = {}
 
-        # Test 1: Regular browser (baseline) - if available
-        print("\nChecking if we can import local browser for comparison...")
-        try:
-            from scitex.scholar.browser import ScholarBrowserManager
-
-            print("Initializing regular browser for baseline comparison...")
-            regular_manager = ScholarBrowserManager(headless=False)
-            regular_results = await test_browser_async(
-                "Regular Browser", regular_manager
-            )
-            all_results["Regular Browser"] = regular_results
-        except Exception as e:
-            print(f"Regular browser not available for comparison: {e}")
-            all_results["Regular Browser"] = {"error": "Not available"}
+        # Test 1: Regular browser baseline removed during standalonization of
+        # scitex-browser. A one-way dep rule means this demo cannot reach back
+        # into scitex-scholar. If you want a baseline comparison, instantiate
+        # a plain Playwright context in the caller and pass its results here.
+        all_results["Regular Browser"] = {"error": "Not available"}
 
         # Test 2: ZenRows Remote Browser (default settings)
         print("\nInitializing ZenRows Remote Browser...")

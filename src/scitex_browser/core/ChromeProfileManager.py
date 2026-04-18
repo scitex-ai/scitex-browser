@@ -12,18 +12,20 @@ __DIR__ = os.path.dirname(__FILE__)
 
 __FILE__ = __file__
 
+import logging
 import subprocess
 import time
 from pathlib import Path
 from typing import Dict, Optional
 
-import logging
-try:
-    from scitex.scholar.config import ScholarConfig
-except ImportError:
-    ScholarConfig = None  # type: ignore[misc,assignment]
-
 logger = logging.getLogger(__name__)
+
+_DEFAULT_CHROME_CACHE = Path(
+    os.environ.get(
+        "SCITEX_BROWSER_CHROME_CACHE_DIR",
+        str(Path.home() / ".cache" / "scitex_browser" / "chrome"),
+    )
+)
 
 
 class ChromeProfileManager:
@@ -58,14 +60,41 @@ class ChromeProfileManager:
 
     AVAILABLE_PROFILE_NAMES = ["system", "extension", "auth", "stealth"]
 
-    def __init__(self, profile_name: str, config: Optional[ScholarConfig] = None):
-        self.name = self.__class__.__name__
-        self.config = config or ScholarConfig()
-        # Allow dynamic profile names (e.g., worker_0, worker_1) for parallel downloads
-        # assert profile_name in self.AVAILABLE_PROFILE_NAMES
+    def __init__(
+        self,
+        profile_name: str,
+        chrome_cache_dir: Optional[Path] = None,
+        config: Optional[object] = None,
+    ):
+        """Manage a Chrome profile for browser automation.
 
+        Parameters
+        ----------
+        profile_name
+            Subdirectory under ``chrome_cache_dir`` to use as the profile.
+        chrome_cache_dir
+            Base directory that holds profile subdirectories. Defaults to
+            ``$SCITEX_BROWSER_CHROME_CACHE_DIR`` or
+            ``~/.cache/scitex_browser/chrome``.
+        config
+            Deprecated. Back-compat shim: any object exposing
+            ``get_cache_chrome_dir(profile_name) -> Path`` is accepted so
+            callers passing ``ScholarConfig`` still work. Prefer
+            ``chrome_cache_dir``.
+        """
+        self.name = self.__class__.__name__
         self.profile_name = profile_name
-        self.profile_dir = self.config.get_cache_chrome_dir(profile_name)
+        if chrome_cache_dir is not None:
+            self._chrome_cache_dir = Path(chrome_cache_dir)
+            self.profile_dir = self._chrome_cache_dir / profile_name
+            self.profile_dir.mkdir(parents=True, exist_ok=True)
+        elif config is not None and hasattr(config, "get_cache_chrome_dir"):
+            self.profile_dir = config.get_cache_chrome_dir(profile_name)
+            self._chrome_cache_dir = self.profile_dir.parent
+        else:
+            self._chrome_cache_dir = _DEFAULT_CHROME_CACHE
+            self.profile_dir = self._chrome_cache_dir / profile_name
+            self.profile_dir.mkdir(parents=True, exist_ok=True)
         logger.debug(
             f"{self.name}: profile_name={self.profile_name}, profile_dir={self.profile_dir}"
         )
@@ -277,7 +306,7 @@ class ChromeProfileManager:
         """
         import time
 
-        source_profile_dir = self.config.get_cache_chrome_dir(source_profile_name)
+        source_profile_dir = self._chrome_cache_dir / source_profile_name
 
         if not source_profile_dir.exists():
             logger.error(f"Source profile does not exist: {source_profile_dir}")
@@ -407,7 +436,6 @@ def run_main() -> None:
     import sys
 
     import matplotlib.pyplot as plt
-
     import scitex as stx
 
     args = parse_args()
