@@ -1,96 +1,55 @@
 #!/usr/bin/env python3
 # SciTeX Browser Utilities - Universal Playwright helpers organized by category
 # ----------------------------------------
+#
+# playwright is a hard dependency (see pyproject.toml) so these imports are
+# unconditional. Submodules are imported explicitly first so that
+# ``scitex_browser.debugging`` / ``.pdf`` / ``.interaction`` are always
+# registered as attributes on the parent package — required by tests that
+# do unittest.mock.patch("scitex_browser.debugging.<module>.<name>").
 
-# All browser utilities require playwright - make them optional
-
-# Debugging utilities
-try:
-    from .debugging import (  # Sync browser session for zombie prevention; Test monitoring (periodic screenshots via scitex.capture); Visual cursor/feedback utilities (sync and async); Failure capture utilities (mirrors console-interceptor.ts)
-        SyncBrowserSession,
-        TestMonitor,
-        browser_logger,
-        collect_console_logs,
-        collect_console_logs_detailed,
-        create_browser_session_fixture,
-        create_failure_capture_fixture,
-        create_test_monitor_fixture,
-        format_logs_devtools_style,
-        highlight_element_async,
-        inject_visual_effects,
-        inject_visual_effects_async,
-        monitor_test,
-        save_failure_artifacts,
-        setup_console_interceptor,
-        show_click_effect,
-        show_click_effect_async,
-        show_cursor_at,
-        show_cursor_at_async,
-        show_grid_async,
-        show_step,
-        show_step_async,
-        show_test_result,
-        show_test_result_async,
-        sync_browser_session,
-    )
-except ImportError:
-    browser_logger = None
-    show_grid_async = None
-    highlight_element_async = None
-    inject_visual_effects = None
-    inject_visual_effects_async = None
-    show_cursor_at = None
-    show_cursor_at_async = None
-    show_click_effect = None
-    show_click_effect_async = None
-    show_step = None
-    show_step_async = None
-    show_test_result = None
-    show_test_result_async = None
-    setup_console_interceptor = None
-    collect_console_logs = None
-    collect_console_logs_detailed = None
-    format_logs_devtools_style = None
-    save_failure_artifacts = None
-    create_failure_capture_fixture = None
-    TestMonitor = None
-    create_test_monitor_fixture = None
-    monitor_test = None
-    SyncBrowserSession = None
-    sync_browser_session = None
-    create_browser_session_fixture = None
-
-# PDF utilities
-try:
-    from .pdf import (
-        click_download_for_chrome_pdf_viewer_async,
-        detect_chrome_pdf_viewer_async,
-        save_as_pdf,
-        save_as_pdf_async,
-    )
-except ImportError:
-    detect_chrome_pdf_viewer_async = None
-    click_download_for_chrome_pdf_viewer_async = None
-    save_as_pdf = None
-    save_as_pdf_async = None
-
-# Interaction utilities
-try:
-    from .interaction import (
-        PopupHandler,
-        click_center_async,
-        click_with_fallbacks_async,
-        close_popups_async,
-        ensure_no_popups_async,
-        fill_with_fallbacks_async,
-    )
-except ImportError:
-    click_center_async = None
-    click_with_fallbacks_async = None
-    fill_with_fallbacks_async = None
-    PopupHandler = None
-    close_popups_async = None
-    ensure_no_popups_async = None
+from . import debugging, interaction, pdf  # register submodules as attributes
+from .debugging import (
+    SyncBrowserSession,
+    TestMonitor,
+    browser_logger,
+    collect_console_logs,
+    collect_console_logs_detailed,
+    create_browser_session_fixture,
+    create_failure_capture_fixture,
+    create_test_monitor_fixture,
+    format_logs_devtools_style,
+    highlight_element_async,
+    inject_visual_effects,
+    inject_visual_effects_async,
+    monitor_test,
+    save_failure_artifacts,
+    setup_console_interceptor,
+    show_click_effect,
+    show_click_effect_async,
+    show_cursor_at,
+    show_cursor_at_async,
+    show_grid_async,
+    show_step,
+    show_step_async,
+    show_test_result,
+    show_test_result_async,
+    sync_browser_session,
+)
+from .interaction import (
+    PopupHandler,
+    click_center_async,
+    click_with_fallbacks_async,
+    close_popups_async,
+    ensure_no_popups_async,
+    fill_with_fallbacks_async,
+)
+from .pdf import (
+    click_download_for_chrome_pdf_viewer_async,
+    detect_chrome_pdf_viewer_async,
+    save_as_pdf,
+    save_as_pdf_async,
+)
 
 
 def is_playwright_cli_available() -> bool:
