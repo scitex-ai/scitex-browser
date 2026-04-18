@@ -33,7 +33,6 @@ IO:
 """Imports"""
 import argparse
 
-import scitex as stx
 import scitex_logging as logging
 
 logger = logging.getLogger(__name__)
@@ -108,7 +107,6 @@ def main(args):
 
 def parse_args() -> argparse.Namespace:
     """Parse command line arguments."""
-    import scitex as stx
 
     parser = argparse.ArgumentParser(description="Grid overlay utility for debugging")
     args = parser.parse_args()
@@ -122,7 +120,6 @@ def run_main() -> None:
     import sys
 
     import matplotlib.pyplot as plt
-
     import scitex as stx
 
     args = parse_args()
