@@ -18,7 +18,7 @@ import random
 
 from playwright.async_api import Browser, BrowserContext, Page
 
-import logging
+import scitex_logging as logging
 
 logger = logging.getLogger(__name__)
 

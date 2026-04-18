@@ -31,7 +31,7 @@ IO:
 """
 
 """Imports"""
-import logging
+import scitex_logging as logging
 
 logger = logging.getLogger(__name__)
 

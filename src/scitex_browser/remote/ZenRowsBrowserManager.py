@@ -15,7 +15,7 @@ __DIR__ = os.path.dirname(__FILE__)
 Browser manager specifically for the ZenRows Scraping Browser service.
 This provides cloud-based Chrome instances with built-in anti-bot bypass.
 """
-import logging
+import scitex_logging as logging
 from typing import Any, Dict, Optional
 
 from playwright.async_api import Browser, BrowserContext, async_playwright

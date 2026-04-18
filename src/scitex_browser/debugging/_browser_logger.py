@@ -33,7 +33,7 @@ import argparse
 from datetime import datetime
 from pathlib import Path
 
-import logging
+import scitex_logging as logging
 from scitex_browser._compat import get_paths
 
 logger = logging.getLogger(__name__)

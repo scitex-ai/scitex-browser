@@ -12,7 +12,7 @@ __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
 __FILE__ = __file__
-import logging
+import scitex_logging as logging
 
 from ..debugging import browser_logger
 

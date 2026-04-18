@@ -17,7 +17,7 @@ import json
 
 from playwright.async_api import Page
 
-import logging
+import scitex_logging as logging
 
 logger = logging.getLogger(__name__)
 

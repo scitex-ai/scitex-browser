@@ -36,7 +36,7 @@ IO:
 """Imports"""
 import argparse
 
-import logging
+import scitex_logging as logging
 
 logger = logging.getLogger(__name__)
 from ..debugging import browser_logger

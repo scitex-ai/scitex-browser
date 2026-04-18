@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "scitex-browser"
-version = "0.1.2"
+version = "0.1.3"
 description = "Browser automation for scholarly paper access in the SciTeX ecosystem"
 readme = "README.md"
 license = "AGPL-3.0"
@@ -12,10 +12,16 @@ requires-python = ">=3.10"
 authors = [
     { name = "Yusuke Watanabe", email = "ywatanabe@scitex.ai" }
 ]
-dependencies = []
+dependencies = [
+    # playwright is imported at module level throughout browser automation code.
+    # Without it, `pip install scitex-browser` yields an unimportable package.
+    "playwright>=1.40.0",
+    # scitex-logging provides .success/.fail logger methods used throughout
+    # ChromeProfileManager, interaction/, pdf/, remote/, stealth/, etc.
+    "scitex-logging>=0.1.0",
+]
 
 [project.optional-dependencies]
-playwright = ["playwright"]
 dev = ["pytest", "pytest-cov"]
 
 [project.urls]
