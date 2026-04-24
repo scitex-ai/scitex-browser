@@ -2,6 +2,8 @@
 
 Browser automation for scholarly paper access in the SciTeX ecosystem.
 
+> **Interfaces:** Python ⭐⭐⭐ (primary) · CLI — · MCP — · Skills ⭐⭐ · Hook — · HTTP —
+
 ## Problem and Solution
 
 
