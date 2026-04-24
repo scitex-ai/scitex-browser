@@ -8,6 +8,9 @@ version = "0.1.8"
 description = "Browser automation for scholarly paper access in the SciTeX ecosystem"
 readme = "README.md"
 license = "AGPL-3.0-only"
+classifiers = [
+    "License :: OSI Approved :: GNU Affero General Public License v3",
+]
 requires-python = ">=3.10"
 authors = [
     { name = "Yusuke Watanabe", email = "ywatanabe@scitex.ai" }
