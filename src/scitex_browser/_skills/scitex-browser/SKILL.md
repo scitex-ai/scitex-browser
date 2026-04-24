@@ -55,3 +55,8 @@ rule and empirical verification table.
 * [05_pdf-capture](05_pdf-capture.md) — `save_as_pdf`, Chrome PDF viewer
 * [06_interaction](06_interaction.md) — Resilient click/fill, popup handling
 * [07_auth-stealth-remote](07_auth-stealth-remote.md) — OAuth, stealth, ZenRows, CAPTCHA
+
+
+## Environment
+
+- [08_env-vars.md](08_env-vars.md) — SCITEX_* env vars read by scitex-browser at runtime
