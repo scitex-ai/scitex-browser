@@ -59,6 +59,9 @@ testpaths = ["tests"]
 addopts = "-v --tb=short"
 asyncio_mode = "auto"
 
+[tool.scitex-linter]
+library_dirs = ["src", "tests", "examples"]
+
 [tool.ruff]
 line-length = 88
 target-version = "py310"
