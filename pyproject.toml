@@ -16,6 +16,7 @@ authors = [
     { name = "Yusuke Watanabe", email = "ywatanabe@scitex.ai" }
 ]
 dependencies = [
+    "aiohttp",
     # playwright is imported at module level throughout browser automation code.
     # Without it, `pip install scitex-browser` yields an unimportable package.
     "playwright>=1.40.0",
