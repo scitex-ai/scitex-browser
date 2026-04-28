@@ -4,12 +4,11 @@ build-backend = "hatchling.build"
 
 [project]
 name = "scitex-browser"
-version = "0.1.13"
+version = "0.1.14"
 description = "Browser automation for scholarly paper access in the SciTeX ecosystem"
 readme = "README.md"
 license = "AGPL-3.0-only"
 classifiers = [
-    "License :: OSI Approved :: GNU Affero General Public License v3",
 ]
 requires-python = ">=3.10"
 authors = [
