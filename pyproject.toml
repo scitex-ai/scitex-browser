@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "scitex-browser"
-version = "0.1.10"
+version = "0.1.11"
 description = "Browser automation for scholarly paper access in the SciTeX ecosystem"
 readme = "README.md"
 license = "AGPL-3.0-only"
@@ -23,6 +23,7 @@ dependencies = [
     # scitex-logging provides .success/.fail logger methods used throughout
     # ChromeProfileManager, interaction/, pdf/, remote/, stealth/, etc.
     "scitex-logging>=0.1.0",
+    "scitex-config>=0.3.0",
 ]
 
 [project.optional-dependencies]
