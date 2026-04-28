@@ -18,18 +18,14 @@ from pathlib import Path
 from typing import Dict, Optional
 
 import scitex_logging as logging
+from scitex_config._ecosystem import local_state
 
 logger = logging.getLogger(__name__)
 
 _DEFAULT_CHROME_CACHE = Path(
     os.environ.get(
         "SCITEX_BROWSER_CHROME_CACHE_DIR",
-        str(
-            Path(os.environ.get("SCITEX_DIR", Path.home() / ".scitex"))
-            / "browser"
-            / "runtime"
-            / "chrome"
-        ),
+        str(local_state.runtime_path("browser", "chrome")),
     )
 )
 
