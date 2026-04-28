@@ -12,18 +12,24 @@ __DIR__ = os.path.dirname(__FILE__)
 
 __FILE__ = __file__
 
-import scitex_logging as logging
 import subprocess
 import time
 from pathlib import Path
 from typing import Dict, Optional
+
+import scitex_logging as logging
 
 logger = logging.getLogger(__name__)
 
 _DEFAULT_CHROME_CACHE = Path(
     os.environ.get(
         "SCITEX_BROWSER_CHROME_CACHE_DIR",
-        str(Path.home() / ".cache" / "scitex_browser" / "chrome"),
+        str(
+            Path(os.environ.get("SCITEX_DIR", Path.home() / ".scitex"))
+            / "browser"
+            / "runtime"
+            / "chrome"
+        ),
     )
 )
 
@@ -75,7 +81,7 @@ class ChromeProfileManager:
         chrome_cache_dir
             Base directory that holds profile subdirectories. Defaults to
             ``$SCITEX_BROWSER_CHROME_CACHE_DIR`` or
-            ``~/.cache/scitex_browser/chrome``.
+            ``$SCITEX_DIR/browser/runtime/chrome`` (``~/.scitex/browser/runtime/chrome`` by default).
         config
             Deprecated. Back-compat shim: any object exposing
             ``get_cache_chrome_dir(profile_name) -> Path`` is accepted so
