@@ -1,3 +1,9 @@
+---
+name: auth-stealth-remote
+description: Auth, Stealth, Remote — see file body for details.
+tags: [scitex-browser, scitex-package]
+---
+
 # Auth, Stealth, Remote
 
 ## auth — Google OAuth

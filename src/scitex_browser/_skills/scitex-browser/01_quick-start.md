@@ -1,3 +1,9 @@
+---
+name: quick-start
+description: Quick Start — see file body for details.
+tags: [scitex-browser, scitex-package]
+---
+
 # Quick Start
 
 ## Save any page as PDF

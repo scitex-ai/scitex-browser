@@ -1,3 +1,9 @@
+---
+name: python-api
+description: Python API — see file body for details.
+tags: [scitex-browser, scitex-package]
+---
+
 # Python API
 
 All symbols listed here are re-exported from top-level `scitex_browser`.

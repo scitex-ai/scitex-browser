@@ -1,3 +1,9 @@
+---
+name: session-lifecycle
+description: Session Lifecycle — see file body for details.
+tags: [scitex-browser, scitex-package]
+---
+
 # Session Lifecycle
 
 Two flavors ship: the synchronous zombie-safe session (small tests,

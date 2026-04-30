@@ -1,3 +1,9 @@
+---
+name: interaction
+description: Interaction Helpers — see file body for details.
+tags: [scitex-browser, scitex-package]
+---
+
 # Interaction Helpers
 
 Resilient click/fill wrappers and popup dismissal, for flaky pages.

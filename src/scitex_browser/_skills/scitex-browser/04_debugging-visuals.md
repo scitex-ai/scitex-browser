@@ -1,3 +1,9 @@
+---
+name: debugging-visuals
+description: Debugging Visuals — see file body for details.
+tags: [scitex-browser, scitex-package]
+---
+
 # Debugging Visuals
 
 Inject CSS/JS overlays into a Playwright page so humans can follow what

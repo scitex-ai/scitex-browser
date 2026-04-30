@@ -1,3 +1,9 @@
+---
+name: pdf-capture
+description: PDF Capture — see file body for details.
+tags: [scitex-browser, scitex-package]
+---
+
 # PDF Capture
 
 Save any page (including the built-in Chrome PDF viewer) to a local

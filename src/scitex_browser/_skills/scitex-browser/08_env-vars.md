@@ -1,6 +1,7 @@
 ---
 name: scitex-browser-env-vars
 description: Environment variables read by scitex-browser at import / runtime. Follow SCITEX_<MODULE>_* convention — see general/10_arch-environment-variables.md.
+tags: [scitex-browser, scitex-package]
 ---
 
 # scitex-browser — Environment Variables
