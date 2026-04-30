@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 try:
     from importlib.metadata import version as _v, PackageNotFoundError
     try:
@@ -70,6 +72,7 @@ def is_playwright_cli_available() -> bool:
 
 
 __all__ = [
+    "__version__",
     # Utilities
     "is_playwright_cli_available",
     # Debugging
