@@ -48,6 +48,7 @@ all = [
 Homepage = "https://github.com/ywatanabe1989/scitex-browser"
 Repository = "https://github.com/ywatanabe1989/scitex-browser"
 Issues = "https://github.com/ywatanabe1989/scitex-browser/issues"
+Documentation = "https://scitex-browser.readthedocs.io"
 
 [project.entry-points."scitex_dev.skills"]
 scitex-browser = "scitex_browser"
