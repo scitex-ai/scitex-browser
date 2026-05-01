@@ -1,0 +1,851 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>scitex_browser.core.ChromeProfileManager &mdash; SciTeX Browser v0.1.14</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=468bc497"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            SciTeX Browser
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../installation.html#requirements">Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../installation.html#basic-installation">Basic Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../installation.html#development">Development</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/core.html">scitex_browser.core</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.BrowserMixin"><code class="docutils literal notranslate"><span class="pre">BrowserMixin</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.BrowserMixin.__init__"><code class="docutils literal notranslate"><span class="pre">BrowserMixin.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.BrowserMixin.get_shared_browser_async"><code class="docutils literal notranslate"><span class="pre">BrowserMixin.get_shared_browser_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.BrowserMixin.cleanup_shared_browser_async"><code class="docutils literal notranslate"><span class="pre">BrowserMixin.cleanup_shared_browser_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.BrowserMixin.get_browser_async"><code class="docutils literal notranslate"><span class="pre">BrowserMixin.get_browser_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.BrowserMixin.new_page"><code class="docutils literal notranslate"><span class="pre">BrowserMixin.new_page()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.BrowserMixin.close_page"><code class="docutils literal notranslate"><span class="pre">BrowserMixin.close_page()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.BrowserMixin.close_all_pages"><code class="docutils literal notranslate"><span class="pre">BrowserMixin.close_all_pages()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.BrowserMixin.create_browser_context_async"><code class="docutils literal notranslate"><span class="pre">BrowserMixin.create_browser_context_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.BrowserMixin.get_session_async"><code class="docutils literal notranslate"><span class="pre">BrowserMixin.get_session_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.BrowserMixin.close_session"><code class="docutils literal notranslate"><span class="pre">BrowserMixin.close_session()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.BrowserMixin.accept_cookies_async"><code class="docutils literal notranslate"><span class="pre">BrowserMixin.accept_cookies_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.BrowserMixin.interactive"><code class="docutils literal notranslate"><span class="pre">BrowserMixin.interactive()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.BrowserMixin.stealth"><code class="docutils literal notranslate"><span class="pre">BrowserMixin.stealth()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.BrowserMixin.show_async"><code class="docutils literal notranslate"><span class="pre">BrowserMixin.show_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.BrowserMixin.hide_async"><code class="docutils literal notranslate"><span class="pre">BrowserMixin.hide_async()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.ChromeProfileManager"><code class="docutils literal notranslate"><span class="pre">ChromeProfileManager</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.ChromeProfileManager.EXTENSIONS"><code class="docutils literal notranslate"><span class="pre">ChromeProfileManager.EXTENSIONS</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.ChromeProfileManager.AVAILABLE_PROFILE_NAMES"><code class="docutils literal notranslate"><span class="pre">ChromeProfileManager.AVAILABLE_PROFILE_NAMES</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.ChromeProfileManager.__init__"><code class="docutils literal notranslate"><span class="pre">ChromeProfileManager.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.ChromeProfileManager._get_extension_statuses"><code class="docutils literal notranslate"><span class="pre">ChromeProfileManager._get_extension_statuses()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.ChromeProfileManager.check_extensions_installed"><code class="docutils literal notranslate"><span class="pre">ChromeProfileManager.check_extensions_installed()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.ChromeProfileManager._get_installed_extension_paths"><code class="docutils literal notranslate"><span class="pre">ChromeProfileManager._get_installed_extension_paths()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.ChromeProfileManager.get_extension_args"><code class="docutils literal notranslate"><span class="pre">ChromeProfileManager.get_extension_args()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.ChromeProfileManager.install_extensions_manually_if_not_installed_async"><code class="docutils literal notranslate"><span class="pre">ChromeProfileManager.install_extensions_manually_if_not_installed_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.ChromeProfileManager.handle_runtime_extension_dialogs_async"><code class="docutils literal notranslate"><span class="pre">ChromeProfileManager.handle_runtime_extension_dialogs_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.ChromeProfileManager.sync_from_profile"><code class="docutils literal notranslate"><span class="pre">ChromeProfileManager.sync_from_profile()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/auth.html">scitex_browser.auth</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/auth.html#scitex_browser.auth.GoogleAuthHelper"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/auth.html#scitex_browser.auth.GoogleAuthHelper.__init__"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/auth.html#scitex_browser.auth.GoogleAuthHelper._log"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper._log()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/auth.html#scitex_browser.auth.GoogleAuthHelper.login_via_google_button"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper.login_via_google_button()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/auth.html#scitex_browser.auth.GoogleAuthHelper._handle_google_popup"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper._handle_google_popup()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/auth.html#scitex_browser.auth.GoogleAuthHelper._fill_email"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper._fill_email()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/auth.html#scitex_browser.auth.GoogleAuthHelper._fill_password"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper._fill_password()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/auth.html#scitex_browser.auth.GoogleAuthHelper._handle_consent_screens"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper._handle_consent_screens()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/auth.html#scitex_browser.auth.GoogleAuthHelper._wait_for_2fa"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper._wait_for_2fa()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/auth.html#scitex_browser.auth.GoogleAuthHelper.is_logged_in"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper.is_logged_in()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/auth.html#scitex_browser.auth.google_login"><code class="docutils literal notranslate"><span class="pre">google_login()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/interaction.html">scitex_browser.interaction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/interaction.html#scitex_browser.interaction.click_center_async"><code class="docutils literal notranslate"><span class="pre">click_center_async()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/interaction.html#scitex_browser.interaction.click_with_fallbacks_async"><code class="docutils literal notranslate"><span class="pre">click_with_fallbacks_async()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/interaction.html#scitex_browser.interaction.fill_with_fallbacks_async"><code class="docutils literal notranslate"><span class="pre">fill_with_fallbacks_async()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/interaction.html#scitex_browser.interaction.PopupHandler"><code class="docutils literal notranslate"><span class="pre">PopupHandler</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/interaction.html#scitex_browser.interaction.PopupHandler.COOKIE_SELECTORS"><code class="docutils literal notranslate"><span class="pre">PopupHandler.COOKIE_SELECTORS</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/interaction.html#scitex_browser.interaction.PopupHandler.CLOSE_SELECTORS"><code class="docutils literal notranslate"><span class="pre">PopupHandler.CLOSE_SELECTORS</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/interaction.html#scitex_browser.interaction.PopupHandler.MODAL_SELECTORS"><code class="docutils literal notranslate"><span class="pre">PopupHandler.MODAL_SELECTORS</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/interaction.html#scitex_browser.interaction.PopupHandler.__init__"><code class="docutils literal notranslate"><span class="pre">PopupHandler.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/interaction.html#scitex_browser.interaction.PopupHandler.detect_popups"><code class="docutils literal notranslate"><span class="pre">PopupHandler.detect_popups()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/interaction.html#scitex_browser.interaction.PopupHandler.handle_cookie_popup"><code class="docutils literal notranslate"><span class="pre">PopupHandler.handle_cookie_popup()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/interaction.html#scitex_browser.interaction.PopupHandler.close_popup"><code class="docutils literal notranslate"><span class="pre">PopupHandler.close_popup()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/interaction.html#scitex_browser.interaction.PopupHandler.handle_all_popups"><code class="docutils literal notranslate"><span class="pre">PopupHandler.handle_all_popups()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/interaction.html#scitex_browser.interaction.PopupHandler.wait_and_handle_popups"><code class="docutils literal notranslate"><span class="pre">PopupHandler.wait_and_handle_popups()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/interaction.html#scitex_browser.interaction.close_popups_async"><code class="docutils literal notranslate"><span class="pre">close_popups_async()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/interaction.html#scitex_browser.interaction.ensure_no_popups_async"><code class="docutils literal notranslate"><span class="pre">ensure_no_popups_async()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/debugging.html">scitex_browser.debugging</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.show_grid_async"><code class="docutils literal notranslate"><span class="pre">show_grid_async()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.highlight_element_async"><code class="docutils literal notranslate"><span class="pre">highlight_element_async()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.inject_visual_effects"><code class="docutils literal notranslate"><span class="pre">inject_visual_effects()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.inject_visual_effects_async"><code class="docutils literal notranslate"><span class="pre">inject_visual_effects_async()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.show_cursor_at"><code class="docutils literal notranslate"><span class="pre">show_cursor_at()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.show_cursor_at_async"><code class="docutils literal notranslate"><span class="pre">show_cursor_at_async()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.show_click_effect"><code class="docutils literal notranslate"><span class="pre">show_click_effect()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.show_click_effect_async"><code class="docutils literal notranslate"><span class="pre">show_click_effect_async()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.show_step"><code class="docutils literal notranslate"><span class="pre">show_step()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.show_step_async"><code class="docutils literal notranslate"><span class="pre">show_step_async()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.show_test_result"><code class="docutils literal notranslate"><span class="pre">show_test_result()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.show_test_result_async"><code class="docutils literal notranslate"><span class="pre">show_test_result_async()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.setup_console_interceptor"><code class="docutils literal notranslate"><span class="pre">setup_console_interceptor()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.collect_console_logs"><code class="docutils literal notranslate"><span class="pre">collect_console_logs()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.collect_console_logs_detailed"><code class="docutils literal notranslate"><span class="pre">collect_console_logs_detailed()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.format_logs_devtools_style"><code class="docutils literal notranslate"><span class="pre">format_logs_devtools_style()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.save_failure_artifacts"><code class="docutils literal notranslate"><span class="pre">save_failure_artifacts()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.create_failure_capture_fixture"><code class="docutils literal notranslate"><span class="pre">create_failure_capture_fixture()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.TestMonitor"><code class="docutils literal notranslate"><span class="pre">TestMonitor</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.TestMonitor.__init__"><code class="docutils literal notranslate"><span class="pre">TestMonitor.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.TestMonitor.start"><code class="docutils literal notranslate"><span class="pre">TestMonitor.start()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.TestMonitor.stop"><code class="docutils literal notranslate"><span class="pre">TestMonitor.stop()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.TestMonitor.get_status"><code class="docutils literal notranslate"><span class="pre">TestMonitor.get_status()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.TestMonitor.take_snapshot"><code class="docutils literal notranslate"><span class="pre">TestMonitor.take_snapshot()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.TestMonitor.create_gif"><code class="docutils literal notranslate"><span class="pre">TestMonitor.create_gif()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.TestMonitor.get_screenshots"><code class="docutils literal notranslate"><span class="pre">TestMonitor.get_screenshots()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.create_test_monitor_fixture"><code class="docutils literal notranslate"><span class="pre">create_test_monitor_fixture()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.monitor_test"><code class="docutils literal notranslate"><span class="pre">monitor_test()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.SyncBrowserSession"><code class="docutils literal notranslate"><span class="pre">SyncBrowserSession</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.SyncBrowserSession.__init__"><code class="docutils literal notranslate"><span class="pre">SyncBrowserSession.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.SyncBrowserSession.__enter__"><code class="docutils literal notranslate"><span class="pre">SyncBrowserSession.__enter__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.SyncBrowserSession.__exit__"><code class="docutils literal notranslate"><span class="pre">SyncBrowserSession.__exit__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.SyncBrowserSession._kill_process_tree"><code class="docutils literal notranslate"><span class="pre">SyncBrowserSession._kill_process_tree()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.SyncBrowserSession._emergency_cleanup"><code class="docutils literal notranslate"><span class="pre">SyncBrowserSession._emergency_cleanup()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.SyncBrowserSession.kill_zombie_browsers"><code class="docutils literal notranslate"><span class="pre">SyncBrowserSession.kill_zombie_browsers()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.sync_browser_session"><code class="docutils literal notranslate"><span class="pre">sync_browser_session()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.create_browser_session_fixture"><code class="docutils literal notranslate"><span class="pre">create_browser_session_fixture()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/pdf.html">scitex_browser.pdf</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/pdf.html#scitex_browser.pdf.save_as_pdf"><code class="docutils literal notranslate"><span class="pre">save_as_pdf()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/pdf.html#scitex_browser.pdf.save_as_pdf_async"><code class="docutils literal notranslate"><span class="pre">save_as_pdf_async()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/pdf.html#scitex_browser.pdf.detect_chrome_pdf_viewer_async"><code class="docutils literal notranslate"><span class="pre">detect_chrome_pdf_viewer_async()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/pdf.html#scitex_browser.pdf.click_download_for_chrome_pdf_viewer_async"><code class="docutils literal notranslate"><span class="pre">click_download_for_chrome_pdf_viewer_async()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/stealth.html">scitex_browser.stealth</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.StealthManager"><code class="docutils literal notranslate"><span class="pre">StealthManager</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.StealthManager.__init__"><code class="docutils literal notranslate"><span class="pre">StealthManager.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.StealthManager.get_random_user_agent"><code class="docutils literal notranslate"><span class="pre">StealthManager.get_random_user_agent()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.StealthManager.get_random_viewport"><code class="docutils literal notranslate"><span class="pre">StealthManager.get_random_viewport()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.StealthManager.get_stealth_options"><code class="docutils literal notranslate"><span class="pre">StealthManager.get_stealth_options()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.StealthManager.get_stealth_options_additional"><code class="docutils literal notranslate"><span class="pre">StealthManager.get_stealth_options_additional()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.StealthManager.get_network_evasion_headers"><code class="docutils literal notranslate"><span class="pre">StealthManager.get_network_evasion_headers()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.StealthManager.add_human_behavior_async"><code class="docutils literal notranslate"><span class="pre">StealthManager.add_human_behavior_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.StealthManager.handle_cloudflare_challenge_async"><code class="docutils literal notranslate"><span class="pre">StealthManager.handle_cloudflare_challenge_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.StealthManager.get_init_script"><code class="docutils literal notranslate"><span class="pre">StealthManager.get_init_script()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.StealthManager.get_dimension_spoofing_script"><code class="docutils literal notranslate"><span class="pre">StealthManager.get_dimension_spoofing_script()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.StealthManager.human_delay_async"><code class="docutils literal notranslate"><span class="pre">StealthManager.human_delay_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.StealthManager.human_click_async"><code class="docutils literal notranslate"><span class="pre">StealthManager.human_click_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.StealthManager.human_mouse_move_async"><code class="docutils literal notranslate"><span class="pre">StealthManager.human_mouse_move_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.StealthManager.human_scroll_async"><code class="docutils literal notranslate"><span class="pre">StealthManager.human_scroll_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.StealthManager.human_type_async"><code class="docutils literal notranslate"><span class="pre">StealthManager.human_type_async()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.HumanBehavior"><code class="docutils literal notranslate"><span class="pre">HumanBehavior</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.HumanBehavior.__init__"><code class="docutils literal notranslate"><span class="pre">HumanBehavior.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.HumanBehavior.random_delay_async"><code class="docutils literal notranslate"><span class="pre">HumanBehavior.random_delay_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.HumanBehavior.reading_delay_async"><code class="docutils literal notranslate"><span class="pre">HumanBehavior.reading_delay_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.HumanBehavior.mouse_move_async"><code class="docutils literal notranslate"><span class="pre">HumanBehavior.mouse_move_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.HumanBehavior.hover_and_click_async"><code class="docutils literal notranslate"><span class="pre">HumanBehavior.hover_and_click_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.HumanBehavior.scroll_async"><code class="docutils literal notranslate"><span class="pre">HumanBehavior.scroll_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.HumanBehavior.type_text_async"><code class="docutils literal notranslate"><span class="pre">HumanBehavior.type_text_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.HumanBehavior.random_mouse_movement_async"><code class="docutils literal notranslate"><span class="pre">HumanBehavior.random_mouse_movement_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.HumanBehavior.pdf_viewing_behavior_async"><code class="docutils literal notranslate"><span class="pre">HumanBehavior.pdf_viewing_behavior_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.HumanBehavior.wait_for_download_async"><code class="docutils literal notranslate"><span class="pre">HumanBehavior.wait_for_download_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.HumanBehavior.form_interaction_async"><code class="docutils literal notranslate"><span class="pre">HumanBehavior.form_interaction_async()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/automation.html">scitex_browser.automation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/automation.html#scitex_browser.automation.CookieAutoAcceptor"><code class="docutils literal notranslate"><span class="pre">CookieAutoAcceptor</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/automation.html#scitex_browser.automation.CookieAutoAcceptor.__init__"><code class="docutils literal notranslate"><span class="pre">CookieAutoAcceptor.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/automation.html#scitex_browser.automation.CookieAutoAcceptor.inject_auto_acceptor_async"><code class="docutils literal notranslate"><span class="pre">CookieAutoAcceptor.inject_auto_acceptor_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/automation.html#scitex_browser.automation.CookieAutoAcceptor.get_auto_acceptor_script"><code class="docutils literal notranslate"><span class="pre">CookieAutoAcceptor.get_auto_acceptor_script()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/automation.html#scitex_browser.automation.CookieAutoAcceptor.check_cookie_banner_exists_async"><code class="docutils literal notranslate"><span class="pre">CookieAutoAcceptor.check_cookie_banner_exists_async()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/collaboration.html">scitex_browser.collaboration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.__init__"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.start"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.start()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.navigate"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.navigate()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.screenshot"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.screenshot()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.wait"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.wait()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.close"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.close()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.__aenter__"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.__aenter__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.__aexit__"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.__aexit__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession._log_event"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession._log_event()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession._auto_screenshot_loop"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession._auto_screenshot_loop()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.get_info"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.get_info()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.type"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.type()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.click"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.click()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.hover"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.hover()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.press"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.press()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.scroll_down"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.scroll_down()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.scroll_to"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.scroll_to()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.wait_for"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.wait_for()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.wait_for_text"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.wait_for_text()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.wait_for_url"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.wait_for_url()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.get_text"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.get_text()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.get_value"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.get_value()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.is_visible"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.is_visible()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.ask"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.ask()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.confirm"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.confirm()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SessionConfig"><code class="docutils literal notranslate"><span class="pre">SessionConfig</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SessionConfig.session_id"><code class="docutils literal notranslate"><span class="pre">SessionConfig.session_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SessionConfig.browser_type"><code class="docutils literal notranslate"><span class="pre">SessionConfig.browser_type</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SessionConfig.headless"><code class="docutils literal notranslate"><span class="pre">SessionConfig.headless</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SessionConfig.viewport"><code class="docutils literal notranslate"><span class="pre">SessionConfig.viewport</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SessionConfig.user_data_dir"><code class="docutils literal notranslate"><span class="pre">SessionConfig.user_data_dir</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SessionConfig.enable_screenshots"><code class="docutils literal notranslate"><span class="pre">SessionConfig.enable_screenshots</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SessionConfig.screenshot_interval"><code class="docutils literal notranslate"><span class="pre">SessionConfig.screenshot_interval</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SessionConfig.__init__"><code class="docutils literal notranslate"><span class="pre">SessionConfig.__init__()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.VisualFeedback"><code class="docutils literal notranslate"><span class="pre">VisualFeedback</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.VisualFeedback.__init__"><code class="docutils literal notranslate"><span class="pre">VisualFeedback.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.VisualFeedback.initialize"><code class="docutils literal notranslate"><span class="pre">VisualFeedback.initialize()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.VisualFeedback.show_message"><code class="docutils literal notranslate"><span class="pre">VisualFeedback.show_message()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.VisualFeedback.show_participant"><code class="docutils literal notranslate"><span class="pre">VisualFeedback.show_participant()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.VisualFeedback.show_action"><code class="docutils literal notranslate"><span class="pre">VisualFeedback.show_action()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.VisualFeedback.clear"><code class="docutils literal notranslate"><span class="pre">VisualFeedback.clear()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.CredentialManager"><code class="docutils literal notranslate"><span class="pre">CredentialManager</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.CredentialManager.__init__"><code class="docutils literal notranslate"><span class="pre">CredentialManager.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.CredentialManager.get_credential"><code class="docutils literal notranslate"><span class="pre">CredentialManager.get_credential()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.CredentialManager._is_terminal_available"><code class="docutils literal notranslate"><span class="pre">CredentialManager._is_terminal_available()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.CredentialManager._prompt_terminal"><code class="docutils literal notranslate"><span class="pre">CredentialManager._prompt_terminal()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.CredentialManager._prompt_browser"><code class="docutils literal notranslate"><span class="pre">CredentialManager._prompt_browser()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.CredentialManager.get_login_credentials"><code class="docutils literal notranslate"><span class="pre">CredentialManager.get_login_credentials()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.CredentialManager.clear_cache"><code class="docutils literal notranslate"><span class="pre">CredentialManager.clear_cache()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.GoogleAuthHelper"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.GoogleAuthHelper.__init__"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.GoogleAuthHelper._log"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper._log()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.GoogleAuthHelper.login_via_google_button"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper.login_via_google_button()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.GoogleAuthHelper._handle_google_popup"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper._handle_google_popup()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.GoogleAuthHelper._fill_email"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper._fill_email()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.GoogleAuthHelper._fill_password"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper._fill_password()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.GoogleAuthHelper._handle_consent_screens"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper._handle_consent_screens()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.GoogleAuthHelper._wait_for_2fa"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper._wait_for_2fa()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.GoogleAuthHelper.is_logged_in"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper.is_logged_in()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.google_login"><code class="docutils literal notranslate"><span class="pre">google_login()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/remote.html">scitex_browser.remote</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">SciTeX Browser</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">scitex_browser.core.ChromeProfileManager</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for scitex_browser.core.ChromeProfileManager</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python3</span>
+<span class="c1"># Timestamp: &quot;2025-10-11 07:53:19 (ywatanabe)&quot;</span>
+<span class="c1"># File: /home/ywatanabe/proj/scitex_repo/src/scitex/browser/core/ChromeProfileManager.py</span>
+<span class="c1"># ----------------------------------------</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+
+<span class="n">__FILE__</span> <span class="o">=</span> <span class="s2">&quot;./src/scitex/browser/core/ChromeProfileManager.py&quot;</span>
+<span class="n">__DIR__</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">__FILE__</span><span class="p">)</span>
+<span class="c1"># ----------------------------------------</span>
+
+<span class="n">__FILE__</span> <span class="o">=</span> <span class="vm">__file__</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">subprocess</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">scitex_logging</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scitex_config._ecosystem</span><span class="w"> </span><span class="kn">import</span> <span class="n">local_state</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+<span class="n">_DEFAULT_CHROME_CACHE</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+        <span class="s2">&quot;SCITEX_BROWSER_CHROME_CACHE_DIR&quot;</span><span class="p">,</span>
+        <span class="nb">str</span><span class="p">(</span><span class="n">local_state</span><span class="o">.</span><span class="n">runtime_path</span><span class="p">(</span><span class="s2">&quot;browser&quot;</span><span class="p">,</span> <span class="s2">&quot;chrome&quot;</span><span class="p">)),</span>
+    <span class="p">)</span>
+<span class="p">)</span>
+
+
+<div class="viewcode-block" id="ChromeProfileManager">
+<a class="viewcode-back" href="../../../api/core.html#scitex_browser.core.ChromeProfileManager">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ChromeProfileManager</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Manages Chrome profile especially extensions for automated literature search.&quot;&quot;&quot;</span>
+
+    <span class="n">EXTENSIONS</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;zotero_connector&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;ekhagklcjbdpajgpjgmbionohlpdbjgc&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Zotero Connector&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;lean_library&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;hghakoefmnkhamdhenpbogkeopjlkpoa&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Lean Library&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;popup_blocker&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;bkkbcggnhapdmkeljlodobbkopceiche&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Pop-up Blocker&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;accept_cookies&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;ofpnikijgfhlmmjlpkfaifhhdonchhoi&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Accept all cookies&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;2captcha_solver&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;ifibfemgeogfhoebkmokieepdoobkbpo&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;2Captcha Solver&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;captcha_solver&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;hlifkpholllijblknnmbfagnkjneagid&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;CAPTCHA Solver&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+    <span class="p">}</span>
+
+    <span class="n">AVAILABLE_PROFILE_NAMES</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;system&quot;</span><span class="p">,</span> <span class="s2">&quot;extension&quot;</span><span class="p">,</span> <span class="s2">&quot;auth&quot;</span><span class="p">,</span> <span class="s2">&quot;stealth&quot;</span><span class="p">]</span>
+
+<div class="viewcode-block" id="ChromeProfileManager.__init__">
+<a class="viewcode-back" href="../../../api/core.html#scitex_browser.core.ChromeProfileManager.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">profile_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">chrome_cache_dir</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Path</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">config</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">object</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Manage a Chrome profile for browser automation.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        profile_name</span>
+<span class="sd">            Subdirectory under ``chrome_cache_dir`` to use as the profile.</span>
+<span class="sd">        chrome_cache_dir</span>
+<span class="sd">            Base directory that holds profile subdirectories. Defaults to</span>
+<span class="sd">            ``$SCITEX_BROWSER_CHROME_CACHE_DIR`` or</span>
+<span class="sd">            ``$SCITEX_DIR/browser/runtime/chrome`` (``~/.scitex/browser/runtime/chrome`` by default).</span>
+<span class="sd">        config</span>
+<span class="sd">            Deprecated. Back-compat shim: any object exposing</span>
+<span class="sd">            ``get_cache_chrome_dir(profile_name) -&gt; Path`` is accepted so</span>
+<span class="sd">            callers passing ``ScholarConfig`` still work. Prefer</span>
+<span class="sd">            ``chrome_cache_dir``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">profile_name</span> <span class="o">=</span> <span class="n">profile_name</span>
+        <span class="k">if</span> <span class="n">chrome_cache_dir</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_chrome_cache_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">chrome_cache_dir</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">profile_dir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_chrome_cache_dir</span> <span class="o">/</span> <span class="n">profile_name</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">profile_dir</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">config</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="s2">&quot;get_cache_chrome_dir&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">profile_dir</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get_cache_chrome_dir</span><span class="p">(</span><span class="n">profile_name</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_chrome_cache_dir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">profile_dir</span><span class="o">.</span><span class="n">parent</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_chrome_cache_dir</span> <span class="o">=</span> <span class="n">_DEFAULT_CHROME_CACHE</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">profile_dir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_chrome_cache_dir</span> <span class="o">/</span> <span class="n">profile_name</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">profile_dir</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">: profile_name=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">profile_name</span><span class="si">}</span><span class="s2">, profile_dir=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">profile_dir</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ChromeProfileManager._get_extension_statuses">
+<a class="viewcode-back" href="../../../api/core.html#scitex_browser.core.ChromeProfileManager._get_extension_statuses">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_get_extension_statuses</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">profile_dir</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bool</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get detailed status of each extension.&quot;&quot;&quot;</span>
+        <span class="n">status</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">extensions_path</span> <span class="o">=</span> <span class="n">profile_dir</span> <span class="o">/</span> <span class="s2">&quot;Default&quot;</span> <span class="o">/</span> <span class="s2">&quot;Extensions&quot;</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">extensions_path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="k">return</span> <span class="nb">dict</span><span class="o">.</span><span class="n">fromkeys</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">EXTENSIONS</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">ext_info</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">EXTENSIONS</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">ext_id</span> <span class="o">=</span> <span class="n">ext_info</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span>
+            <span class="n">ext_dir</span> <span class="o">=</span> <span class="n">extensions_path</span> <span class="o">/</span> <span class="n">ext_id</span>
+
+            <span class="k">if</span> <span class="n">ext_dir</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+                <span class="n">version_dirs</span> <span class="o">=</span> <span class="p">[</span><span class="n">d</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">ext_dir</span><span class="o">.</span><span class="n">iterdir</span><span class="p">()</span> <span class="k">if</span> <span class="n">d</span><span class="o">.</span><span class="n">is_dir</span><span class="p">()]</span>
+                <span class="k">if</span> <span class="n">version_dirs</span><span class="p">:</span>
+                    <span class="n">latest_version</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">version_dirs</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+                    <span class="n">manifest_file</span> <span class="o">=</span> <span class="n">latest_version</span> <span class="o">/</span> <span class="s2">&quot;manifest.json&quot;</span>
+                    <span class="n">status</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">manifest_file</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">status</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">status</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="k">return</span> <span class="n">status</span></div>
+
+
+<div class="viewcode-block" id="ChromeProfileManager.check_extensions_installed">
+<a class="viewcode-back" href="../../../api/core.html#scitex_browser.core.ChromeProfileManager.check_extensions_installed">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">check_extensions_installed</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">profile_dir</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check installation status of all extensions from profile directory.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">profile_dir</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">profile_dir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">profile_dir</span>
+
+        <span class="n">status</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_extension_statuses</span><span class="p">(</span><span class="n">profile_dir</span><span class="p">)</span>
+        <span class="n">installed_count</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">status</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+
+        <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">ext_info</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">EXTENSIONS</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">ext_id</span> <span class="o">=</span> <span class="n">ext_info</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">status</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">ext_info</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">ext_id</span><span class="si">}</span><span class="s2">) not installed&quot;</span>
+                    <span class="p">)</span>
+
+            <span class="n">all_installed</span> <span class="o">=</span> <span class="n">installed_count</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">EXTENSIONS</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">all_installed</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">: All </span><span class="si">{</span><span class="n">installed_count</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">EXTENSIONS</span><span class="p">)</span><span class="si">}</span><span class="s2"> extensions installed&quot;</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">: Only </span><span class="si">{</span><span class="n">installed_count</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">EXTENSIONS</span><span class="p">)</span><span class="si">}</span><span class="s2"> extensions installed&quot;</span>
+                <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">installed_count</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">EXTENSIONS</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ChromeProfileManager._get_installed_extension_paths">
+<a class="viewcode-back" href="../../../api/core.html#scitex_browser.core.ChromeProfileManager._get_installed_extension_paths">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_get_installed_extension_paths</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">profile_dir</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get paths to installed extensions for --load-extension argument.&quot;&quot;&quot;</span>
+        <span class="n">extension_paths</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">extensions_dir</span> <span class="o">=</span> <span class="n">profile_dir</span> <span class="o">/</span> <span class="s2">&quot;Default&quot;</span> <span class="o">/</span> <span class="s2">&quot;Extensions&quot;</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">extensions_dir</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="k">return</span> <span class="n">extension_paths</span>
+
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">ext_info</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">EXTENSIONS</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">ext_id</span> <span class="o">=</span> <span class="n">ext_info</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span>
+            <span class="n">ext_dir</span> <span class="o">=</span> <span class="n">extensions_dir</span> <span class="o">/</span> <span class="n">ext_id</span>
+
+            <span class="k">if</span> <span class="n">ext_dir</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+                <span class="n">version_dirs</span> <span class="o">=</span> <span class="p">[</span><span class="n">d</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">ext_dir</span><span class="o">.</span><span class="n">iterdir</span><span class="p">()</span> <span class="k">if</span> <span class="n">d</span><span class="o">.</span><span class="n">is_dir</span><span class="p">()]</span>
+                <span class="k">if</span> <span class="n">version_dirs</span><span class="p">:</span>
+                    <span class="n">latest_version</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">version_dirs</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+                    <span class="n">manifest_file</span> <span class="o">=</span> <span class="n">latest_version</span> <span class="o">/</span> <span class="s2">&quot;manifest.json&quot;</span>
+                    <span class="k">if</span> <span class="n">manifest_file</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+                        <span class="n">extension_paths</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">latest_version</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">extension_paths</span></div>
+
+
+<div class="viewcode-block" id="ChromeProfileManager.get_extension_args">
+<a class="viewcode-back" href="../../../api/core.html#scitex_browser.core.ChromeProfileManager.get_extension_args">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_extension_args</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get extension args using appropriate profile directory.&quot;&quot;&quot;</span>
+        <span class="c1"># profile_dir = self._get_profile_dir_with_system_handling()</span>
+
+        <span class="n">extension_paths</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_installed_extension_paths</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">profile_dir</span><span class="p">)</span>
+
+        <span class="n">extension_args</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="n">extension_paths</span><span class="p">:</span>
+            <span class="n">extensions_list</span> <span class="o">=</span> <span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">extension_paths</span><span class="p">)</span>
+            <span class="n">extension_args</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
+                <span class="p">[</span>
+                    <span class="sa">f</span><span class="s2">&quot;--load-extension=</span><span class="si">{</span><span class="n">extensions_list</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                    <span class="sa">f</span><span class="s2">&quot;--disable-extensions-except=</span><span class="si">{</span><span class="n">extensions_list</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;--enable-extensions&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;--disable-extensions-file-access-check&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;--disable-web-security&quot;</span><span class="p">,</span>
+                <span class="p">]</span>
+            <span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Loading </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">extension_paths</span><span class="p">)</span><span class="si">}</span><span class="s2"> extensions from </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">profile_dir</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">extension_args</span></div>
+
+
+<div class="viewcode-block" id="ChromeProfileManager.install_extensions_manually_if_not_installed_async">
+<a class="viewcode-back" href="../../../api/core.html#scitex_browser.core.ChromeProfileManager.install_extensions_manually_if_not_installed_async">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">install_extensions_manually_if_not_installed_async</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Open Chrome for manual extension installation.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_extensions_installed</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">True</span>
+
+        <span class="c1"># Build Chrome command</span>
+        <span class="n">chrome_cmd</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s2">&quot;google-chrome&quot;</span><span class="p">,</span>
+            <span class="sa">f</span><span class="s2">&quot;--user-data-dir=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">profile_dir</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--enable-extensions&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--new-window&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--no-sandbox&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--disable-dev-shm-usage&quot;</span><span class="p">,</span>
+        <span class="p">]</span>
+        <span class="n">chrome_cmd_str</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">chrome_cmd</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Chrome command: </span><span class="si">{</span><span class="n">chrome_cmd_str</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Add extension URLs</span>
+        <span class="k">for</span> <span class="n">ext_info</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">EXTENSIONS</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;https://chrome.google.com/webstore/detail/</span><span class="si">{</span><span class="n">ext_info</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">chrome_cmd</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+
+        <span class="c1"># Set environment for WSL2</span>
+        <span class="n">env</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="k">if</span> <span class="s2">&quot;WSL_DISTRO_NAME&quot;</span> <span class="ow">in</span> <span class="n">env</span> <span class="ow">and</span> <span class="s2">&quot;DISPLAY&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">env</span><span class="p">:</span>
+            <span class="n">env</span><span class="p">[</span><span class="s2">&quot;DISPLAY&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;:0.0&quot;</span>
+
+        <span class="c1"># Try to launch Chrome</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">process</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">(</span>
+                <span class="n">chrome_cmd</span><span class="p">,</span>
+                <span class="n">env</span><span class="o">=</span><span class="n">env</span><span class="p">,</span>
+                <span class="n">stdout</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">DEVNULL</span><span class="p">,</span>
+                <span class="n">stderr</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">DEVNULL</span><span class="p">,</span>
+                <span class="n">start_new_session</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Launched Chrome with PID </span><span class="si">{</span><span class="n">process</span><span class="o">.</span><span class="n">pid</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">process</span><span class="o">.</span><span class="n">poll</span><span class="p">()</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Chrome exited immediately&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Chrome not found&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">60</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Chrome Extension Installation&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">60</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Install extensions from the opened Chrome tabs, then press Enter&quot;</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Press Enter when done...&quot;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">EOFError</span><span class="p">,</span> <span class="ne">KeyboardInterrupt</span><span class="p">):</span>
+            <span class="k">pass</span>
+
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_extensions_installed</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="s2">&quot;Extension installation complete!&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Extension installation may be incomplete&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="ChromeProfileManager.handle_runtime_extension_dialogs_async">
+<a class="viewcode-back" href="../../../api/core.html#scitex_browser.core.ChromeProfileManager.handle_runtime_extension_dialogs_async">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">handle_runtime_extension_dialogs_async</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">page</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Handle extension consent dialogs that appear at runtime.&quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">await</span> <span class="n">page</span><span class="o">.</span><span class="n">wait_for_timeout</span><span class="p">(</span><span class="mi">2000</span><span class="p">)</span>
+
+            <span class="n">consent_selectors</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="s1">&#39;button:has-text(&quot;Agree&quot;)&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;button:has-text(&quot;Accept&quot;)&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;button:has-text(&quot;Continue&quot;)&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;button:has-text(&quot;OK&quot;)&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;button:has-text(&quot;Dismiss&quot;)&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;button:has-text(&quot;Close&quot;)&#39;</span><span class="p">,</span>
+            <span class="p">]</span>
+
+            <span class="k">for</span> <span class="n">selector</span> <span class="ow">in</span> <span class="n">consent_selectors</span><span class="p">:</span>
+                <span class="n">element</span> <span class="o">=</span> <span class="k">await</span> <span class="n">page</span><span class="o">.</span><span class="n">query_selector</span><span class="p">(</span><span class="n">selector</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">element</span><span class="p">:</span>
+                    <span class="k">await</span> <span class="n">element</span><span class="o">.</span><span class="n">click</span><span class="p">()</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Clicked dialog: </span><span class="si">{</span><span class="n">selector</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="k">return</span> <span class="kc">True</span>
+
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error handling dialogs: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="ChromeProfileManager.sync_from_profile">
+<a class="viewcode-back" href="../../../api/core.html#scitex_browser.core.ChromeProfileManager.sync_from_profile">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">sync_from_profile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source_profile_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;system&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sync extensions and cookies from source profile to this profile using rsync.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            source_profile_name: Name of source profile (default: &quot;system&quot;)</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">            True if sync succeeded, False otherwise</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+
+        <span class="n">source_profile_dir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_chrome_cache_dir</span> <span class="o">/</span> <span class="n">source_profile_name</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">source_profile_dir</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Source profile does not exist: </span><span class="si">{</span><span class="n">source_profile_dir</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="c1"># Create target profile directory if needed</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">profile_dir</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Syncing profile: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">profile_name</span><span class="si">}</span><span class="s2"> ← </span><span class="si">{</span><span class="n">source_profile_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Source: </span><span class="si">{</span><span class="n">source_profile_dir</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Target: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">profile_dir</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Use rsync to sync entire profile directory</span>
+        <span class="c1"># -a: archive mode (preserves permissions, timestamps, symlinks)</span>
+        <span class="c1"># -u: skip files newer on receiver</span>
+        <span class="c1"># -v: verbose output</span>
+        <span class="c1"># --stats: show transfer statistics</span>
+        <span class="c1"># --delete: delete files not in source (keep profiles identical)</span>
+        <span class="n">rsync_cmd</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s2">&quot;rsync&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;-auv&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--stats&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--delete&quot;</span><span class="p">,</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">source_profile_dir</span><span class="si">}</span><span class="s2">/&quot;</span><span class="p">,</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">profile_dir</span><span class="si">}</span><span class="s2">/&quot;</span><span class="p">,</span>
+        <span class="p">]</span>
+
+        <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+                <span class="n">rsync_cmd</span><span class="p">,</span> <span class="n">capture_output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">check</span><span class="o">=</span><span class="kc">True</span>
+            <span class="p">)</span>
+
+            <span class="n">elapsed</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span>
+
+            <span class="c1"># Parse rsync stats</span>
+            <span class="n">stats_lines</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">transferred_files</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">total_size</span> <span class="o">=</span> <span class="mi">0</span>
+
+            <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">stats_lines</span><span class="p">:</span>
+                <span class="k">if</span> <span class="s2">&quot;Number of regular files transferred:&quot;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+                    <span class="c1"># Remove commas from number (e.g., &quot;3,301&quot; -&gt; &quot;3301&quot;)</span>
+                    <span class="n">transferred_files</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">))</span>
+                <span class="k">elif</span> <span class="s2">&quot;Total transferred file size:&quot;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+                    <span class="n">size_str</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="n">total_size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">size_str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">))</span>
+
+            <span class="c1"># Log detailed results</span>
+            <span class="k">if</span> <span class="n">transferred_files</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">size_mb</span> <span class="o">=</span> <span class="n">total_size</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1024</span> <span class="o">*</span> <span class="mi">1024</span><span class="p">)</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">success</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Profile sync complete: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">profile_name</span><span class="si">}</span><span class="s2"> ← </span><span class="si">{</span><span class="n">source_profile_name</span><span class="si">}</span><span class="s2"> &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;(</span><span class="si">{</span><span class="n">transferred_files</span><span class="si">}</span><span class="s2"> files, </span><span class="si">{</span><span class="n">size_mb</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">MB, </span><span class="si">{</span><span class="n">elapsed</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">s)&quot;</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Profile sync complete: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">profile_name</span><span class="si">}</span><span class="s2"> ← </span><span class="si">{</span><span class="n">source_profile_name</span><span class="si">}</span><span class="s2"> &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;(no changes, </span><span class="si">{</span><span class="n">elapsed</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">s)&quot;</span>
+                <span class="p">)</span>
+
+            <span class="c1"># Log verbose output at debug level</span>
+            <span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">stdout</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;rsync output:</span><span class="se">\n</span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">stdout</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="kc">True</span>
+
+        <span class="k">except</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">CalledProcessError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="c1"># Exit code 23 = partial transfer (often just timestamp issues on WSL)</span>
+            <span class="c1"># Check if it&#39;s only &quot;failed to set times&quot; errors - these are harmless</span>
+            <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">returncode</span> <span class="o">==</span> <span class="mi">23</span> <span class="ow">and</span> <span class="s2">&quot;failed to set times&quot;</span> <span class="ow">in</span> <span class="n">e</span><span class="o">.</span><span class="n">stderr</span><span class="p">:</span>
+                <span class="c1"># Files copied successfully, just couldn&#39;t preserve timestamps</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Profile sync complete (timestamps not preserved)&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="kc">True</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;rsync failed (exit code </span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">returncode</span><span class="si">}</span><span class="s2">): </span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">stderr</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;rsync command not found - please install rsync&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+</div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Demonstrate ChromeProfileManager functionality.&quot;&quot;&quot;</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">asyncio</span>
+
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">demo</span><span class="p">():</span>
+        <span class="n">manager</span> <span class="o">=</span> <span class="n">ChromeProfileManager</span><span class="p">(</span><span class="s2">&quot;system&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Check extensions</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Checking system profile extensions...&quot;</span><span class="p">)</span>
+        <span class="n">all_installed</span> <span class="o">=</span> <span class="n">manager</span><span class="o">.</span><span class="n">check_extensions_installed</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">all_installed</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Installing missing extensions...&quot;</span><span class="p">)</span>
+            <span class="k">await</span> <span class="n">manager</span><span class="o">.</span><span class="n">install_extensions_manually_if_not_installed_async</span><span class="p">(</span>
+                <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span>
+            <span class="p">)</span>
+
+        <span class="c1"># Demo profile sync</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Checking profile sync capability...&quot;</span><span class="p">)</span>
+        <span class="n">test_profile</span> <span class="o">=</span> <span class="n">ChromeProfileManager</span><span class="p">(</span><span class="s2">&quot;test_profile&quot;</span><span class="p">)</span>
+        <span class="n">success</span> <span class="o">=</span> <span class="n">test_profile</span><span class="o">.</span><span class="n">sync_from_profile</span><span class="p">(</span><span class="s2">&quot;system&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">success</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;✓ Profile sync test complete&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;✓ Profile sync skipped (source profile not ready)&quot;</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;✓ Demo complete&quot;</span><span class="p">)</span>
+
+    <span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">demo</span><span class="p">())</span>
+    <span class="k">return</span> <span class="mi">0</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">parse_args</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Parse command line arguments.&quot;&quot;&quot;</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">argparse</span>
+
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;ChromeProfileManager demo&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">run_main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Initialize scitex framework, run main function, and cleanup.&quot;&quot;&quot;</span>
+    <span class="k">global</span> <span class="n">CONFIG</span><span class="p">,</span> <span class="n">CC</span><span class="p">,</span> <span class="n">sys</span><span class="p">,</span> <span class="n">plt</span><span class="p">,</span> <span class="n">rng</span>
+
+    <span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+
+    <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">scitex</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">stx</span>
+
+    <span class="n">args</span> <span class="o">=</span> <span class="n">parse_args</span><span class="p">()</span>
+
+    <span class="n">CONFIG</span><span class="p">,</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">,</span> <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">,</span> <span class="n">plt</span><span class="p">,</span> <span class="n">CC</span><span class="p">,</span> <span class="n">rng</span> <span class="o">=</span> <span class="n">stx</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">start</span><span class="p">(</span>
+        <span class="n">sys</span><span class="p">,</span>
+        <span class="n">plt</span><span class="p">,</span>
+        <span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">,</span>
+        <span class="n">file</span><span class="o">=</span><span class="n">__FILE__</span><span class="p">,</span>
+        <span class="n">sdir_suffix</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">agg</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">exit_status</span> <span class="o">=</span> <span class="n">main</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+
+    <span class="n">stx</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">close</span><span class="p">(</span>
+        <span class="n">CONFIG</span><span class="p">,</span>
+        <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">notify</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">message</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="n">exit_status</span><span class="o">=</span><span class="n">exit_status</span><span class="p">,</span>
+    <span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">run_main</span><span class="p">()</span>
+
+<span class="c1"># python -m scitex_browser.core.ChromeProfileManager</span>
+
+<span class="c1"># EOF</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Yusuke Watanabe.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,894 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>scitex_browser.interaction.close_popups &mdash; SciTeX Browser v0.1.14</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=468bc497"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            SciTeX Browser
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../installation.html#requirements">Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../installation.html#basic-installation">Basic Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../installation.html#development">Development</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/core.html">scitex_browser.core</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.BrowserMixin"><code class="docutils literal notranslate"><span class="pre">BrowserMixin</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.BrowserMixin.__init__"><code class="docutils literal notranslate"><span class="pre">BrowserMixin.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.BrowserMixin.get_shared_browser_async"><code class="docutils literal notranslate"><span class="pre">BrowserMixin.get_shared_browser_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.BrowserMixin.cleanup_shared_browser_async"><code class="docutils literal notranslate"><span class="pre">BrowserMixin.cleanup_shared_browser_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.BrowserMixin.get_browser_async"><code class="docutils literal notranslate"><span class="pre">BrowserMixin.get_browser_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.BrowserMixin.new_page"><code class="docutils literal notranslate"><span class="pre">BrowserMixin.new_page()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.BrowserMixin.close_page"><code class="docutils literal notranslate"><span class="pre">BrowserMixin.close_page()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.BrowserMixin.close_all_pages"><code class="docutils literal notranslate"><span class="pre">BrowserMixin.close_all_pages()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.BrowserMixin.create_browser_context_async"><code class="docutils literal notranslate"><span class="pre">BrowserMixin.create_browser_context_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.BrowserMixin.get_session_async"><code class="docutils literal notranslate"><span class="pre">BrowserMixin.get_session_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.BrowserMixin.close_session"><code class="docutils literal notranslate"><span class="pre">BrowserMixin.close_session()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.BrowserMixin.accept_cookies_async"><code class="docutils literal notranslate"><span class="pre">BrowserMixin.accept_cookies_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.BrowserMixin.interactive"><code class="docutils literal notranslate"><span class="pre">BrowserMixin.interactive()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.BrowserMixin.stealth"><code class="docutils literal notranslate"><span class="pre">BrowserMixin.stealth()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.BrowserMixin.show_async"><code class="docutils literal notranslate"><span class="pre">BrowserMixin.show_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.BrowserMixin.hide_async"><code class="docutils literal notranslate"><span class="pre">BrowserMixin.hide_async()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.ChromeProfileManager"><code class="docutils literal notranslate"><span class="pre">ChromeProfileManager</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.ChromeProfileManager.EXTENSIONS"><code class="docutils literal notranslate"><span class="pre">ChromeProfileManager.EXTENSIONS</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.ChromeProfileManager.AVAILABLE_PROFILE_NAMES"><code class="docutils literal notranslate"><span class="pre">ChromeProfileManager.AVAILABLE_PROFILE_NAMES</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.ChromeProfileManager.__init__"><code class="docutils literal notranslate"><span class="pre">ChromeProfileManager.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.ChromeProfileManager._get_extension_statuses"><code class="docutils literal notranslate"><span class="pre">ChromeProfileManager._get_extension_statuses()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.ChromeProfileManager.check_extensions_installed"><code class="docutils literal notranslate"><span class="pre">ChromeProfileManager.check_extensions_installed()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.ChromeProfileManager._get_installed_extension_paths"><code class="docutils literal notranslate"><span class="pre">ChromeProfileManager._get_installed_extension_paths()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.ChromeProfileManager.get_extension_args"><code class="docutils literal notranslate"><span class="pre">ChromeProfileManager.get_extension_args()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.ChromeProfileManager.install_extensions_manually_if_not_installed_async"><code class="docutils literal notranslate"><span class="pre">ChromeProfileManager.install_extensions_manually_if_not_installed_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.ChromeProfileManager.handle_runtime_extension_dialogs_async"><code class="docutils literal notranslate"><span class="pre">ChromeProfileManager.handle_runtime_extension_dialogs_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.ChromeProfileManager.sync_from_profile"><code class="docutils literal notranslate"><span class="pre">ChromeProfileManager.sync_from_profile()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/auth.html">scitex_browser.auth</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/auth.html#scitex_browser.auth.GoogleAuthHelper"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/auth.html#scitex_browser.auth.GoogleAuthHelper.__init__"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/auth.html#scitex_browser.auth.GoogleAuthHelper._log"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper._log()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/auth.html#scitex_browser.auth.GoogleAuthHelper.login_via_google_button"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper.login_via_google_button()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/auth.html#scitex_browser.auth.GoogleAuthHelper._handle_google_popup"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper._handle_google_popup()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/auth.html#scitex_browser.auth.GoogleAuthHelper._fill_email"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper._fill_email()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/auth.html#scitex_browser.auth.GoogleAuthHelper._fill_password"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper._fill_password()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/auth.html#scitex_browser.auth.GoogleAuthHelper._handle_consent_screens"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper._handle_consent_screens()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/auth.html#scitex_browser.auth.GoogleAuthHelper._wait_for_2fa"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper._wait_for_2fa()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/auth.html#scitex_browser.auth.GoogleAuthHelper.is_logged_in"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper.is_logged_in()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/auth.html#scitex_browser.auth.google_login"><code class="docutils literal notranslate"><span class="pre">google_login()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/interaction.html">scitex_browser.interaction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/interaction.html#scitex_browser.interaction.click_center_async"><code class="docutils literal notranslate"><span class="pre">click_center_async()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/interaction.html#scitex_browser.interaction.click_with_fallbacks_async"><code class="docutils literal notranslate"><span class="pre">click_with_fallbacks_async()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/interaction.html#scitex_browser.interaction.fill_with_fallbacks_async"><code class="docutils literal notranslate"><span class="pre">fill_with_fallbacks_async()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/interaction.html#scitex_browser.interaction.PopupHandler"><code class="docutils literal notranslate"><span class="pre">PopupHandler</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/interaction.html#scitex_browser.interaction.PopupHandler.COOKIE_SELECTORS"><code class="docutils literal notranslate"><span class="pre">PopupHandler.COOKIE_SELECTORS</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/interaction.html#scitex_browser.interaction.PopupHandler.CLOSE_SELECTORS"><code class="docutils literal notranslate"><span class="pre">PopupHandler.CLOSE_SELECTORS</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/interaction.html#scitex_browser.interaction.PopupHandler.MODAL_SELECTORS"><code class="docutils literal notranslate"><span class="pre">PopupHandler.MODAL_SELECTORS</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/interaction.html#scitex_browser.interaction.PopupHandler.__init__"><code class="docutils literal notranslate"><span class="pre">PopupHandler.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/interaction.html#scitex_browser.interaction.PopupHandler.detect_popups"><code class="docutils literal notranslate"><span class="pre">PopupHandler.detect_popups()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/interaction.html#scitex_browser.interaction.PopupHandler.handle_cookie_popup"><code class="docutils literal notranslate"><span class="pre">PopupHandler.handle_cookie_popup()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/interaction.html#scitex_browser.interaction.PopupHandler.close_popup"><code class="docutils literal notranslate"><span class="pre">PopupHandler.close_popup()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/interaction.html#scitex_browser.interaction.PopupHandler.handle_all_popups"><code class="docutils literal notranslate"><span class="pre">PopupHandler.handle_all_popups()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/interaction.html#scitex_browser.interaction.PopupHandler.wait_and_handle_popups"><code class="docutils literal notranslate"><span class="pre">PopupHandler.wait_and_handle_popups()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/interaction.html#scitex_browser.interaction.close_popups_async"><code class="docutils literal notranslate"><span class="pre">close_popups_async()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/interaction.html#scitex_browser.interaction.ensure_no_popups_async"><code class="docutils literal notranslate"><span class="pre">ensure_no_popups_async()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/debugging.html">scitex_browser.debugging</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.show_grid_async"><code class="docutils literal notranslate"><span class="pre">show_grid_async()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.highlight_element_async"><code class="docutils literal notranslate"><span class="pre">highlight_element_async()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.inject_visual_effects"><code class="docutils literal notranslate"><span class="pre">inject_visual_effects()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.inject_visual_effects_async"><code class="docutils literal notranslate"><span class="pre">inject_visual_effects_async()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.show_cursor_at"><code class="docutils literal notranslate"><span class="pre">show_cursor_at()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.show_cursor_at_async"><code class="docutils literal notranslate"><span class="pre">show_cursor_at_async()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.show_click_effect"><code class="docutils literal notranslate"><span class="pre">show_click_effect()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.show_click_effect_async"><code class="docutils literal notranslate"><span class="pre">show_click_effect_async()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.show_step"><code class="docutils literal notranslate"><span class="pre">show_step()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.show_step_async"><code class="docutils literal notranslate"><span class="pre">show_step_async()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.show_test_result"><code class="docutils literal notranslate"><span class="pre">show_test_result()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.show_test_result_async"><code class="docutils literal notranslate"><span class="pre">show_test_result_async()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.setup_console_interceptor"><code class="docutils literal notranslate"><span class="pre">setup_console_interceptor()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.collect_console_logs"><code class="docutils literal notranslate"><span class="pre">collect_console_logs()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.collect_console_logs_detailed"><code class="docutils literal notranslate"><span class="pre">collect_console_logs_detailed()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.format_logs_devtools_style"><code class="docutils literal notranslate"><span class="pre">format_logs_devtools_style()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.save_failure_artifacts"><code class="docutils literal notranslate"><span class="pre">save_failure_artifacts()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.create_failure_capture_fixture"><code class="docutils literal notranslate"><span class="pre">create_failure_capture_fixture()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.TestMonitor"><code class="docutils literal notranslate"><span class="pre">TestMonitor</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.TestMonitor.__init__"><code class="docutils literal notranslate"><span class="pre">TestMonitor.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.TestMonitor.start"><code class="docutils literal notranslate"><span class="pre">TestMonitor.start()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.TestMonitor.stop"><code class="docutils literal notranslate"><span class="pre">TestMonitor.stop()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.TestMonitor.get_status"><code class="docutils literal notranslate"><span class="pre">TestMonitor.get_status()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.TestMonitor.take_snapshot"><code class="docutils literal notranslate"><span class="pre">TestMonitor.take_snapshot()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.TestMonitor.create_gif"><code class="docutils literal notranslate"><span class="pre">TestMonitor.create_gif()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.TestMonitor.get_screenshots"><code class="docutils literal notranslate"><span class="pre">TestMonitor.get_screenshots()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.create_test_monitor_fixture"><code class="docutils literal notranslate"><span class="pre">create_test_monitor_fixture()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.monitor_test"><code class="docutils literal notranslate"><span class="pre">monitor_test()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.SyncBrowserSession"><code class="docutils literal notranslate"><span class="pre">SyncBrowserSession</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.SyncBrowserSession.__init__"><code class="docutils literal notranslate"><span class="pre">SyncBrowserSession.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.SyncBrowserSession.__enter__"><code class="docutils literal notranslate"><span class="pre">SyncBrowserSession.__enter__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.SyncBrowserSession.__exit__"><code class="docutils literal notranslate"><span class="pre">SyncBrowserSession.__exit__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.SyncBrowserSession._kill_process_tree"><code class="docutils literal notranslate"><span class="pre">SyncBrowserSession._kill_process_tree()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.SyncBrowserSession._emergency_cleanup"><code class="docutils literal notranslate"><span class="pre">SyncBrowserSession._emergency_cleanup()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.SyncBrowserSession.kill_zombie_browsers"><code class="docutils literal notranslate"><span class="pre">SyncBrowserSession.kill_zombie_browsers()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.sync_browser_session"><code class="docutils literal notranslate"><span class="pre">sync_browser_session()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.create_browser_session_fixture"><code class="docutils literal notranslate"><span class="pre">create_browser_session_fixture()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/pdf.html">scitex_browser.pdf</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/pdf.html#scitex_browser.pdf.save_as_pdf"><code class="docutils literal notranslate"><span class="pre">save_as_pdf()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/pdf.html#scitex_browser.pdf.save_as_pdf_async"><code class="docutils literal notranslate"><span class="pre">save_as_pdf_async()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/pdf.html#scitex_browser.pdf.detect_chrome_pdf_viewer_async"><code class="docutils literal notranslate"><span class="pre">detect_chrome_pdf_viewer_async()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/pdf.html#scitex_browser.pdf.click_download_for_chrome_pdf_viewer_async"><code class="docutils literal notranslate"><span class="pre">click_download_for_chrome_pdf_viewer_async()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/stealth.html">scitex_browser.stealth</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.StealthManager"><code class="docutils literal notranslate"><span class="pre">StealthManager</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.StealthManager.__init__"><code class="docutils literal notranslate"><span class="pre">StealthManager.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.StealthManager.get_random_user_agent"><code class="docutils literal notranslate"><span class="pre">StealthManager.get_random_user_agent()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.StealthManager.get_random_viewport"><code class="docutils literal notranslate"><span class="pre">StealthManager.get_random_viewport()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.StealthManager.get_stealth_options"><code class="docutils literal notranslate"><span class="pre">StealthManager.get_stealth_options()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.StealthManager.get_stealth_options_additional"><code class="docutils literal notranslate"><span class="pre">StealthManager.get_stealth_options_additional()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.StealthManager.get_network_evasion_headers"><code class="docutils literal notranslate"><span class="pre">StealthManager.get_network_evasion_headers()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.StealthManager.add_human_behavior_async"><code class="docutils literal notranslate"><span class="pre">StealthManager.add_human_behavior_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.StealthManager.handle_cloudflare_challenge_async"><code class="docutils literal notranslate"><span class="pre">StealthManager.handle_cloudflare_challenge_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.StealthManager.get_init_script"><code class="docutils literal notranslate"><span class="pre">StealthManager.get_init_script()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.StealthManager.get_dimension_spoofing_script"><code class="docutils literal notranslate"><span class="pre">StealthManager.get_dimension_spoofing_script()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.StealthManager.human_delay_async"><code class="docutils literal notranslate"><span class="pre">StealthManager.human_delay_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.StealthManager.human_click_async"><code class="docutils literal notranslate"><span class="pre">StealthManager.human_click_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.StealthManager.human_mouse_move_async"><code class="docutils literal notranslate"><span class="pre">StealthManager.human_mouse_move_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.StealthManager.human_scroll_async"><code class="docutils literal notranslate"><span class="pre">StealthManager.human_scroll_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.StealthManager.human_type_async"><code class="docutils literal notranslate"><span class="pre">StealthManager.human_type_async()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.HumanBehavior"><code class="docutils literal notranslate"><span class="pre">HumanBehavior</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.HumanBehavior.__init__"><code class="docutils literal notranslate"><span class="pre">HumanBehavior.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.HumanBehavior.random_delay_async"><code class="docutils literal notranslate"><span class="pre">HumanBehavior.random_delay_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.HumanBehavior.reading_delay_async"><code class="docutils literal notranslate"><span class="pre">HumanBehavior.reading_delay_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.HumanBehavior.mouse_move_async"><code class="docutils literal notranslate"><span class="pre">HumanBehavior.mouse_move_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.HumanBehavior.hover_and_click_async"><code class="docutils literal notranslate"><span class="pre">HumanBehavior.hover_and_click_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.HumanBehavior.scroll_async"><code class="docutils literal notranslate"><span class="pre">HumanBehavior.scroll_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.HumanBehavior.type_text_async"><code class="docutils literal notranslate"><span class="pre">HumanBehavior.type_text_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.HumanBehavior.random_mouse_movement_async"><code class="docutils literal notranslate"><span class="pre">HumanBehavior.random_mouse_movement_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.HumanBehavior.pdf_viewing_behavior_async"><code class="docutils literal notranslate"><span class="pre">HumanBehavior.pdf_viewing_behavior_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.HumanBehavior.wait_for_download_async"><code class="docutils literal notranslate"><span class="pre">HumanBehavior.wait_for_download_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.HumanBehavior.form_interaction_async"><code class="docutils literal notranslate"><span class="pre">HumanBehavior.form_interaction_async()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/automation.html">scitex_browser.automation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/automation.html#scitex_browser.automation.CookieAutoAcceptor"><code class="docutils literal notranslate"><span class="pre">CookieAutoAcceptor</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/automation.html#scitex_browser.automation.CookieAutoAcceptor.__init__"><code class="docutils literal notranslate"><span class="pre">CookieAutoAcceptor.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/automation.html#scitex_browser.automation.CookieAutoAcceptor.inject_auto_acceptor_async"><code class="docutils literal notranslate"><span class="pre">CookieAutoAcceptor.inject_auto_acceptor_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/automation.html#scitex_browser.automation.CookieAutoAcceptor.get_auto_acceptor_script"><code class="docutils literal notranslate"><span class="pre">CookieAutoAcceptor.get_auto_acceptor_script()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/automation.html#scitex_browser.automation.CookieAutoAcceptor.check_cookie_banner_exists_async"><code class="docutils literal notranslate"><span class="pre">CookieAutoAcceptor.check_cookie_banner_exists_async()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/collaboration.html">scitex_browser.collaboration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.__init__"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.start"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.start()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.navigate"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.navigate()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.screenshot"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.screenshot()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.wait"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.wait()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.close"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.close()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.__aenter__"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.__aenter__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.__aexit__"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.__aexit__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession._log_event"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession._log_event()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession._auto_screenshot_loop"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession._auto_screenshot_loop()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.get_info"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.get_info()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.type"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.type()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.click"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.click()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.hover"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.hover()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.press"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.press()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.scroll_down"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.scroll_down()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.scroll_to"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.scroll_to()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.wait_for"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.wait_for()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.wait_for_text"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.wait_for_text()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.wait_for_url"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.wait_for_url()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.get_text"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.get_text()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.get_value"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.get_value()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.is_visible"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.is_visible()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.ask"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.ask()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.confirm"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.confirm()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SessionConfig"><code class="docutils literal notranslate"><span class="pre">SessionConfig</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SessionConfig.session_id"><code class="docutils literal notranslate"><span class="pre">SessionConfig.session_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SessionConfig.browser_type"><code class="docutils literal notranslate"><span class="pre">SessionConfig.browser_type</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SessionConfig.headless"><code class="docutils literal notranslate"><span class="pre">SessionConfig.headless</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SessionConfig.viewport"><code class="docutils literal notranslate"><span class="pre">SessionConfig.viewport</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SessionConfig.user_data_dir"><code class="docutils literal notranslate"><span class="pre">SessionConfig.user_data_dir</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SessionConfig.enable_screenshots"><code class="docutils literal notranslate"><span class="pre">SessionConfig.enable_screenshots</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SessionConfig.screenshot_interval"><code class="docutils literal notranslate"><span class="pre">SessionConfig.screenshot_interval</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SessionConfig.__init__"><code class="docutils literal notranslate"><span class="pre">SessionConfig.__init__()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.VisualFeedback"><code class="docutils literal notranslate"><span class="pre">VisualFeedback</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.VisualFeedback.__init__"><code class="docutils literal notranslate"><span class="pre">VisualFeedback.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.VisualFeedback.initialize"><code class="docutils literal notranslate"><span class="pre">VisualFeedback.initialize()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.VisualFeedback.show_message"><code class="docutils literal notranslate"><span class="pre">VisualFeedback.show_message()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.VisualFeedback.show_participant"><code class="docutils literal notranslate"><span class="pre">VisualFeedback.show_participant()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.VisualFeedback.show_action"><code class="docutils literal notranslate"><span class="pre">VisualFeedback.show_action()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.VisualFeedback.clear"><code class="docutils literal notranslate"><span class="pre">VisualFeedback.clear()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.CredentialManager"><code class="docutils literal notranslate"><span class="pre">CredentialManager</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.CredentialManager.__init__"><code class="docutils literal notranslate"><span class="pre">CredentialManager.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.CredentialManager.get_credential"><code class="docutils literal notranslate"><span class="pre">CredentialManager.get_credential()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.CredentialManager._is_terminal_available"><code class="docutils literal notranslate"><span class="pre">CredentialManager._is_terminal_available()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.CredentialManager._prompt_terminal"><code class="docutils literal notranslate"><span class="pre">CredentialManager._prompt_terminal()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.CredentialManager._prompt_browser"><code class="docutils literal notranslate"><span class="pre">CredentialManager._prompt_browser()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.CredentialManager.get_login_credentials"><code class="docutils literal notranslate"><span class="pre">CredentialManager.get_login_credentials()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.CredentialManager.clear_cache"><code class="docutils literal notranslate"><span class="pre">CredentialManager.clear_cache()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.GoogleAuthHelper"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.GoogleAuthHelper.__init__"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.GoogleAuthHelper._log"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper._log()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.GoogleAuthHelper.login_via_google_button"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper.login_via_google_button()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.GoogleAuthHelper._handle_google_popup"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper._handle_google_popup()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.GoogleAuthHelper._fill_email"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper._fill_email()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.GoogleAuthHelper._fill_password"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper._fill_password()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.GoogleAuthHelper._handle_consent_screens"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper._handle_consent_screens()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.GoogleAuthHelper._wait_for_2fa"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper._wait_for_2fa()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.GoogleAuthHelper.is_logged_in"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper.is_logged_in()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.google_login"><code class="docutils literal notranslate"><span class="pre">google_login()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/remote.html">scitex_browser.remote</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">SciTeX Browser</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">scitex_browser.interaction.close_popups</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for scitex_browser.interaction.close_popups</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python3</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1"># Timestamp: &quot;2025-10-08 04:22:00 (ywatanabe)&quot;</span>
+<span class="c1"># File: /home/ywatanabe/proj/scitex_repo/src/scitex/browser/interaction/handle_popups.py</span>
+<span class="c1"># ----------------------------------------</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+
+<span class="n">__FILE__</span> <span class="o">=</span> <span class="vm">__file__</span>
+<span class="n">__DIR__</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">__FILE__</span><span class="p">)</span>
+<span class="c1"># ----------------------------------------</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Universal popup handler for browser automation.</span>
+
+<span class="sd">Detects and closes various types of popups including:</span>
+<span class="sd">- Cookie consent banners</span>
+<span class="sd">- Newsletter/subscription modals</span>
+<span class="sd">- AI assistant promotions</span>
+<span class="sd">- Authentication prompts</span>
+<span class="sd">- General modal dialogs</span>
+
+<span class="sd">This is a universal utility that works across any website.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">asyncio</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">playwright.async_api</span><span class="w"> </span><span class="kn">import</span> <span class="n">ElementHandle</span><span class="p">,</span> <span class="n">Page</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">scitex_logging</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">logging</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="PopupHandler">
+<a class="viewcode-back" href="../../../api/interaction.html#scitex_browser.interaction.PopupHandler">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">PopupHandler</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Handle various types of popups on web pages.&quot;&quot;&quot;</span>
+
+    <span class="c1"># Common selectors for different popup types</span>
+    <span class="n">COOKIE_SELECTORS</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s2">&quot;button#onetrust-accept-btn-handler&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;button#onetrust-pc-btn-handler&quot;</span><span class="p">,</span>
+        <span class="s1">&#39;button[id*=&quot;accept-cookie&quot;]&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;button[id*=&quot;accept-all&quot;]&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;button[aria-label*=&quot;accept cookie&quot;]&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;button[aria-label*=&quot;Accept cookie&quot;]&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;button:has-text(&quot;Accept all&quot;)&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;button:has-text(&quot;Accept All&quot;)&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;button:has-text(&quot;I agree&quot;)&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;button:has-text(&quot;I Agree&quot;)&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;button:has-text(&quot;Accept&quot;)&#39;</span><span class="p">,</span>
+        <span class="s2">&quot;.cookie-notice button.accept&quot;</span><span class="p">,</span>
+        <span class="s1">&#39;[class*=&quot;cookie&quot;] button[class*=&quot;accept&quot;]&#39;</span><span class="p">,</span>
+    <span class="p">]</span>
+
+    <span class="n">CLOSE_SELECTORS</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s1">&#39;button[aria-label=&quot;Close&quot;]&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;button[aria-label=&quot;close&quot;]&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;button[aria-label*=&quot;Close&quot;]&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;button[aria-label*=&quot;close&quot;]&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;button[aria-label*=&quot;dismiss&quot;]&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;button[aria-label*=&quot;Dismiss&quot;]&#39;</span><span class="p">,</span>
+        <span class="s2">&quot;button.close&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;button.close-button&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;button.modal-close&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;button.popup-close&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;button.dialog-close&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;a.close&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;a.close-button&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;span.close&quot;</span><span class="p">,</span>
+        <span class="s1">&#39;[class*=&quot;close-button&quot;]&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;[class*=&quot;close-icon&quot;]&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;svg[class*=&quot;close&quot;]&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;button:has-text(&quot;No thanks&quot;)&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;button:has-text(&quot;No Thanks&quot;)&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;button:has-text(&quot;Maybe later&quot;)&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;button:has-text(&quot;Maybe Later&quot;)&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;button:has-text(&quot;Skip&quot;)&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;button:has-text(&quot;Dismiss&quot;)&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;button:has-text(&quot;Not now&quot;)&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;button:has-text(&quot;Not Now&quot;)&#39;</span><span class="p">,</span>
+    <span class="p">]</span>
+
+    <span class="n">MODAL_SELECTORS</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s2">&quot;.modal&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;.overlay&quot;</span><span class="p">,</span>
+        <span class="s1">&#39;[role=&quot;dialog&quot;]&#39;</span><span class="p">,</span>
+        <span class="s2">&quot;.popup&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;#onetrust-banner-sdk&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;.onetrust-pc-dark-filter&quot;</span><span class="p">,</span>
+        <span class="s1">&#39;[class*=&quot;modal&quot;]&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;[class*=&quot;popup&quot;]&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;[class*=&quot;overlay&quot;]&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;[class*=&quot;dialog&quot;]&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;[class*=&quot;banner&quot;]&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;div[aria-modal=&quot;true&quot;]&#39;</span><span class="p">,</span>
+    <span class="p">]</span>
+
+<div class="viewcode-block" id="PopupHandler.__init__">
+<a class="viewcode-back" href="../../../api/interaction.html#scitex_browser.interaction.PopupHandler.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">page</span><span class="p">:</span> <span class="n">Page</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize popup handler with a page.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">page</span> <span class="o">=</span> <span class="n">page</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">handled_popups</span> <span class="o">=</span> <span class="p">[]</span></div>
+
+
+<div class="viewcode-block" id="PopupHandler.detect_popups">
+<a class="viewcode-back" href="../../../api/interaction.html#scitex_browser.interaction.PopupHandler.detect_popups">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">detect_popups</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Detect all visible popups on the page.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List of detected popups with their details</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">detected</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># Check for visible modal/popup elements</span>
+            <span class="n">popup_info</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">page</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span>
+<span class="w">                </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">                () =&gt; {</span>
+<span class="sd">                    const modalSelectors = %s;</span>
+<span class="sd">                    const found = [];</span>
+
+<span class="sd">                    for (const selector of modalSelectors) {</span>
+<span class="sd">                        try {</span>
+<span class="sd">                            const elements = document.querySelectorAll(selector);</span>
+<span class="sd">                            for (const el of elements) {</span>
+<span class="sd">                                const style = window.getComputedStyle(el);</span>
+<span class="sd">                                const rect = el.getBoundingClientRect();</span>
+
+<span class="sd">                                // Check if element is visible</span>
+<span class="sd">                                if (style.display !== &#39;none&#39; &amp;&amp;</span>
+<span class="sd">                                    style.visibility !== &#39;hidden&#39; &amp;&amp;</span>
+<span class="sd">                                    rect.width &gt; 0 &amp;&amp;</span>
+<span class="sd">                                    rect.height &gt; 0 &amp;&amp;</span>
+<span class="sd">                                    style.opacity !== &#39;0&#39;) {</span>
+
+<span class="sd">                                    // Get text preview</span>
+<span class="sd">                                    let text = el.innerText || el.textContent || &#39;&#39;;</span>
+<span class="sd">                                    text = text.substring(0, 200).trim();</span>
+
+<span class="sd">                                    // Try to identify popup type</span>
+<span class="sd">                                    let type = &#39;unknown&#39;;</span>
+<span class="sd">                                    const lowerText = text.toLowerCase();</span>
+<span class="sd">                                    if (lowerText.includes(&#39;cookie&#39;) || lowerText.includes(&#39;privacy&#39;)) {</span>
+<span class="sd">                                        type = &#39;cookie&#39;;</span>
+<span class="sd">                                    } else if (lowerText.includes(&#39;subscribe&#39;) || lowerText.includes(&#39;newsletter&#39;)) {</span>
+<span class="sd">                                        type = &#39;newsletter&#39;;</span>
+<span class="sd">                                    } else if (lowerText.includes(&#39;sign in&#39;) || lowerText.includes(&#39;login&#39;)) {</span>
+<span class="sd">                                        type = &#39;auth&#39;;</span>
+<span class="sd">                                    } else if (lowerText.includes(&#39;ai&#39;) || lowerText.includes(&#39;assistant&#39;)) {</span>
+<span class="sd">                                        type = &#39;ai_promotion&#39;;</span>
+<span class="sd">                                    }</span>
+
+<span class="sd">                                    found.push({</span>
+<span class="sd">                                        selector: selector,</span>
+<span class="sd">                                        type: type,</span>
+<span class="sd">                                        text: text,</span>
+<span class="sd">                                        zIndex: style.zIndex || &#39;0&#39;,</span>
+<span class="sd">                                        position: {</span>
+<span class="sd">                                            top: rect.top,</span>
+<span class="sd">                                            left: rect.left,</span>
+<span class="sd">                                            width: rect.width,</span>
+<span class="sd">                                            height: rect.height</span>
+<span class="sd">                                        }</span>
+<span class="sd">                                    });</span>
+<span class="sd">                                }</span>
+<span class="sd">                            }</span>
+<span class="sd">                        } catch (e) {</span>
+<span class="sd">                            // Ignore selector errors</span>
+<span class="sd">                        }</span>
+<span class="sd">                    }</span>
+
+<span class="sd">                    // Sort by z-index (highest first)</span>
+<span class="sd">                    found.sort((a, b) =&gt; {</span>
+<span class="sd">                        const zA = parseInt(a.zIndex) || 0;</span>
+<span class="sd">                        const zB = parseInt(b.zIndex) || 0;</span>
+<span class="sd">                        return zB - zA;</span>
+<span class="sd">                    });</span>
+
+<span class="sd">                    return found;</span>
+<span class="sd">                }</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+                <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">MODAL_SELECTORS</span><span class="p">)</span>
+            <span class="p">)</span>
+
+            <span class="n">detected</span> <span class="o">=</span> <span class="n">popup_info</span>
+
+            <span class="k">if</span> <span class="n">detected</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Detected </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">detected</span><span class="p">)</span><span class="si">}</span><span class="s2"> popup(s)&quot;</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">popup</span> <span class="ow">in</span> <span class="n">detected</span><span class="p">[:</span><span class="mi">3</span><span class="p">]:</span>  <span class="c1"># Log first 3</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;  - Type: </span><span class="si">{</span><span class="n">popup</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">, Text preview: </span><span class="si">{</span><span class="n">popup</span><span class="p">[</span><span class="s1">&#39;text&#39;</span><span class="p">][:</span><span class="mi">50</span><span class="p">]</span><span class="si">}</span><span class="s2">...&quot;</span>
+                    <span class="p">)</span>
+
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error detecting popups: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">detected</span></div>
+
+
+<div class="viewcode-block" id="PopupHandler.handle_cookie_popup">
+<a class="viewcode-back" href="../../../api/interaction.html#scitex_browser.interaction.PopupHandler.handle_cookie_popup">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">handle_cookie_popup</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Handle cookie consent popups.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            True if handled, False otherwise</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">selector</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">COOKIE_SELECTORS</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">button</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">page</span><span class="o">.</span><span class="n">query_selector</span><span class="p">(</span><span class="n">selector</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">button</span> <span class="ow">and</span> <span class="k">await</span> <span class="n">button</span><span class="o">.</span><span class="n">is_visible</span><span class="p">():</span>
+                    <span class="c1"># IMPORTANT: Skip SciTeX manual control buttons</span>
+                    <span class="n">is_scitex_control</span> <span class="o">=</span> <span class="k">await</span> <span class="n">button</span><span class="o">.</span><span class="n">get_attribute</span><span class="p">(</span>
+                        <span class="s2">&quot;data-scitex-no-auto-click&quot;</span>
+                    <span class="p">)</span>
+                    <span class="k">if</span> <span class="n">is_scitex_control</span><span class="p">:</span>
+                        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Skipping SciTeX control button: </span><span class="si">{</span><span class="n">selector</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                        <span class="k">continue</span>
+
+                    <span class="k">await</span> <span class="n">button</span><span class="o">.</span><span class="n">click</span><span class="p">()</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Accepted cookies with selector: </span><span class="si">{</span><span class="n">selector</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">page</span><span class="o">.</span><span class="n">wait_for_timeout</span><span class="p">(</span><span class="mi">1000</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">handled_popups</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s2">&quot;cookie&quot;</span><span class="p">,</span> <span class="n">selector</span><span class="p">))</span>
+                    <span class="k">return</span> <span class="kc">True</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Cookie selector </span><span class="si">{</span><span class="n">selector</span><span class="si">}</span><span class="s2"> failed: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">continue</span>
+
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="PopupHandler.close_popup">
+<a class="viewcode-back" href="../../../api/interaction.html#scitex_browser.interaction.PopupHandler.close_popup">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">close_popup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">popup_info</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Close a popup using various strategies.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            popup_info: Optional popup information from detect_popups</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            True if closed, False otherwise</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Try close buttons</span>
+        <span class="k">for</span> <span class="n">selector</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">CLOSE_SELECTORS</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">button</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">page</span><span class="o">.</span><span class="n">query_selector</span><span class="p">(</span><span class="n">selector</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">button</span> <span class="ow">and</span> <span class="k">await</span> <span class="n">button</span><span class="o">.</span><span class="n">is_visible</span><span class="p">():</span>
+                    <span class="c1"># IMPORTANT: Skip SciTeX manual control buttons</span>
+                    <span class="n">is_scitex_control</span> <span class="o">=</span> <span class="k">await</span> <span class="n">button</span><span class="o">.</span><span class="n">get_attribute</span><span class="p">(</span>
+                        <span class="s2">&quot;data-scitex-no-auto-click&quot;</span>
+                    <span class="p">)</span>
+                    <span class="k">if</span> <span class="n">is_scitex_control</span><span class="p">:</span>
+                        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Skipping SciTeX control button: </span><span class="si">{</span><span class="n">selector</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                        <span class="k">continue</span>
+
+                    <span class="k">await</span> <span class="n">button</span><span class="o">.</span><span class="n">click</span><span class="p">()</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Closed popup with selector: </span><span class="si">{</span><span class="n">selector</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">page</span><span class="o">.</span><span class="n">wait_for_timeout</span><span class="p">(</span><span class="mi">500</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">handled_popups</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s2">&quot;close&quot;</span><span class="p">,</span> <span class="n">selector</span><span class="p">))</span>
+                    <span class="k">return</span> <span class="kc">True</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+        <span class="c1"># Try ESC key as fallback</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">page</span><span class="o">.</span><span class="n">keyboard</span><span class="o">.</span><span class="n">press</span><span class="p">(</span><span class="s2">&quot;Escape&quot;</span><span class="p">)</span>
+            <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">page</span><span class="o">.</span><span class="n">wait_for_timeout</span><span class="p">(</span><span class="mi">500</span><span class="p">)</span>
+
+            <span class="c1"># Check if popup is gone</span>
+            <span class="k">if</span> <span class="n">popup_info</span><span class="p">:</span>
+                <span class="n">still_visible</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">page</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s1">&#39;!!document.querySelector(&quot;</span><span class="si">{</span><span class="n">popup_info</span><span class="p">[</span><span class="s2">&quot;selector&quot;</span><span class="p">]</span><span class="si">}</span><span class="s1">&quot;)&#39;</span>
+                <span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">still_visible</span><span class="p">:</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="s2">&quot;Closed popup with ESC key&quot;</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">handled_popups</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s2">&quot;escape&quot;</span><span class="p">,</span> <span class="n">popup_info</span><span class="p">[</span><span class="s2">&quot;selector&quot;</span><span class="p">]))</span>
+                    <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;ESC key failed: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="PopupHandler.handle_all_popups">
+<a class="viewcode-back" href="../../../api/interaction.html#scitex_browser.interaction.PopupHandler.handle_all_popups">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">handle_all_popups</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">max_attempts</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span> <span class="n">delay_ms</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1000</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Detect and handle all popups on the page.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            max_attempts: Maximum number of attempts to clear popups</span>
+<span class="sd">            delay_ms: Delay between attempts in milliseconds</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Number of popups handled</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">total_handled</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">for</span> <span class="n">attempt</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">max_attempts</span><span class="p">):</span>
+            <span class="c1"># Detect popups</span>
+            <span class="n">popups</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">detect_popups</span><span class="p">()</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">popups</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">attempt</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;No popups detected&quot;</span><span class="p">)</span>
+                <span class="k">break</span>
+
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Attempt </span><span class="si">{</span><span class="n">attempt</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">: Found </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">popups</span><span class="p">)</span><span class="si">}</span><span class="s2"> popup(s)&quot;</span><span class="p">)</span>
+
+            <span class="c1"># Handle each popup</span>
+            <span class="k">for</span> <span class="n">popup</span> <span class="ow">in</span> <span class="n">popups</span><span class="p">:</span>
+                <span class="n">handled</span> <span class="o">=</span> <span class="kc">False</span>
+
+                <span class="c1"># Try cookie handling first if it&#39;s a cookie popup</span>
+                <span class="k">if</span> <span class="n">popup</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;cookie&quot;</span><span class="p">:</span>
+                    <span class="n">handled</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">handle_cookie_popup</span><span class="p">()</span>
+
+                <span class="c1"># Otherwise try to close it</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">handled</span><span class="p">:</span>
+                    <span class="n">handled</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">close_popup</span><span class="p">(</span><span class="n">popup</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">handled</span><span class="p">:</span>
+                    <span class="n">total_handled</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">page</span><span class="o">.</span><span class="n">wait_for_timeout</span><span class="p">(</span><span class="n">delay_ms</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Could not handle popup: </span><span class="si">{</span><span class="n">popup</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+            <span class="c1"># Small delay before next detection</span>
+            <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">page</span><span class="o">.</span><span class="n">wait_for_timeout</span><span class="p">(</span><span class="mi">500</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">total_handled</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Successfully handled </span><span class="si">{</span><span class="n">total_handled</span><span class="si">}</span><span class="s2"> popup(s)&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">total_handled</span></div>
+
+
+<div class="viewcode-block" id="PopupHandler.wait_and_handle_popups">
+<a class="viewcode-back" href="../../../api/interaction.html#scitex_browser.interaction.PopupHandler.wait_and_handle_popups">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">wait_and_handle_popups</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout_ms</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5000</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Wait for popups to appear and handle them.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            timeout_ms: Maximum time to wait for popups</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Number of popups handled</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">start_time</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">get_event_loop</span><span class="p">()</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="n">total_handled</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">while</span> <span class="p">(</span><span class="n">asyncio</span><span class="o">.</span><span class="n">get_event_loop</span><span class="p">()</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span><span class="p">)</span> <span class="o">*</span> <span class="mi">1000</span> <span class="o">&lt;</span> <span class="n">timeout_ms</span><span class="p">:</span>
+            <span class="n">popups</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">detect_popups</span><span class="p">()</span>
+
+            <span class="k">if</span> <span class="n">popups</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">popup</span> <span class="ow">in</span> <span class="n">popups</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">popup</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;cookie&quot;</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">handle_cookie_popup</span><span class="p">():</span>
+                            <span class="n">total_handled</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="k">elif</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">close_popup</span><span class="p">(</span><span class="n">popup</span><span class="p">):</span>
+                        <span class="n">total_handled</span> <span class="o">+=</span> <span class="mi">1</span>
+
+                <span class="k">if</span> <span class="n">total_handled</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="k">break</span>
+
+            <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">page</span><span class="o">.</span><span class="n">wait_for_timeout</span><span class="p">(</span><span class="mi">500</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">total_handled</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="close_popups_async">
+<a class="viewcode-back" href="../../../api/interaction.html#scitex_browser.interaction.close_popups_async">[docs]</a>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">close_popups_async</span><span class="p">(</span>
+    <span class="n">page</span><span class="p">:</span> <span class="n">Page</span><span class="p">,</span>
+    <span class="n">handle_cookies</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">close_others</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">max_attempts</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span>
+    <span class="n">wait_first</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">wait_ms</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2000</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">List</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convenience function to handle all popups on a page.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        page: Playwright page object</span>
+<span class="sd">        handle_cookies: Whether to accept cookie popups</span>
+<span class="sd">        close_others: Whether to close other popups</span>
+<span class="sd">        max_attempts: Maximum attempts to clear popups</span>
+<span class="sd">        wait_first: Whether to wait for popups to appear first</span>
+<span class="sd">        wait_ms: Time to wait for popups to appear</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Tuple of (number handled, list of handled popups)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">handler</span> <span class="o">=</span> <span class="n">PopupHandler</span><span class="p">(</span><span class="n">page</span><span class="p">)</span>
+
+    <span class="c1"># Wait for popups to appear if requested</span>
+    <span class="k">if</span> <span class="n">wait_first</span><span class="p">:</span>
+        <span class="k">await</span> <span class="n">page</span><span class="o">.</span><span class="n">wait_for_timeout</span><span class="p">(</span><span class="n">wait_ms</span><span class="p">)</span>
+
+    <span class="c1"># Handle all popups</span>
+    <span class="n">total</span> <span class="o">=</span> <span class="k">await</span> <span class="n">handler</span><span class="o">.</span><span class="n">handle_all_popups</span><span class="p">(</span><span class="n">max_attempts</span><span class="o">=</span><span class="n">max_attempts</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">total</span><span class="p">,</span> <span class="n">handler</span><span class="o">.</span><span class="n">handled_popups</span></div>
+
+
+
+<div class="viewcode-block" id="ensure_no_popups_async">
+<a class="viewcode-back" href="../../../api/interaction.html#scitex_browser.interaction.ensure_no_popups_async">[docs]</a>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">ensure_no_popups_async</span><span class="p">(</span><span class="n">page</span><span class="p">:</span> <span class="n">Page</span><span class="p">,</span> <span class="n">check_interval_ms</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Ensure no popups are blocking the page.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        page: Playwright page object</span>
+<span class="sd">        check_interval_ms: Interval to check for popups</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        True if page is clear of popups</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">handler</span> <span class="o">=</span> <span class="n">PopupHandler</span><span class="p">(</span><span class="n">page</span><span class="p">)</span>
+
+    <span class="c1"># Check multiple times</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+        <span class="n">popups</span> <span class="o">=</span> <span class="k">await</span> <span class="n">handler</span><span class="o">.</span><span class="n">detect_popups</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">popups</span><span class="p">:</span>
+            <span class="k">await</span> <span class="n">handler</span><span class="o">.</span><span class="n">handle_all_popups</span><span class="p">(</span><span class="n">max_attempts</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="k">await</span> <span class="n">page</span><span class="o">.</span><span class="n">wait_for_timeout</span><span class="p">(</span><span class="n">check_interval_ms</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="c1"># Final check</span>
+    <span class="n">final_popups</span> <span class="o">=</span> <span class="k">await</span> <span class="n">handler</span><span class="o">.</span><span class="n">detect_popups</span><span class="p">()</span>
+    <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">final_popups</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Demonstrate PopupHandler functionality.&quot;&quot;&quot;</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">asyncio</span>
+
+    <span class="kn">from</span><span class="w"> </span><span class="nn">playwright.async_api</span><span class="w"> </span><span class="kn">import</span> <span class="n">async_playwright</span>
+
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">demo</span><span class="p">():</span>
+        <span class="k">async</span> <span class="k">with</span> <span class="n">async_playwright</span><span class="p">()</span> <span class="k">as</span> <span class="n">p</span><span class="p">:</span>
+            <span class="n">browser</span> <span class="o">=</span> <span class="k">await</span> <span class="n">p</span><span class="o">.</span><span class="n">chromium</span><span class="o">.</span><span class="n">launch</span><span class="p">(</span><span class="n">headless</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="n">page</span> <span class="o">=</span> <span class="k">await</span> <span class="n">browser</span><span class="o">.</span><span class="n">new_page</span><span class="p">()</span>
+
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;PopupHandler: Starting demo&quot;</span><span class="p">)</span>
+
+            <span class="c1"># Navigate to a page with popups</span>
+            <span class="k">await</span> <span class="n">page</span><span class="o">.</span><span class="n">goto</span><span class="p">(</span><span class="s2">&quot;https://www.springer.com&quot;</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">30000</span><span class="p">)</span>
+            <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+
+            <span class="c1"># Demonstrate popup handling</span>
+            <span class="n">handler</span> <span class="o">=</span> <span class="n">PopupHandler</span><span class="p">(</span><span class="n">page</span><span class="p">)</span>
+
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Detecting popups...&quot;</span><span class="p">)</span>
+            <span class="n">popups</span> <span class="o">=</span> <span class="k">await</span> <span class="n">handler</span><span class="o">.</span><span class="n">detect_popups</span><span class="p">()</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Found </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">popups</span><span class="p">)</span><span class="si">}</span><span class="s2"> popup(s)&quot;</span><span class="p">)</span>
+
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Handling popups...&quot;</span><span class="p">)</span>
+            <span class="n">handled</span> <span class="o">=</span> <span class="k">await</span> <span class="n">handler</span><span class="o">.</span><span class="n">handle_all_popups</span><span class="p">()</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Successfully handled </span><span class="si">{</span><span class="n">handled</span><span class="si">}</span><span class="s2"> popup(s)&quot;</span><span class="p">)</span>
+
+            <span class="c1"># Verify page is clear</span>
+            <span class="n">is_clear</span> <span class="o">=</span> <span class="k">await</span> <span class="n">ensure_no_popups_async</span><span class="p">(</span><span class="n">page</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">is_clear</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="s2">&quot;Page is clear of popups&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Some popups may still be present&quot;</span><span class="p">)</span>
+
+            <span class="n">logger</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="s2">&quot;PopupHandler demonstration complete&quot;</span><span class="p">)</span>
+
+            <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+            <span class="k">await</span> <span class="n">browser</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+    <span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">demo</span><span class="p">())</span>
+    <span class="k">return</span> <span class="mi">0</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">parse_args</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Parse command line arguments.&quot;&quot;&quot;</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">argparse</span>
+
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;Popup handler demo&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">run_main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Initialize scitex framework, run main function, and cleanup.&quot;&quot;&quot;</span>
+    <span class="k">global</span> <span class="n">CONFIG</span><span class="p">,</span> <span class="n">CC</span><span class="p">,</span> <span class="n">sys</span><span class="p">,</span> <span class="n">plt</span><span class="p">,</span> <span class="n">rng</span>
+
+    <span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+
+    <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
+    <span class="kn">import</span><span class="w"> </span><span class="nn">scitex</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">stx</span>
+
+    <span class="n">args</span> <span class="o">=</span> <span class="n">parse_args</span><span class="p">()</span>
+
+    <span class="n">CONFIG</span><span class="p">,</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">,</span> <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">,</span> <span class="n">plt</span><span class="p">,</span> <span class="n">CC</span><span class="p">,</span> <span class="n">rng</span> <span class="o">=</span> <span class="n">stx</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">start</span><span class="p">(</span>
+        <span class="n">sys</span><span class="p">,</span>
+        <span class="n">plt</span><span class="p">,</span>
+        <span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">,</span>
+        <span class="n">file</span><span class="o">=</span><span class="n">__FILE__</span><span class="p">,</span>
+        <span class="n">sdir_suffix</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">agg</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">exit_status</span> <span class="o">=</span> <span class="n">main</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+
+    <span class="n">stx</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">close</span><span class="p">(</span>
+        <span class="n">CONFIG</span><span class="p">,</span>
+        <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">notify</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">message</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="n">exit_status</span><span class="o">=</span><span class="n">exit_status</span><span class="p">,</span>
+    <span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">run_main</span><span class="p">()</span>
+
+<span class="c1"># python -m scitex_browser.interaction.close_popups</span>
+
+<span class="c1"># EOF</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Yusuke Watanabe.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

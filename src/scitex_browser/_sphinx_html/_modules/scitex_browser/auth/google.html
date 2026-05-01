@@ -1,0 +1,773 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>scitex_browser.auth.google &mdash; SciTeX Browser v0.1.14</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=468bc497"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            SciTeX Browser
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../installation.html#requirements">Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../installation.html#basic-installation">Basic Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../installation.html#development">Development</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/core.html">scitex_browser.core</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.BrowserMixin"><code class="docutils literal notranslate"><span class="pre">BrowserMixin</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.BrowserMixin.__init__"><code class="docutils literal notranslate"><span class="pre">BrowserMixin.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.BrowserMixin.get_shared_browser_async"><code class="docutils literal notranslate"><span class="pre">BrowserMixin.get_shared_browser_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.BrowserMixin.cleanup_shared_browser_async"><code class="docutils literal notranslate"><span class="pre">BrowserMixin.cleanup_shared_browser_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.BrowserMixin.get_browser_async"><code class="docutils literal notranslate"><span class="pre">BrowserMixin.get_browser_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.BrowserMixin.new_page"><code class="docutils literal notranslate"><span class="pre">BrowserMixin.new_page()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.BrowserMixin.close_page"><code class="docutils literal notranslate"><span class="pre">BrowserMixin.close_page()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.BrowserMixin.close_all_pages"><code class="docutils literal notranslate"><span class="pre">BrowserMixin.close_all_pages()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.BrowserMixin.create_browser_context_async"><code class="docutils literal notranslate"><span class="pre">BrowserMixin.create_browser_context_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.BrowserMixin.get_session_async"><code class="docutils literal notranslate"><span class="pre">BrowserMixin.get_session_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.BrowserMixin.close_session"><code class="docutils literal notranslate"><span class="pre">BrowserMixin.close_session()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.BrowserMixin.accept_cookies_async"><code class="docutils literal notranslate"><span class="pre">BrowserMixin.accept_cookies_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.BrowserMixin.interactive"><code class="docutils literal notranslate"><span class="pre">BrowserMixin.interactive()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.BrowserMixin.stealth"><code class="docutils literal notranslate"><span class="pre">BrowserMixin.stealth()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.BrowserMixin.show_async"><code class="docutils literal notranslate"><span class="pre">BrowserMixin.show_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.BrowserMixin.hide_async"><code class="docutils literal notranslate"><span class="pre">BrowserMixin.hide_async()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.ChromeProfileManager"><code class="docutils literal notranslate"><span class="pre">ChromeProfileManager</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.ChromeProfileManager.EXTENSIONS"><code class="docutils literal notranslate"><span class="pre">ChromeProfileManager.EXTENSIONS</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.ChromeProfileManager.AVAILABLE_PROFILE_NAMES"><code class="docutils literal notranslate"><span class="pre">ChromeProfileManager.AVAILABLE_PROFILE_NAMES</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.ChromeProfileManager.__init__"><code class="docutils literal notranslate"><span class="pre">ChromeProfileManager.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.ChromeProfileManager._get_extension_statuses"><code class="docutils literal notranslate"><span class="pre">ChromeProfileManager._get_extension_statuses()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.ChromeProfileManager.check_extensions_installed"><code class="docutils literal notranslate"><span class="pre">ChromeProfileManager.check_extensions_installed()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.ChromeProfileManager._get_installed_extension_paths"><code class="docutils literal notranslate"><span class="pre">ChromeProfileManager._get_installed_extension_paths()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.ChromeProfileManager.get_extension_args"><code class="docutils literal notranslate"><span class="pre">ChromeProfileManager.get_extension_args()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.ChromeProfileManager.install_extensions_manually_if_not_installed_async"><code class="docutils literal notranslate"><span class="pre">ChromeProfileManager.install_extensions_manually_if_not_installed_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.ChromeProfileManager.handle_runtime_extension_dialogs_async"><code class="docutils literal notranslate"><span class="pre">ChromeProfileManager.handle_runtime_extension_dialogs_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.ChromeProfileManager.sync_from_profile"><code class="docutils literal notranslate"><span class="pre">ChromeProfileManager.sync_from_profile()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/auth.html">scitex_browser.auth</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/auth.html#scitex_browser.auth.GoogleAuthHelper"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/auth.html#scitex_browser.auth.GoogleAuthHelper.__init__"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/auth.html#scitex_browser.auth.GoogleAuthHelper._log"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper._log()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/auth.html#scitex_browser.auth.GoogleAuthHelper.login_via_google_button"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper.login_via_google_button()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/auth.html#scitex_browser.auth.GoogleAuthHelper._handle_google_popup"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper._handle_google_popup()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/auth.html#scitex_browser.auth.GoogleAuthHelper._fill_email"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper._fill_email()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/auth.html#scitex_browser.auth.GoogleAuthHelper._fill_password"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper._fill_password()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/auth.html#scitex_browser.auth.GoogleAuthHelper._handle_consent_screens"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper._handle_consent_screens()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/auth.html#scitex_browser.auth.GoogleAuthHelper._wait_for_2fa"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper._wait_for_2fa()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/auth.html#scitex_browser.auth.GoogleAuthHelper.is_logged_in"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper.is_logged_in()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/auth.html#scitex_browser.auth.google_login"><code class="docutils literal notranslate"><span class="pre">google_login()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/interaction.html">scitex_browser.interaction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/interaction.html#scitex_browser.interaction.click_center_async"><code class="docutils literal notranslate"><span class="pre">click_center_async()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/interaction.html#scitex_browser.interaction.click_with_fallbacks_async"><code class="docutils literal notranslate"><span class="pre">click_with_fallbacks_async()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/interaction.html#scitex_browser.interaction.fill_with_fallbacks_async"><code class="docutils literal notranslate"><span class="pre">fill_with_fallbacks_async()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/interaction.html#scitex_browser.interaction.PopupHandler"><code class="docutils literal notranslate"><span class="pre">PopupHandler</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/interaction.html#scitex_browser.interaction.PopupHandler.COOKIE_SELECTORS"><code class="docutils literal notranslate"><span class="pre">PopupHandler.COOKIE_SELECTORS</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/interaction.html#scitex_browser.interaction.PopupHandler.CLOSE_SELECTORS"><code class="docutils literal notranslate"><span class="pre">PopupHandler.CLOSE_SELECTORS</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/interaction.html#scitex_browser.interaction.PopupHandler.MODAL_SELECTORS"><code class="docutils literal notranslate"><span class="pre">PopupHandler.MODAL_SELECTORS</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/interaction.html#scitex_browser.interaction.PopupHandler.__init__"><code class="docutils literal notranslate"><span class="pre">PopupHandler.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/interaction.html#scitex_browser.interaction.PopupHandler.detect_popups"><code class="docutils literal notranslate"><span class="pre">PopupHandler.detect_popups()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/interaction.html#scitex_browser.interaction.PopupHandler.handle_cookie_popup"><code class="docutils literal notranslate"><span class="pre">PopupHandler.handle_cookie_popup()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/interaction.html#scitex_browser.interaction.PopupHandler.close_popup"><code class="docutils literal notranslate"><span class="pre">PopupHandler.close_popup()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/interaction.html#scitex_browser.interaction.PopupHandler.handle_all_popups"><code class="docutils literal notranslate"><span class="pre">PopupHandler.handle_all_popups()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/interaction.html#scitex_browser.interaction.PopupHandler.wait_and_handle_popups"><code class="docutils literal notranslate"><span class="pre">PopupHandler.wait_and_handle_popups()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/interaction.html#scitex_browser.interaction.close_popups_async"><code class="docutils literal notranslate"><span class="pre">close_popups_async()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/interaction.html#scitex_browser.interaction.ensure_no_popups_async"><code class="docutils literal notranslate"><span class="pre">ensure_no_popups_async()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/debugging.html">scitex_browser.debugging</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.show_grid_async"><code class="docutils literal notranslate"><span class="pre">show_grid_async()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.highlight_element_async"><code class="docutils literal notranslate"><span class="pre">highlight_element_async()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.inject_visual_effects"><code class="docutils literal notranslate"><span class="pre">inject_visual_effects()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.inject_visual_effects_async"><code class="docutils literal notranslate"><span class="pre">inject_visual_effects_async()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.show_cursor_at"><code class="docutils literal notranslate"><span class="pre">show_cursor_at()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.show_cursor_at_async"><code class="docutils literal notranslate"><span class="pre">show_cursor_at_async()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.show_click_effect"><code class="docutils literal notranslate"><span class="pre">show_click_effect()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.show_click_effect_async"><code class="docutils literal notranslate"><span class="pre">show_click_effect_async()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.show_step"><code class="docutils literal notranslate"><span class="pre">show_step()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.show_step_async"><code class="docutils literal notranslate"><span class="pre">show_step_async()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.show_test_result"><code class="docutils literal notranslate"><span class="pre">show_test_result()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.show_test_result_async"><code class="docutils literal notranslate"><span class="pre">show_test_result_async()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.setup_console_interceptor"><code class="docutils literal notranslate"><span class="pre">setup_console_interceptor()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.collect_console_logs"><code class="docutils literal notranslate"><span class="pre">collect_console_logs()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.collect_console_logs_detailed"><code class="docutils literal notranslate"><span class="pre">collect_console_logs_detailed()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.format_logs_devtools_style"><code class="docutils literal notranslate"><span class="pre">format_logs_devtools_style()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.save_failure_artifacts"><code class="docutils literal notranslate"><span class="pre">save_failure_artifacts()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.create_failure_capture_fixture"><code class="docutils literal notranslate"><span class="pre">create_failure_capture_fixture()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.TestMonitor"><code class="docutils literal notranslate"><span class="pre">TestMonitor</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.TestMonitor.__init__"><code class="docutils literal notranslate"><span class="pre">TestMonitor.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.TestMonitor.start"><code class="docutils literal notranslate"><span class="pre">TestMonitor.start()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.TestMonitor.stop"><code class="docutils literal notranslate"><span class="pre">TestMonitor.stop()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.TestMonitor.get_status"><code class="docutils literal notranslate"><span class="pre">TestMonitor.get_status()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.TestMonitor.take_snapshot"><code class="docutils literal notranslate"><span class="pre">TestMonitor.take_snapshot()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.TestMonitor.create_gif"><code class="docutils literal notranslate"><span class="pre">TestMonitor.create_gif()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.TestMonitor.get_screenshots"><code class="docutils literal notranslate"><span class="pre">TestMonitor.get_screenshots()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.create_test_monitor_fixture"><code class="docutils literal notranslate"><span class="pre">create_test_monitor_fixture()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.monitor_test"><code class="docutils literal notranslate"><span class="pre">monitor_test()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.SyncBrowserSession"><code class="docutils literal notranslate"><span class="pre">SyncBrowserSession</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.SyncBrowserSession.__init__"><code class="docutils literal notranslate"><span class="pre">SyncBrowserSession.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.SyncBrowserSession.__enter__"><code class="docutils literal notranslate"><span class="pre">SyncBrowserSession.__enter__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.SyncBrowserSession.__exit__"><code class="docutils literal notranslate"><span class="pre">SyncBrowserSession.__exit__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.SyncBrowserSession._kill_process_tree"><code class="docutils literal notranslate"><span class="pre">SyncBrowserSession._kill_process_tree()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.SyncBrowserSession._emergency_cleanup"><code class="docutils literal notranslate"><span class="pre">SyncBrowserSession._emergency_cleanup()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.SyncBrowserSession.kill_zombie_browsers"><code class="docutils literal notranslate"><span class="pre">SyncBrowserSession.kill_zombie_browsers()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.sync_browser_session"><code class="docutils literal notranslate"><span class="pre">sync_browser_session()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.create_browser_session_fixture"><code class="docutils literal notranslate"><span class="pre">create_browser_session_fixture()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/pdf.html">scitex_browser.pdf</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/pdf.html#scitex_browser.pdf.save_as_pdf"><code class="docutils literal notranslate"><span class="pre">save_as_pdf()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/pdf.html#scitex_browser.pdf.save_as_pdf_async"><code class="docutils literal notranslate"><span class="pre">save_as_pdf_async()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/pdf.html#scitex_browser.pdf.detect_chrome_pdf_viewer_async"><code class="docutils literal notranslate"><span class="pre">detect_chrome_pdf_viewer_async()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/pdf.html#scitex_browser.pdf.click_download_for_chrome_pdf_viewer_async"><code class="docutils literal notranslate"><span class="pre">click_download_for_chrome_pdf_viewer_async()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/stealth.html">scitex_browser.stealth</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.StealthManager"><code class="docutils literal notranslate"><span class="pre">StealthManager</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.StealthManager.__init__"><code class="docutils literal notranslate"><span class="pre">StealthManager.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.StealthManager.get_random_user_agent"><code class="docutils literal notranslate"><span class="pre">StealthManager.get_random_user_agent()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.StealthManager.get_random_viewport"><code class="docutils literal notranslate"><span class="pre">StealthManager.get_random_viewport()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.StealthManager.get_stealth_options"><code class="docutils literal notranslate"><span class="pre">StealthManager.get_stealth_options()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.StealthManager.get_stealth_options_additional"><code class="docutils literal notranslate"><span class="pre">StealthManager.get_stealth_options_additional()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.StealthManager.get_network_evasion_headers"><code class="docutils literal notranslate"><span class="pre">StealthManager.get_network_evasion_headers()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.StealthManager.add_human_behavior_async"><code class="docutils literal notranslate"><span class="pre">StealthManager.add_human_behavior_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.StealthManager.handle_cloudflare_challenge_async"><code class="docutils literal notranslate"><span class="pre">StealthManager.handle_cloudflare_challenge_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.StealthManager.get_init_script"><code class="docutils literal notranslate"><span class="pre">StealthManager.get_init_script()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.StealthManager.get_dimension_spoofing_script"><code class="docutils literal notranslate"><span class="pre">StealthManager.get_dimension_spoofing_script()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.StealthManager.human_delay_async"><code class="docutils literal notranslate"><span class="pre">StealthManager.human_delay_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.StealthManager.human_click_async"><code class="docutils literal notranslate"><span class="pre">StealthManager.human_click_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.StealthManager.human_mouse_move_async"><code class="docutils literal notranslate"><span class="pre">StealthManager.human_mouse_move_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.StealthManager.human_scroll_async"><code class="docutils literal notranslate"><span class="pre">StealthManager.human_scroll_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.StealthManager.human_type_async"><code class="docutils literal notranslate"><span class="pre">StealthManager.human_type_async()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.HumanBehavior"><code class="docutils literal notranslate"><span class="pre">HumanBehavior</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.HumanBehavior.__init__"><code class="docutils literal notranslate"><span class="pre">HumanBehavior.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.HumanBehavior.random_delay_async"><code class="docutils literal notranslate"><span class="pre">HumanBehavior.random_delay_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.HumanBehavior.reading_delay_async"><code class="docutils literal notranslate"><span class="pre">HumanBehavior.reading_delay_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.HumanBehavior.mouse_move_async"><code class="docutils literal notranslate"><span class="pre">HumanBehavior.mouse_move_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.HumanBehavior.hover_and_click_async"><code class="docutils literal notranslate"><span class="pre">HumanBehavior.hover_and_click_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.HumanBehavior.scroll_async"><code class="docutils literal notranslate"><span class="pre">HumanBehavior.scroll_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.HumanBehavior.type_text_async"><code class="docutils literal notranslate"><span class="pre">HumanBehavior.type_text_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.HumanBehavior.random_mouse_movement_async"><code class="docutils literal notranslate"><span class="pre">HumanBehavior.random_mouse_movement_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.HumanBehavior.pdf_viewing_behavior_async"><code class="docutils literal notranslate"><span class="pre">HumanBehavior.pdf_viewing_behavior_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.HumanBehavior.wait_for_download_async"><code class="docutils literal notranslate"><span class="pre">HumanBehavior.wait_for_download_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.HumanBehavior.form_interaction_async"><code class="docutils literal notranslate"><span class="pre">HumanBehavior.form_interaction_async()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/automation.html">scitex_browser.automation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/automation.html#scitex_browser.automation.CookieAutoAcceptor"><code class="docutils literal notranslate"><span class="pre">CookieAutoAcceptor</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/automation.html#scitex_browser.automation.CookieAutoAcceptor.__init__"><code class="docutils literal notranslate"><span class="pre">CookieAutoAcceptor.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/automation.html#scitex_browser.automation.CookieAutoAcceptor.inject_auto_acceptor_async"><code class="docutils literal notranslate"><span class="pre">CookieAutoAcceptor.inject_auto_acceptor_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/automation.html#scitex_browser.automation.CookieAutoAcceptor.get_auto_acceptor_script"><code class="docutils literal notranslate"><span class="pre">CookieAutoAcceptor.get_auto_acceptor_script()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/automation.html#scitex_browser.automation.CookieAutoAcceptor.check_cookie_banner_exists_async"><code class="docutils literal notranslate"><span class="pre">CookieAutoAcceptor.check_cookie_banner_exists_async()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/collaboration.html">scitex_browser.collaboration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.__init__"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.start"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.start()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.navigate"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.navigate()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.screenshot"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.screenshot()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.wait"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.wait()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.close"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.close()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.__aenter__"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.__aenter__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.__aexit__"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.__aexit__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession._log_event"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession._log_event()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession._auto_screenshot_loop"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession._auto_screenshot_loop()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.get_info"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.get_info()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.type"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.type()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.click"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.click()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.hover"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.hover()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.press"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.press()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.scroll_down"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.scroll_down()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.scroll_to"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.scroll_to()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.wait_for"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.wait_for()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.wait_for_text"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.wait_for_text()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.wait_for_url"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.wait_for_url()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.get_text"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.get_text()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.get_value"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.get_value()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.is_visible"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.is_visible()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.ask"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.ask()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.confirm"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.confirm()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SessionConfig"><code class="docutils literal notranslate"><span class="pre">SessionConfig</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SessionConfig.session_id"><code class="docutils literal notranslate"><span class="pre">SessionConfig.session_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SessionConfig.browser_type"><code class="docutils literal notranslate"><span class="pre">SessionConfig.browser_type</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SessionConfig.headless"><code class="docutils literal notranslate"><span class="pre">SessionConfig.headless</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SessionConfig.viewport"><code class="docutils literal notranslate"><span class="pre">SessionConfig.viewport</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SessionConfig.user_data_dir"><code class="docutils literal notranslate"><span class="pre">SessionConfig.user_data_dir</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SessionConfig.enable_screenshots"><code class="docutils literal notranslate"><span class="pre">SessionConfig.enable_screenshots</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SessionConfig.screenshot_interval"><code class="docutils literal notranslate"><span class="pre">SessionConfig.screenshot_interval</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SessionConfig.__init__"><code class="docutils literal notranslate"><span class="pre">SessionConfig.__init__()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.VisualFeedback"><code class="docutils literal notranslate"><span class="pre">VisualFeedback</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.VisualFeedback.__init__"><code class="docutils literal notranslate"><span class="pre">VisualFeedback.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.VisualFeedback.initialize"><code class="docutils literal notranslate"><span class="pre">VisualFeedback.initialize()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.VisualFeedback.show_message"><code class="docutils literal notranslate"><span class="pre">VisualFeedback.show_message()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.VisualFeedback.show_participant"><code class="docutils literal notranslate"><span class="pre">VisualFeedback.show_participant()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.VisualFeedback.show_action"><code class="docutils literal notranslate"><span class="pre">VisualFeedback.show_action()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.VisualFeedback.clear"><code class="docutils literal notranslate"><span class="pre">VisualFeedback.clear()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.CredentialManager"><code class="docutils literal notranslate"><span class="pre">CredentialManager</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.CredentialManager.__init__"><code class="docutils literal notranslate"><span class="pre">CredentialManager.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.CredentialManager.get_credential"><code class="docutils literal notranslate"><span class="pre">CredentialManager.get_credential()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.CredentialManager._is_terminal_available"><code class="docutils literal notranslate"><span class="pre">CredentialManager._is_terminal_available()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.CredentialManager._prompt_terminal"><code class="docutils literal notranslate"><span class="pre">CredentialManager._prompt_terminal()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.CredentialManager._prompt_browser"><code class="docutils literal notranslate"><span class="pre">CredentialManager._prompt_browser()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.CredentialManager.get_login_credentials"><code class="docutils literal notranslate"><span class="pre">CredentialManager.get_login_credentials()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.CredentialManager.clear_cache"><code class="docutils literal notranslate"><span class="pre">CredentialManager.clear_cache()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.GoogleAuthHelper"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.GoogleAuthHelper.__init__"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.GoogleAuthHelper._log"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper._log()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.GoogleAuthHelper.login_via_google_button"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper.login_via_google_button()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.GoogleAuthHelper._handle_google_popup"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper._handle_google_popup()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.GoogleAuthHelper._fill_email"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper._fill_email()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.GoogleAuthHelper._fill_password"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper._fill_password()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.GoogleAuthHelper._handle_consent_screens"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper._handle_consent_screens()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.GoogleAuthHelper._wait_for_2fa"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper._wait_for_2fa()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.GoogleAuthHelper.is_logged_in"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper.is_logged_in()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.google_login"><code class="docutils literal notranslate"><span class="pre">google_login()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/remote.html">scitex_browser.remote</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">SciTeX Browser</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">scitex_browser.auth.google</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for scitex_browser.auth.google</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python3</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1"># Timestamp: &quot;2025-12-04 (ywatanabe)&quot;</span>
+<span class="c1"># File: ./src/scitex/browser/auth/google.py</span>
+<span class="c1"># ----------------------------------------</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Google OAuth authentication helper for Playwright.</span>
+
+<span class="sd">Handles Google OAuth popup flow for services that use &quot;Continue with Google&quot;.</span>
+
+<span class="sd">Example:</span>
+<span class="sd">    from scitex_browser.auth import GoogleAuthHelper</span>
+
+<span class="sd">    auth = GoogleAuthHelper(</span>
+<span class="sd">        email=&quot;user@gmail.com&quot;,</span>
+<span class="sd">        password=&quot;your_password&quot;,</span>
+<span class="sd">    )</span>
+
+<span class="sd">    # Login to a service that uses Google OAuth</span>
+<span class="sd">    success = await auth.login_via_google_button(page, &#39;button:has-text(&quot;Continue with Google&quot;)&#39;)</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">playwright.async_api</span><span class="w"> </span><span class="kn">import</span> <span class="n">Page</span>
+
+
+<div class="viewcode-block" id="GoogleAuthHelper">
+<a class="viewcode-back" href="../../../api/collaboration.html#scitex_browser.auth.GoogleAuthHelper">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">GoogleAuthHelper</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Google OAuth authentication helper.</span>
+
+<span class="sd">    Handles the popup-based Google OAuth flow used by many services.</span>
+
+<span class="sd">    Environment Variables:</span>
+<span class="sd">        GOOGLE_EMAIL: Default email if not provided</span>
+<span class="sd">        GOOGLE_PASSWORD: Default password if not provided</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="GoogleAuthHelper.__init__">
+<a class="viewcode-back" href="../../../api/collaboration.html#scitex_browser.auth.GoogleAuthHelper.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">email</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">password</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">debug</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize GoogleAuthHelper.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            email: Google account email</span>
+<span class="sd">            password: Google account password</span>
+<span class="sd">            debug: Print debug messages to stderr</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">email</span> <span class="o">=</span> <span class="n">email</span> <span class="ow">or</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;GOOGLE_EMAIL&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">password</span> <span class="o">=</span> <span class="n">password</span> <span class="ow">or</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;GOOGLE_PASSWORD&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">debug</span> <span class="o">=</span> <span class="n">debug</span> <span class="ow">or</span> <span class="nb">bool</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;GOOGLE_AUTH_DEBUG&quot;</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="GoogleAuthHelper._log">
+<a class="viewcode-back" href="../../../api/collaboration.html#scitex_browser.auth.GoogleAuthHelper._log">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_log</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Print debug message if debug mode is enabled.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">debug</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[GoogleAuth] </span><span class="si">{</span><span class="n">msg</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="GoogleAuthHelper.login_via_google_button">
+<a class="viewcode-back" href="../../../api/collaboration.html#scitex_browser.auth.GoogleAuthHelper.login_via_google_button">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">login_via_google_button</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">page</span><span class="p">:</span> <span class="n">Page</span><span class="p">,</span>
+        <span class="n">google_button_selector</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;button:has-text(&quot;Continue with Google&quot;)&#39;</span><span class="p">,</span>
+        <span class="n">timeout</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">60000</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Perform Google OAuth login via a &quot;Continue with Google&quot; button.</span>
+
+<span class="sd">        This handles the popup-based OAuth flow:</span>
+<span class="sd">        1. Click the Google button on the main page</span>
+<span class="sd">        2. Handle the Google popup for email/password entry</span>
+<span class="sd">        3. Wait for redirect back to the original service</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            page: Playwright Page object (the main page with the Google button)</span>
+<span class="sd">            google_button_selector: CSS selector for the Google login button</span>
+<span class="sd">            timeout: Maximum time to wait for login (ms)</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            True if login successful, False otherwise</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># Find the Google button</span>
+            <span class="n">google_btn</span> <span class="o">=</span> <span class="k">await</span> <span class="n">page</span><span class="o">.</span><span class="n">query_selector</span><span class="p">(</span><span class="n">google_button_selector</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">google_btn</span><span class="p">:</span>
+                <span class="c1"># Try alternative selectors</span>
+                <span class="n">alternatives</span> <span class="o">=</span> <span class="p">[</span>
+                    <span class="s1">&#39;button:has-text(&quot;Google&quot;)&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;[data-testid=&quot;google-login&quot;]&#39;</span><span class="p">,</span>
+                    <span class="s2">&quot;button &gt;&gt; text=Continue with Google&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;button &gt;&gt; text=Sign in with Google&quot;</span><span class="p">,</span>
+                <span class="p">]</span>
+                <span class="k">for</span> <span class="n">selector</span> <span class="ow">in</span> <span class="n">alternatives</span><span class="p">:</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">google_btn</span> <span class="o">=</span> <span class="k">await</span> <span class="n">page</span><span class="o">.</span><span class="n">query_selector</span><span class="p">(</span><span class="n">selector</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="n">google_btn</span><span class="p">:</span>
+                            <span class="k">break</span>
+                    <span class="k">except</span><span class="p">:</span>
+                        <span class="k">continue</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">google_btn</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_log</span><span class="p">(</span><span class="s2">&quot;Google button not found&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="kc">False</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_log</span><span class="p">(</span><span class="s2">&quot;Found Google button, clicking...&quot;</span><span class="p">)</span>
+
+            <span class="c1"># Google OAuth opens in a popup - listen for it</span>
+            <span class="k">async</span> <span class="k">with</span> <span class="n">page</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">expect_page</span><span class="p">(</span><span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">)</span> <span class="k">as</span> <span class="n">popup_info</span><span class="p">:</span>
+                <span class="k">await</span> <span class="n">google_btn</span><span class="o">.</span><span class="n">click</span><span class="p">()</span>
+
+            <span class="n">popup</span> <span class="o">=</span> <span class="k">await</span> <span class="n">popup_info</span><span class="o">.</span><span class="n">value</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_log</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Popup opened: </span><span class="si">{</span><span class="n">popup</span><span class="o">.</span><span class="n">url</span><span class="p">[:</span><span class="mi">100</span><span class="p">]</span><span class="si">}</span><span class="s2">...&quot;</span><span class="p">)</span>
+
+            <span class="c1"># Handle Google OAuth in popup</span>
+            <span class="n">success</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handle_google_popup</span><span class="p">(</span><span class="n">popup</span><span class="p">,</span> <span class="n">timeout</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">success</span><span class="p">:</span>
+                <span class="c1"># Wait for main page to update after OAuth completes</span>
+                <span class="k">await</span> <span class="n">page</span><span class="o">.</span><span class="n">wait_for_timeout</span><span class="p">(</span><span class="mi">3000</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_log</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Login complete, main page URL: </span><span class="si">{</span><span class="n">page</span><span class="o">.</span><span class="n">url</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="n">success</span>
+
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_log</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Login error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="GoogleAuthHelper._handle_google_popup">
+<a class="viewcode-back" href="../../../api/collaboration.html#scitex_browser.auth.GoogleAuthHelper._handle_google_popup">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">_handle_google_popup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">popup</span><span class="p">:</span> <span class="n">Page</span><span class="p">,</span> <span class="n">timeout</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">60000</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Handle the Google OAuth popup flow.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            popup: The Google OAuth popup page</span>
+<span class="sd">            timeout: Maximum time to wait (ms)</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            True if authentication successful, False otherwise</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># Wait for Google login page to load</span>
+            <span class="k">await</span> <span class="n">popup</span><span class="o">.</span><span class="n">wait_for_load_state</span><span class="p">(</span><span class="s2">&quot;domcontentloaded&quot;</span><span class="p">)</span>
+            <span class="k">await</span> <span class="n">popup</span><span class="o">.</span><span class="n">wait_for_timeout</span><span class="p">(</span><span class="mi">2000</span><span class="p">)</span>
+
+            <span class="c1"># Step 1: Enter email</span>
+            <span class="n">email_filled</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fill_email</span><span class="p">(</span><span class="n">popup</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">email_filled</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_log</span><span class="p">(</span><span class="s2">&quot;Failed to fill email&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="kc">False</span>
+
+            <span class="c1"># Step 2: Wait for password page and enter password</span>
+            <span class="n">password_filled</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fill_password</span><span class="p">(</span><span class="n">popup</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">password_filled</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_log</span><span class="p">(</span><span class="s2">&quot;Failed to fill password&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="kc">False</span>
+
+            <span class="c1"># Step 3: Wait for popup to close (indicates success)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">await</span> <span class="n">popup</span><span class="o">.</span><span class="n">wait_for_event</span><span class="p">(</span><span class="s2">&quot;close&quot;</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">20000</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_log</span><span class="p">(</span><span class="s2">&quot;Popup closed - login successful&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="kc">True</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="c1"># Check if we&#39;re still on Google or redirected</span>
+                <span class="n">current_url</span> <span class="o">=</span> <span class="n">popup</span><span class="o">.</span><span class="n">url</span>
+                <span class="k">if</span> <span class="s2">&quot;accounts.google.com&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">current_url</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_log</span><span class="p">(</span><span class="s2">&quot;Redirected away from Google - login successful&quot;</span><span class="p">)</span>
+                    <span class="k">return</span> <span class="kc">True</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_log</span><span class="p">(</span><span class="s2">&quot;Popup didn&#39;t close - possible error&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_log</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Popup handling error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="GoogleAuthHelper._fill_email">
+<a class="viewcode-back" href="../../../api/collaboration.html#scitex_browser.auth.GoogleAuthHelper._fill_email">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">_fill_email</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">popup</span><span class="p">:</span> <span class="n">Page</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Fill email on Google login page.&quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># Wait for email input</span>
+            <span class="k">await</span> <span class="n">popup</span><span class="o">.</span><span class="n">wait_for_selector</span><span class="p">(</span>
+                <span class="s1">&#39;input[type=&quot;email&quot;]&#39;</span><span class="p">,</span> <span class="n">state</span><span class="o">=</span><span class="s2">&quot;visible&quot;</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">10000</span>
+            <span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_log</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Filling email: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">email</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">await</span> <span class="n">popup</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="s1">&#39;input[type=&quot;email&quot;]&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">email</span><span class="p">)</span>
+            <span class="k">await</span> <span class="n">popup</span><span class="o">.</span><span class="n">wait_for_timeout</span><span class="p">(</span><span class="mi">500</span><span class="p">)</span>
+
+            <span class="c1"># Click Next button</span>
+            <span class="n">next_btn</span> <span class="o">=</span> <span class="k">await</span> <span class="n">popup</span><span class="o">.</span><span class="n">query_selector</span><span class="p">(</span><span class="s2">&quot;#identifierNext&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">next_btn</span><span class="p">:</span>
+                <span class="n">next_btn</span> <span class="o">=</span> <span class="k">await</span> <span class="n">popup</span><span class="o">.</span><span class="n">query_selector</span><span class="p">(</span><span class="s1">&#39;button:has-text(&quot;Next&quot;)&#39;</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">next_btn</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_log</span><span class="p">(</span><span class="s2">&quot;Clicking Next after email&quot;</span><span class="p">)</span>
+                <span class="k">await</span> <span class="n">next_btn</span><span class="o">.</span><span class="n">click</span><span class="p">()</span>
+                <span class="k">await</span> <span class="n">popup</span><span class="o">.</span><span class="n">wait_for_timeout</span><span class="p">(</span><span class="mi">3000</span><span class="p">)</span>
+                <span class="k">return</span> <span class="kc">True</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_log</span><span class="p">(</span><span class="s2">&quot;Next button not found after email&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_log</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Email fill error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="GoogleAuthHelper._fill_password">
+<a class="viewcode-back" href="../../../api/collaboration.html#scitex_browser.auth.GoogleAuthHelper._fill_password">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">_fill_password</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">popup</span><span class="p">:</span> <span class="n">Page</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Fill password on Google login page.&quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># Wait for password page to load (Google transitions between pages)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_log</span><span class="p">(</span><span class="s2">&quot;Waiting for password page...&quot;</span><span class="p">)</span>
+
+            <span class="c1"># Wait for password input to become visible</span>
+            <span class="k">await</span> <span class="n">popup</span><span class="o">.</span><span class="n">wait_for_selector</span><span class="p">(</span>
+                <span class="s1">&#39;input[type=&quot;password&quot;]&#39;</span><span class="p">,</span> <span class="n">state</span><span class="o">=</span><span class="s2">&quot;visible&quot;</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">15000</span>
+            <span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_log</span><span class="p">(</span><span class="s2">&quot;Filling password&quot;</span><span class="p">)</span>
+            <span class="k">await</span> <span class="n">popup</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="s1">&#39;input[type=&quot;password&quot;]&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">password</span><span class="p">)</span>
+            <span class="k">await</span> <span class="n">popup</span><span class="o">.</span><span class="n">wait_for_timeout</span><span class="p">(</span><span class="mi">500</span><span class="p">)</span>
+
+            <span class="c1"># Click Next button</span>
+            <span class="n">next_btn</span> <span class="o">=</span> <span class="k">await</span> <span class="n">popup</span><span class="o">.</span><span class="n">query_selector</span><span class="p">(</span><span class="s2">&quot;#passwordNext&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">next_btn</span><span class="p">:</span>
+                <span class="n">next_btn</span> <span class="o">=</span> <span class="k">await</span> <span class="n">popup</span><span class="o">.</span><span class="n">query_selector</span><span class="p">(</span><span class="s1">&#39;button:has-text(&quot;Next&quot;)&#39;</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">next_btn</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_log</span><span class="p">(</span><span class="s2">&quot;Clicking Next after password&quot;</span><span class="p">)</span>
+                <span class="k">await</span> <span class="n">next_btn</span><span class="o">.</span><span class="n">click</span><span class="p">()</span>
+                <span class="k">await</span> <span class="n">popup</span><span class="o">.</span><span class="n">wait_for_timeout</span><span class="p">(</span><span class="mi">5000</span><span class="p">)</span>
+
+                <span class="c1"># Handle 2FA if present</span>
+                <span class="n">twofa_ok</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_wait_for_2fa</span><span class="p">(</span><span class="n">popup</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">60000</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">twofa_ok</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="kc">False</span>
+
+                <span class="c1"># Handle potential consent/continue screens</span>
+                <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handle_consent_screens</span><span class="p">(</span><span class="n">popup</span><span class="p">)</span>
+
+                <span class="k">return</span> <span class="kc">True</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_log</span><span class="p">(</span><span class="s2">&quot;Next button not found after password&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_log</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Password fill error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="GoogleAuthHelper._handle_consent_screens">
+<a class="viewcode-back" href="../../../api/collaboration.html#scitex_browser.auth.GoogleAuthHelper._handle_consent_screens">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">_handle_consent_screens</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">popup</span><span class="p">:</span> <span class="n">Page</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Handle OAuth consent or &#39;Continue&#39; screens that may appear.&quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># Check for Continue button (consent screen)</span>
+            <span class="n">continue_selectors</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="s1">&#39;button:has-text(&quot;Continue&quot;)&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;button:has-text(&quot;Allow&quot;)&#39;</span><span class="p">,</span>
+                <span class="s2">&quot;#submit_approve_access&quot;</span><span class="p">,</span>
+                <span class="s1">&#39;button[data-idom-class*=&quot;continue&quot;]&#39;</span><span class="p">,</span>
+            <span class="p">]</span>
+
+            <span class="k">for</span> <span class="n">selector</span> <span class="ow">in</span> <span class="n">continue_selectors</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">btn</span> <span class="o">=</span> <span class="k">await</span> <span class="n">popup</span><span class="o">.</span><span class="n">query_selector</span><span class="p">(</span><span class="n">selector</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">btn</span> <span class="ow">and</span> <span class="k">await</span> <span class="n">btn</span><span class="o">.</span><span class="n">is_visible</span><span class="p">():</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_log</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Found consent button: </span><span class="si">{</span><span class="n">selector</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                        <span class="k">await</span> <span class="n">btn</span><span class="o">.</span><span class="n">click</span><span class="p">()</span>
+                        <span class="k">await</span> <span class="n">popup</span><span class="o">.</span><span class="n">wait_for_timeout</span><span class="p">(</span><span class="mi">3000</span><span class="p">)</span>
+                        <span class="k">break</span>
+                <span class="k">except</span><span class="p">:</span>
+                    <span class="k">continue</span>
+
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_log</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Consent handling: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="GoogleAuthHelper._wait_for_2fa">
+<a class="viewcode-back" href="../../../api/collaboration.html#scitex_browser.auth.GoogleAuthHelper._wait_for_2fa">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">_wait_for_2fa</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">popup</span><span class="p">:</span> <span class="n">Page</span><span class="p">,</span> <span class="n">timeout</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">60000</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Wait for 2FA verification to complete.</span>
+
+<span class="sd">        Detects 2FA screens and waits for user to approve on their device.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            popup: The Google OAuth popup page</span>
+<span class="sd">            timeout: Maximum time to wait for 2FA (ms)</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            True if 2FA completed, False if timed out</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># Check if we&#39;re on a 2FA page</span>
+            <span class="n">page_text</span> <span class="o">=</span> <span class="k">await</span> <span class="n">popup</span><span class="o">.</span><span class="n">inner_text</span><span class="p">(</span><span class="s2">&quot;body&quot;</span><span class="p">)</span>
+            <span class="n">twofa_indicators</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="s2">&quot;2-Step Verification&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Verify it&#39;s you&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;confirm it&#39;s you&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Open the Gmail app&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Check your phone&quot;</span><span class="p">,</span>
+            <span class="p">]</span>
+
+            <span class="n">is_2fa</span> <span class="o">=</span> <span class="nb">any</span><span class="p">(</span>
+                <span class="n">indicator</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="n">page_text</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">for</span> <span class="n">indicator</span> <span class="ow">in</span> <span class="n">twofa_indicators</span>
+            <span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">is_2fa</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_log</span><span class="p">(</span><span class="s2">&quot;2FA detected - waiting for user approval...&quot;</span><span class="p">)</span>
+                <span class="c1"># Wait for popup to close or URL to change (indicating 2FA success)</span>
+                <span class="n">start_url</span> <span class="o">=</span> <span class="n">popup</span><span class="o">.</span><span class="n">url</span>
+                <span class="n">check_interval</span> <span class="o">=</span> <span class="mi">2000</span>  <span class="c1"># Check every 2 seconds</span>
+                <span class="n">elapsed</span> <span class="o">=</span> <span class="mi">0</span>
+
+                <span class="k">while</span> <span class="n">elapsed</span> <span class="o">&lt;</span> <span class="n">timeout</span><span class="p">:</span>
+                    <span class="k">await</span> <span class="n">popup</span><span class="o">.</span><span class="n">wait_for_timeout</span><span class="p">(</span><span class="n">check_interval</span><span class="p">)</span>
+                    <span class="n">elapsed</span> <span class="o">+=</span> <span class="n">check_interval</span>
+
+                    <span class="c1"># Check if popup closed</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">current_url</span> <span class="o">=</span> <span class="n">popup</span><span class="o">.</span><span class="n">url</span>
+                        <span class="k">if</span> <span class="p">(</span>
+                            <span class="n">current_url</span> <span class="o">!=</span> <span class="n">start_url</span>
+                            <span class="ow">and</span> <span class="s2">&quot;accounts.google.com&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">current_url</span>
+                        <span class="p">):</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">_log</span><span class="p">(</span><span class="s2">&quot;2FA completed - redirected&quot;</span><span class="p">)</span>
+                            <span class="k">return</span> <span class="kc">True</span>
+                    <span class="k">except</span><span class="p">:</span>
+                        <span class="c1"># Popup closed</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_log</span><span class="p">(</span><span class="s2">&quot;2FA completed - popup closed&quot;</span><span class="p">)</span>
+                        <span class="k">return</span> <span class="kc">True</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">_log</span><span class="p">(</span><span class="s2">&quot;2FA timeout&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="kc">False</span>
+
+            <span class="k">return</span> <span class="kc">True</span>  <span class="c1"># Not a 2FA page</span>
+
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_log</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;2FA check error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="GoogleAuthHelper.is_logged_in">
+<a class="viewcode-back" href="../../../api/collaboration.html#scitex_browser.auth.GoogleAuthHelper.is_logged_in">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">is_logged_in</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">page</span><span class="p">:</span> <span class="n">Page</span><span class="p">,</span> <span class="n">login_indicators</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check if user appears to be logged in.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            page: Page to check</span>
+<span class="sd">            login_indicators: List of URL substrings that indicate NOT logged in</span>
+<span class="sd">                             (default: [&quot;login&quot;, &quot;signin&quot;, &quot;oauth&quot;])</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            True if appears logged in, False otherwise</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">login_indicators</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">login_indicators</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;login&quot;</span><span class="p">,</span> <span class="s2">&quot;signin&quot;</span><span class="p">,</span> <span class="s2">&quot;oauth&quot;</span><span class="p">,</span> <span class="s2">&quot;accounts.google.com&quot;</span><span class="p">]</span>
+
+        <span class="n">current_url</span> <span class="o">=</span> <span class="n">page</span><span class="o">.</span><span class="n">url</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">indicator</span> <span class="ow">in</span> <span class="n">login_indicators</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">indicator</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="n">current_url</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+</div>
+
+
+
+<span class="c1"># Convenience function for quick usage</span>
+<div class="viewcode-block" id="google_login">
+<a class="viewcode-back" href="../../../api/collaboration.html#scitex_browser.auth.google_login">[docs]</a>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">google_login</span><span class="p">(</span>
+    <span class="n">page</span><span class="p">:</span> <span class="n">Page</span><span class="p">,</span>
+    <span class="n">email</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">password</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">button_selector</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;button:has-text(&quot;Continue with Google&quot;)&#39;</span><span class="p">,</span>
+    <span class="n">debug</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Quick Google OAuth login.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        page: Playwright Page with Google login button</span>
+<span class="sd">        email: Google account email</span>
+<span class="sd">        password: Google account password</span>
+<span class="sd">        button_selector: CSS selector for Google button</span>
+<span class="sd">        debug: Print debug messages</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        True if login successful, False otherwise</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        success = await google_login(page, &quot;user@gmail.com&quot;, &quot;password&quot;)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">auth</span> <span class="o">=</span> <span class="n">GoogleAuthHelper</span><span class="p">(</span><span class="n">email</span><span class="o">=</span><span class="n">email</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="n">password</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="n">debug</span><span class="p">)</span>
+    <span class="k">return</span> <span class="k">await</span> <span class="n">auth</span><span class="o">.</span><span class="n">login_via_google_button</span><span class="p">(</span><span class="n">page</span><span class="p">,</span> <span class="n">button_selector</span><span class="p">)</span></div>
+
+
+
+<span class="c1"># EOF</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Yusuke Watanabe.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

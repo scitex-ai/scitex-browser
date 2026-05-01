@@ -1,0 +1,1395 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>scitex_browser.stealth.StealthManager &mdash; SciTeX Browser v0.1.14</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=468bc497"></script>
+      <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            SciTeX Browser
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../installation.html#requirements">Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../installation.html#basic-installation">Basic Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../installation.html#development">Development</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/core.html">scitex_browser.core</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.BrowserMixin"><code class="docutils literal notranslate"><span class="pre">BrowserMixin</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.BrowserMixin.__init__"><code class="docutils literal notranslate"><span class="pre">BrowserMixin.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.BrowserMixin.get_shared_browser_async"><code class="docutils literal notranslate"><span class="pre">BrowserMixin.get_shared_browser_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.BrowserMixin.cleanup_shared_browser_async"><code class="docutils literal notranslate"><span class="pre">BrowserMixin.cleanup_shared_browser_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.BrowserMixin.get_browser_async"><code class="docutils literal notranslate"><span class="pre">BrowserMixin.get_browser_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.BrowserMixin.new_page"><code class="docutils literal notranslate"><span class="pre">BrowserMixin.new_page()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.BrowserMixin.close_page"><code class="docutils literal notranslate"><span class="pre">BrowserMixin.close_page()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.BrowserMixin.close_all_pages"><code class="docutils literal notranslate"><span class="pre">BrowserMixin.close_all_pages()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.BrowserMixin.create_browser_context_async"><code class="docutils literal notranslate"><span class="pre">BrowserMixin.create_browser_context_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.BrowserMixin.get_session_async"><code class="docutils literal notranslate"><span class="pre">BrowserMixin.get_session_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.BrowserMixin.close_session"><code class="docutils literal notranslate"><span class="pre">BrowserMixin.close_session()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.BrowserMixin.accept_cookies_async"><code class="docutils literal notranslate"><span class="pre">BrowserMixin.accept_cookies_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.BrowserMixin.interactive"><code class="docutils literal notranslate"><span class="pre">BrowserMixin.interactive()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.BrowserMixin.stealth"><code class="docutils literal notranslate"><span class="pre">BrowserMixin.stealth()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.BrowserMixin.show_async"><code class="docutils literal notranslate"><span class="pre">BrowserMixin.show_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.BrowserMixin.hide_async"><code class="docutils literal notranslate"><span class="pre">BrowserMixin.hide_async()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.ChromeProfileManager"><code class="docutils literal notranslate"><span class="pre">ChromeProfileManager</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.ChromeProfileManager.EXTENSIONS"><code class="docutils literal notranslate"><span class="pre">ChromeProfileManager.EXTENSIONS</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.ChromeProfileManager.AVAILABLE_PROFILE_NAMES"><code class="docutils literal notranslate"><span class="pre">ChromeProfileManager.AVAILABLE_PROFILE_NAMES</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.ChromeProfileManager.__init__"><code class="docutils literal notranslate"><span class="pre">ChromeProfileManager.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.ChromeProfileManager._get_extension_statuses"><code class="docutils literal notranslate"><span class="pre">ChromeProfileManager._get_extension_statuses()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.ChromeProfileManager.check_extensions_installed"><code class="docutils literal notranslate"><span class="pre">ChromeProfileManager.check_extensions_installed()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.ChromeProfileManager._get_installed_extension_paths"><code class="docutils literal notranslate"><span class="pre">ChromeProfileManager._get_installed_extension_paths()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.ChromeProfileManager.get_extension_args"><code class="docutils literal notranslate"><span class="pre">ChromeProfileManager.get_extension_args()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.ChromeProfileManager.install_extensions_manually_if_not_installed_async"><code class="docutils literal notranslate"><span class="pre">ChromeProfileManager.install_extensions_manually_if_not_installed_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.ChromeProfileManager.handle_runtime_extension_dialogs_async"><code class="docutils literal notranslate"><span class="pre">ChromeProfileManager.handle_runtime_extension_dialogs_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/core.html#scitex_browser.core.ChromeProfileManager.sync_from_profile"><code class="docutils literal notranslate"><span class="pre">ChromeProfileManager.sync_from_profile()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/auth.html">scitex_browser.auth</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/auth.html#scitex_browser.auth.GoogleAuthHelper"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/auth.html#scitex_browser.auth.GoogleAuthHelper.__init__"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/auth.html#scitex_browser.auth.GoogleAuthHelper._log"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper._log()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/auth.html#scitex_browser.auth.GoogleAuthHelper.login_via_google_button"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper.login_via_google_button()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/auth.html#scitex_browser.auth.GoogleAuthHelper._handle_google_popup"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper._handle_google_popup()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/auth.html#scitex_browser.auth.GoogleAuthHelper._fill_email"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper._fill_email()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/auth.html#scitex_browser.auth.GoogleAuthHelper._fill_password"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper._fill_password()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/auth.html#scitex_browser.auth.GoogleAuthHelper._handle_consent_screens"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper._handle_consent_screens()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/auth.html#scitex_browser.auth.GoogleAuthHelper._wait_for_2fa"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper._wait_for_2fa()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/auth.html#scitex_browser.auth.GoogleAuthHelper.is_logged_in"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper.is_logged_in()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/auth.html#scitex_browser.auth.google_login"><code class="docutils literal notranslate"><span class="pre">google_login()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/interaction.html">scitex_browser.interaction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/interaction.html#scitex_browser.interaction.click_center_async"><code class="docutils literal notranslate"><span class="pre">click_center_async()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/interaction.html#scitex_browser.interaction.click_with_fallbacks_async"><code class="docutils literal notranslate"><span class="pre">click_with_fallbacks_async()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/interaction.html#scitex_browser.interaction.fill_with_fallbacks_async"><code class="docutils literal notranslate"><span class="pre">fill_with_fallbacks_async()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/interaction.html#scitex_browser.interaction.PopupHandler"><code class="docutils literal notranslate"><span class="pre">PopupHandler</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/interaction.html#scitex_browser.interaction.PopupHandler.COOKIE_SELECTORS"><code class="docutils literal notranslate"><span class="pre">PopupHandler.COOKIE_SELECTORS</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/interaction.html#scitex_browser.interaction.PopupHandler.CLOSE_SELECTORS"><code class="docutils literal notranslate"><span class="pre">PopupHandler.CLOSE_SELECTORS</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/interaction.html#scitex_browser.interaction.PopupHandler.MODAL_SELECTORS"><code class="docutils literal notranslate"><span class="pre">PopupHandler.MODAL_SELECTORS</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/interaction.html#scitex_browser.interaction.PopupHandler.__init__"><code class="docutils literal notranslate"><span class="pre">PopupHandler.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/interaction.html#scitex_browser.interaction.PopupHandler.detect_popups"><code class="docutils literal notranslate"><span class="pre">PopupHandler.detect_popups()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/interaction.html#scitex_browser.interaction.PopupHandler.handle_cookie_popup"><code class="docutils literal notranslate"><span class="pre">PopupHandler.handle_cookie_popup()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/interaction.html#scitex_browser.interaction.PopupHandler.close_popup"><code class="docutils literal notranslate"><span class="pre">PopupHandler.close_popup()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/interaction.html#scitex_browser.interaction.PopupHandler.handle_all_popups"><code class="docutils literal notranslate"><span class="pre">PopupHandler.handle_all_popups()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/interaction.html#scitex_browser.interaction.PopupHandler.wait_and_handle_popups"><code class="docutils literal notranslate"><span class="pre">PopupHandler.wait_and_handle_popups()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/interaction.html#scitex_browser.interaction.close_popups_async"><code class="docutils literal notranslate"><span class="pre">close_popups_async()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/interaction.html#scitex_browser.interaction.ensure_no_popups_async"><code class="docutils literal notranslate"><span class="pre">ensure_no_popups_async()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/debugging.html">scitex_browser.debugging</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.show_grid_async"><code class="docutils literal notranslate"><span class="pre">show_grid_async()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.highlight_element_async"><code class="docutils literal notranslate"><span class="pre">highlight_element_async()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.inject_visual_effects"><code class="docutils literal notranslate"><span class="pre">inject_visual_effects()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.inject_visual_effects_async"><code class="docutils literal notranslate"><span class="pre">inject_visual_effects_async()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.show_cursor_at"><code class="docutils literal notranslate"><span class="pre">show_cursor_at()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.show_cursor_at_async"><code class="docutils literal notranslate"><span class="pre">show_cursor_at_async()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.show_click_effect"><code class="docutils literal notranslate"><span class="pre">show_click_effect()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.show_click_effect_async"><code class="docutils literal notranslate"><span class="pre">show_click_effect_async()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.show_step"><code class="docutils literal notranslate"><span class="pre">show_step()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.show_step_async"><code class="docutils literal notranslate"><span class="pre">show_step_async()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.show_test_result"><code class="docutils literal notranslate"><span class="pre">show_test_result()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.show_test_result_async"><code class="docutils literal notranslate"><span class="pre">show_test_result_async()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.setup_console_interceptor"><code class="docutils literal notranslate"><span class="pre">setup_console_interceptor()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.collect_console_logs"><code class="docutils literal notranslate"><span class="pre">collect_console_logs()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.collect_console_logs_detailed"><code class="docutils literal notranslate"><span class="pre">collect_console_logs_detailed()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.format_logs_devtools_style"><code class="docutils literal notranslate"><span class="pre">format_logs_devtools_style()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.save_failure_artifacts"><code class="docutils literal notranslate"><span class="pre">save_failure_artifacts()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.create_failure_capture_fixture"><code class="docutils literal notranslate"><span class="pre">create_failure_capture_fixture()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.TestMonitor"><code class="docutils literal notranslate"><span class="pre">TestMonitor</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.TestMonitor.__init__"><code class="docutils literal notranslate"><span class="pre">TestMonitor.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.TestMonitor.start"><code class="docutils literal notranslate"><span class="pre">TestMonitor.start()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.TestMonitor.stop"><code class="docutils literal notranslate"><span class="pre">TestMonitor.stop()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.TestMonitor.get_status"><code class="docutils literal notranslate"><span class="pre">TestMonitor.get_status()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.TestMonitor.take_snapshot"><code class="docutils literal notranslate"><span class="pre">TestMonitor.take_snapshot()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.TestMonitor.create_gif"><code class="docutils literal notranslate"><span class="pre">TestMonitor.create_gif()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.TestMonitor.get_screenshots"><code class="docutils literal notranslate"><span class="pre">TestMonitor.get_screenshots()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.create_test_monitor_fixture"><code class="docutils literal notranslate"><span class="pre">create_test_monitor_fixture()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.monitor_test"><code class="docutils literal notranslate"><span class="pre">monitor_test()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.SyncBrowserSession"><code class="docutils literal notranslate"><span class="pre">SyncBrowserSession</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.SyncBrowserSession.__init__"><code class="docutils literal notranslate"><span class="pre">SyncBrowserSession.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.SyncBrowserSession.__enter__"><code class="docutils literal notranslate"><span class="pre">SyncBrowserSession.__enter__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.SyncBrowserSession.__exit__"><code class="docutils literal notranslate"><span class="pre">SyncBrowserSession.__exit__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.SyncBrowserSession._kill_process_tree"><code class="docutils literal notranslate"><span class="pre">SyncBrowserSession._kill_process_tree()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.SyncBrowserSession._emergency_cleanup"><code class="docutils literal notranslate"><span class="pre">SyncBrowserSession._emergency_cleanup()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.SyncBrowserSession.kill_zombie_browsers"><code class="docutils literal notranslate"><span class="pre">SyncBrowserSession.kill_zombie_browsers()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.sync_browser_session"><code class="docutils literal notranslate"><span class="pre">sync_browser_session()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.create_browser_session_fixture"><code class="docutils literal notranslate"><span class="pre">create_browser_session_fixture()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/pdf.html">scitex_browser.pdf</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/pdf.html#scitex_browser.pdf.save_as_pdf"><code class="docutils literal notranslate"><span class="pre">save_as_pdf()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/pdf.html#scitex_browser.pdf.save_as_pdf_async"><code class="docutils literal notranslate"><span class="pre">save_as_pdf_async()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/pdf.html#scitex_browser.pdf.detect_chrome_pdf_viewer_async"><code class="docutils literal notranslate"><span class="pre">detect_chrome_pdf_viewer_async()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/pdf.html#scitex_browser.pdf.click_download_for_chrome_pdf_viewer_async"><code class="docutils literal notranslate"><span class="pre">click_download_for_chrome_pdf_viewer_async()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/stealth.html">scitex_browser.stealth</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.StealthManager"><code class="docutils literal notranslate"><span class="pre">StealthManager</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.StealthManager.__init__"><code class="docutils literal notranslate"><span class="pre">StealthManager.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.StealthManager.get_random_user_agent"><code class="docutils literal notranslate"><span class="pre">StealthManager.get_random_user_agent()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.StealthManager.get_random_viewport"><code class="docutils literal notranslate"><span class="pre">StealthManager.get_random_viewport()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.StealthManager.get_stealth_options"><code class="docutils literal notranslate"><span class="pre">StealthManager.get_stealth_options()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.StealthManager.get_stealth_options_additional"><code class="docutils literal notranslate"><span class="pre">StealthManager.get_stealth_options_additional()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.StealthManager.get_network_evasion_headers"><code class="docutils literal notranslate"><span class="pre">StealthManager.get_network_evasion_headers()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.StealthManager.add_human_behavior_async"><code class="docutils literal notranslate"><span class="pre">StealthManager.add_human_behavior_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.StealthManager.handle_cloudflare_challenge_async"><code class="docutils literal notranslate"><span class="pre">StealthManager.handle_cloudflare_challenge_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.StealthManager.get_init_script"><code class="docutils literal notranslate"><span class="pre">StealthManager.get_init_script()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.StealthManager.get_dimension_spoofing_script"><code class="docutils literal notranslate"><span class="pre">StealthManager.get_dimension_spoofing_script()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.StealthManager.human_delay_async"><code class="docutils literal notranslate"><span class="pre">StealthManager.human_delay_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.StealthManager.human_click_async"><code class="docutils literal notranslate"><span class="pre">StealthManager.human_click_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.StealthManager.human_mouse_move_async"><code class="docutils literal notranslate"><span class="pre">StealthManager.human_mouse_move_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.StealthManager.human_scroll_async"><code class="docutils literal notranslate"><span class="pre">StealthManager.human_scroll_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.StealthManager.human_type_async"><code class="docutils literal notranslate"><span class="pre">StealthManager.human_type_async()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.HumanBehavior"><code class="docutils literal notranslate"><span class="pre">HumanBehavior</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.HumanBehavior.__init__"><code class="docutils literal notranslate"><span class="pre">HumanBehavior.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.HumanBehavior.random_delay_async"><code class="docutils literal notranslate"><span class="pre">HumanBehavior.random_delay_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.HumanBehavior.reading_delay_async"><code class="docutils literal notranslate"><span class="pre">HumanBehavior.reading_delay_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.HumanBehavior.mouse_move_async"><code class="docutils literal notranslate"><span class="pre">HumanBehavior.mouse_move_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.HumanBehavior.hover_and_click_async"><code class="docutils literal notranslate"><span class="pre">HumanBehavior.hover_and_click_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.HumanBehavior.scroll_async"><code class="docutils literal notranslate"><span class="pre">HumanBehavior.scroll_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.HumanBehavior.type_text_async"><code class="docutils literal notranslate"><span class="pre">HumanBehavior.type_text_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.HumanBehavior.random_mouse_movement_async"><code class="docutils literal notranslate"><span class="pre">HumanBehavior.random_mouse_movement_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.HumanBehavior.pdf_viewing_behavior_async"><code class="docutils literal notranslate"><span class="pre">HumanBehavior.pdf_viewing_behavior_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.HumanBehavior.wait_for_download_async"><code class="docutils literal notranslate"><span class="pre">HumanBehavior.wait_for_download_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/stealth.html#scitex_browser.stealth.HumanBehavior.form_interaction_async"><code class="docutils literal notranslate"><span class="pre">HumanBehavior.form_interaction_async()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/automation.html">scitex_browser.automation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/automation.html#scitex_browser.automation.CookieAutoAcceptor"><code class="docutils literal notranslate"><span class="pre">CookieAutoAcceptor</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/automation.html#scitex_browser.automation.CookieAutoAcceptor.__init__"><code class="docutils literal notranslate"><span class="pre">CookieAutoAcceptor.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/automation.html#scitex_browser.automation.CookieAutoAcceptor.inject_auto_acceptor_async"><code class="docutils literal notranslate"><span class="pre">CookieAutoAcceptor.inject_auto_acceptor_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/automation.html#scitex_browser.automation.CookieAutoAcceptor.get_auto_acceptor_script"><code class="docutils literal notranslate"><span class="pre">CookieAutoAcceptor.get_auto_acceptor_script()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/automation.html#scitex_browser.automation.CookieAutoAcceptor.check_cookie_banner_exists_async"><code class="docutils literal notranslate"><span class="pre">CookieAutoAcceptor.check_cookie_banner_exists_async()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/collaboration.html">scitex_browser.collaboration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.__init__"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.start"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.start()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.navigate"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.navigate()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.screenshot"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.screenshot()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.wait"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.wait()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.close"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.close()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.__aenter__"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.__aenter__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.__aexit__"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.__aexit__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession._log_event"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession._log_event()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession._auto_screenshot_loop"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession._auto_screenshot_loop()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.get_info"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.get_info()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.type"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.type()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.click"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.click()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.hover"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.hover()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.press"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.press()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.scroll_down"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.scroll_down()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.scroll_to"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.scroll_to()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.wait_for"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.wait_for()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.wait_for_text"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.wait_for_text()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.wait_for_url"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.wait_for_url()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.get_text"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.get_text()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.get_value"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.get_value()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.is_visible"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.is_visible()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.ask"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.ask()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.confirm"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.confirm()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SessionConfig"><code class="docutils literal notranslate"><span class="pre">SessionConfig</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SessionConfig.session_id"><code class="docutils literal notranslate"><span class="pre">SessionConfig.session_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SessionConfig.browser_type"><code class="docutils literal notranslate"><span class="pre">SessionConfig.browser_type</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SessionConfig.headless"><code class="docutils literal notranslate"><span class="pre">SessionConfig.headless</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SessionConfig.viewport"><code class="docutils literal notranslate"><span class="pre">SessionConfig.viewport</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SessionConfig.user_data_dir"><code class="docutils literal notranslate"><span class="pre">SessionConfig.user_data_dir</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SessionConfig.enable_screenshots"><code class="docutils literal notranslate"><span class="pre">SessionConfig.enable_screenshots</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SessionConfig.screenshot_interval"><code class="docutils literal notranslate"><span class="pre">SessionConfig.screenshot_interval</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.SessionConfig.__init__"><code class="docutils literal notranslate"><span class="pre">SessionConfig.__init__()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.VisualFeedback"><code class="docutils literal notranslate"><span class="pre">VisualFeedback</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.VisualFeedback.__init__"><code class="docutils literal notranslate"><span class="pre">VisualFeedback.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.VisualFeedback.initialize"><code class="docutils literal notranslate"><span class="pre">VisualFeedback.initialize()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.VisualFeedback.show_message"><code class="docutils literal notranslate"><span class="pre">VisualFeedback.show_message()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.VisualFeedback.show_participant"><code class="docutils literal notranslate"><span class="pre">VisualFeedback.show_participant()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.VisualFeedback.show_action"><code class="docutils literal notranslate"><span class="pre">VisualFeedback.show_action()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.VisualFeedback.clear"><code class="docutils literal notranslate"><span class="pre">VisualFeedback.clear()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.CredentialManager"><code class="docutils literal notranslate"><span class="pre">CredentialManager</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.CredentialManager.__init__"><code class="docutils literal notranslate"><span class="pre">CredentialManager.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.CredentialManager.get_credential"><code class="docutils literal notranslate"><span class="pre">CredentialManager.get_credential()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.CredentialManager._is_terminal_available"><code class="docutils literal notranslate"><span class="pre">CredentialManager._is_terminal_available()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.CredentialManager._prompt_terminal"><code class="docutils literal notranslate"><span class="pre">CredentialManager._prompt_terminal()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.CredentialManager._prompt_browser"><code class="docutils literal notranslate"><span class="pre">CredentialManager._prompt_browser()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.CredentialManager.get_login_credentials"><code class="docutils literal notranslate"><span class="pre">CredentialManager.get_login_credentials()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.CredentialManager.clear_cache"><code class="docutils literal notranslate"><span class="pre">CredentialManager.clear_cache()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.GoogleAuthHelper"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.GoogleAuthHelper.__init__"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.GoogleAuthHelper._log"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper._log()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.GoogleAuthHelper.login_via_google_button"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper.login_via_google_button()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.GoogleAuthHelper._handle_google_popup"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper._handle_google_popup()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.GoogleAuthHelper._fill_email"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper._fill_email()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.GoogleAuthHelper._fill_password"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper._fill_password()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.GoogleAuthHelper._handle_consent_screens"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper._handle_consent_screens()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.GoogleAuthHelper._wait_for_2fa"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper._wait_for_2fa()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.GoogleAuthHelper.is_logged_in"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper.is_logged_in()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/collaboration.html#scitex_browser.collaboration.google_login"><code class="docutils literal notranslate"><span class="pre">google_login()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/remote.html">scitex_browser.remote</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">SciTeX Browser</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">scitex_browser.stealth.StealthManager</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for scitex_browser.stealth.StealthManager</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python3</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1"># Timestamp: &quot;2025-10-10 00:50:44 (ywatanabe)&quot;</span>
+<span class="c1"># File: /home/ywatanabe/proj/scitex_repo/src/scitex/browser/stealth/StealthManager.py</span>
+<span class="c1"># ----------------------------------------</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+
+<span class="n">__FILE__</span> <span class="o">=</span> <span class="s2">&quot;./src/scitex/browser/stealth/StealthManager.py&quot;</span>
+<span class="n">__DIR__</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">__FILE__</span><span class="p">)</span>
+<span class="c1"># ----------------------------------------</span>
+
+<span class="n">__FILE__</span> <span class="o">=</span> <span class="vm">__file__</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">asyncio</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">random</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">playwright.async_api</span><span class="w"> </span><span class="kn">import</span> <span class="n">Browser</span><span class="p">,</span> <span class="n">BrowserContext</span><span class="p">,</span> <span class="n">Page</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">scitex_logging</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">logging</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+<span class="c1"># User Agent(Old)	Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36</span>
+<span class="c1"># WebDriver(New)	missing (passed)</span>
+<span class="c1"># WebDriver Advanced	passed</span>
+<span class="c1"># Chrome(New)	present (passed)</span>
+<span class="c1"># Permissions(New)	prompt</span>
+<span class="c1"># Plugins Length(Old)	5</span>
+<span class="c1"># Plugins is of type PluginArray	passed</span>
+<span class="c1"># Languages(Old)	en-US,en,ja</span>
+<span class="c1"># WebGL Vendor	Google Inc. (AMD)</span>
+<span class="c1"># WebGL Renderer	ANGLE (AMD, AMD Radeon(TM) Graphics (0x00001636) Direct3D11 vs_5_0 ps_5_0, D3D11)</span>
+<span class="c1"># Broken Image Dimensions	16x16</span>
+
+
+<div class="viewcode-block" id="StealthManager">
+<a class="viewcode-back" href="../../../api/stealth.html#scitex_browser.stealth.StealthManager">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">StealthManager</span><span class="p">:</span>
+<div class="viewcode-block" id="StealthManager.__init__">
+<a class="viewcode-back" href="../../../api/stealth.html#scitex_browser.stealth.StealthManager.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">viewport_size</span><span class="p">:</span> <span class="nb">tuple</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">spoof_dimension</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">viewport_size</span> <span class="o">=</span> <span class="n">viewport_size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spoof_dimension</span> <span class="o">=</span> <span class="n">spoof_dimension</span></div>
+
+
+<div class="viewcode-block" id="StealthManager.get_random_user_agent">
+<a class="viewcode-back" href="../../../api/stealth.html#scitex_browser.stealth.StealthManager.get_random_user_agent">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_random_user_agent</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="n">user_agents</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s2">&quot;Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36&quot;</span><span class="p">,</span>
+            <span class="c1"># &quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36&quot;,</span>
+            <span class="c1"># &quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Safari/537.36&quot;,</span>
+            <span class="c1"># &quot;Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Safari/537.36&quot;,</span>
+            <span class="c1"># &quot;Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Safari/537.36&quot;,</span>
+            <span class="c1"># &quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36&quot;,</span>
+            <span class="c1"># &quot;Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36&quot;,</span>
+            <span class="c1"># &quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36&quot;,</span>
+        <span class="p">]</span>
+        <span class="n">user_agent</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">user_agents</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">: User Agent randomly selected: </span><span class="si">{</span><span class="n">user_agent</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">user_agent</span></div>
+
+
+<div class="viewcode-block" id="StealthManager.get_random_viewport">
+<a class="viewcode-back" href="../../../api/stealth.html#scitex_browser.stealth.StealthManager.get_random_viewport">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_random_viewport</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">viewport_size</span><span class="p">:</span>
+            <span class="n">viewport</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;width&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">viewport_size</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="s2">&quot;height&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">viewport_size</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+            <span class="p">}</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">: Viewport defined as specified in Stealth Manager initiation: </span><span class="si">{</span><span class="n">viewport</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="n">viewport</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">spoof_dimension</span><span class="p">:</span>
+            <span class="c1"># viewport = {&quot;width&quot;: 1, &quot;height&quot;: 1}</span>
+            <span class="n">viewport</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;width&quot;</span><span class="p">:</span> <span class="mi">1920</span><span class="p">,</span> <span class="s2">&quot;height&quot;</span><span class="p">:</span> <span class="mi">1080</span><span class="p">}</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">: Viewport defined as spoof_dimension passed during Stealth Manager initiation: </span><span class="si">{</span><span class="n">viewport</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="n">viewport</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">viewport</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span>
+                <span class="p">[</span>
+                    <span class="p">{</span><span class="s2">&quot;width&quot;</span><span class="p">:</span> <span class="mi">1920</span><span class="p">,</span> <span class="s2">&quot;height&quot;</span><span class="p">:</span> <span class="mi">1080</span><span class="p">},</span>
+                    <span class="p">{</span><span class="s2">&quot;width&quot;</span><span class="p">:</span> <span class="mi">1366</span><span class="p">,</span> <span class="s2">&quot;height&quot;</span><span class="p">:</span> <span class="mi">768</span><span class="p">},</span>
+                    <span class="p">{</span><span class="s2">&quot;width&quot;</span><span class="p">:</span> <span class="mi">1440</span><span class="p">,</span> <span class="s2">&quot;height&quot;</span><span class="p">:</span> <span class="mi">900</span><span class="p">},</span>
+                    <span class="p">{</span><span class="s2">&quot;width&quot;</span><span class="p">:</span> <span class="mi">1280</span><span class="p">,</span> <span class="s2">&quot;height&quot;</span><span class="p">:</span> <span class="mi">720</span><span class="p">},</span>
+                <span class="p">]</span>
+            <span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">: Viewport randomly selected: </span><span class="si">{</span><span class="n">viewport</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">viewport</span></div>
+
+
+<div class="viewcode-block" id="StealthManager.get_stealth_options">
+<a class="viewcode-back" href="../../../api/stealth.html#scitex_browser.stealth.StealthManager.get_stealth_options">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_stealth_options</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">&quot;viewport&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_random_viewport</span><span class="p">(),</span>
+            <span class="s2">&quot;user_agent&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_random_user_agent</span><span class="p">(),</span>
+            <span class="s2">&quot;extra_http_headers&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;Accept&quot;</span><span class="p">:</span> <span class="s2">&quot;text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Accept-Language&quot;</span><span class="p">:</span> <span class="s2">&quot;en-US,en;q=0.9&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Accept-Encoding&quot;</span><span class="p">:</span> <span class="s2">&quot;gzip, deflate, br, zstd&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Cache-Control&quot;</span><span class="p">:</span> <span class="s2">&quot;max-age=0&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Sec-Ch-Ua&quot;</span><span class="p">:</span> <span class="s1">&#39;&quot;Google Chrome&quot;;v=&quot;132&quot;, &quot;Chromium&quot;;v=&quot;132&quot;, &quot;Not_A Brand&quot;;v=&quot;24&quot;&#39;</span><span class="p">,</span>
+                <span class="s2">&quot;Sec-Ch-Ua-Mobile&quot;</span><span class="p">:</span> <span class="s2">&quot;?0&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Sec-Ch-Ua-Platform&quot;</span><span class="p">:</span> <span class="s1">&#39;&quot;Windows&quot;&#39;</span><span class="p">,</span>
+                <span class="s2">&quot;Sec-Fetch-Dest&quot;</span><span class="p">:</span> <span class="s2">&quot;document&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Sec-Fetch-Mode&quot;</span><span class="p">:</span> <span class="s2">&quot;navigate&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Sec-Fetch-Site&quot;</span><span class="p">:</span> <span class="s2">&quot;none&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Sec-Fetch-User&quot;</span><span class="p">:</span> <span class="s2">&quot;?1&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Upgrade-Insecure-Requests&quot;</span><span class="p">:</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Referer&quot;</span><span class="p">:</span> <span class="s2">&quot;https://www.google.com/&quot;</span><span class="p">,</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;ignore_https_errors&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="s2">&quot;java_script_enabled&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="p">}</span></div>
+
+
+<div class="viewcode-block" id="StealthManager.get_stealth_options_additional">
+<a class="viewcode-back" href="../../../api/stealth.html#scitex_browser.stealth.StealthManager.get_stealth_options_additional">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_stealth_options_additional</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+        <span class="n">stealth_args</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="c1"># Core security and sandbox</span>
+            <span class="s2">&quot;--no-sandbox&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--disable-setuid-sandbox&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--disable-dev-shm-usage&quot;</span><span class="p">,</span>
+            <span class="c1"># Critical automation detection bypass</span>
+            <span class="s2">&quot;--disable-blink-features=AutomationControlled&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--disable-features=UserAgentClientHint&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--disable-features=WebRtcHideLocalIpsWithMdns&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--disable-features=VizDisplayCompositor&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--disable-features=TranslateUI&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--disable-features=Translate&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--disable-features=MediaRouter&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--disable-features=OptimizationHints&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--disable-features=AudioServiceOutOfProcess&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--disable-features=VizServiceSharingEnabled&quot;</span><span class="p">,</span>
+            <span class="c1"># Enhanced fingerprinting resistance</span>
+            <span class="s2">&quot;--disable-web-security&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--disable-site-isolation-trials&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--disable-cross-domain-blocking&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--disable-features=CrossOriginOpenerPolicy&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--disable-features=DocumentPolicy&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--disable-features=OriginPolicy&quot;</span><span class="p">,</span>
+            <span class="c1"># Network and connectivity</span>
+            <span class="s2">&quot;--disable-background-networking&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--disable-client-side-phishing-detection&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--disable-component-update&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--disable-domain-reliability&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--disable-background-mode&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--disable-ipc-flooding-protection&quot;</span><span class="p">,</span>
+            <span class="c1"># Browser behavior normalization</span>
+            <span class="s2">&quot;--disable-sync&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--disable-translate&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--disable-default-apps&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--enable-extensions&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--no-first-run&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--no-default-browser-check&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--disable-infobars&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--disable-notifications&quot;</span><span class="p">,</span>
+            <span class="c1"># POPUP BLOCKING - Add these lines</span>
+            <span class="s2">&quot;--block-new-web-contents&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--disable-popup-blocking&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--suppress-message-center-popups&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--disable-session-crashed-bubble&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--disable-features=UserAgentClientHint,TranslateSubFrames,AutofillServerCommunication&quot;</span><span class="p">,</span>
+            <span class="c1"># Performance and timing</span>
+            <span class="s2">&quot;--disable-background-timer-throttling&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--disable-backgrounding-occluded-windows&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--disable-renderer-backgrounding&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--disable-hang-monitor&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--disable-plugins-discovery&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--disable-field-trial-config&quot;</span><span class="p">,</span>
+            <span class="c1"># Media and hardware access</span>
+            <span class="s2">&quot;--use-fake-ui-for-media-stream&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--use-fake-device-for-media-stream&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--autoplay-policy=user-gesture-required&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--disable-audio-output&quot;</span><span class="p">,</span>
+            <span class="c1"># Logging and debugging</span>
+            <span class="s2">&quot;--disable-logging&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--disable-gpu-logging&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--disable-dev-shm-usage&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--disable-renderer-code-integrity&quot;</span><span class="p">,</span>
+            <span class="c1"># Memory optimization</span>
+            <span class="s2">&quot;--memory-pressure-off&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--max_old_space_size=4096&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--disable-low-res-tiling&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--disable-partial-raster&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--disable-checker-imaging&quot;</span><span class="p">,</span>
+            <span class="c1"># TLS/SSL improvements</span>
+            <span class="s2">&quot;--ignore-certificate-errors&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--ignore-ssl-errors&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--ignore-certificate-errors-spki-list&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--disable-web-security&quot;</span><span class="p">,</span>
+            <span class="c1"># Additional anti-detection</span>
+            <span class="s2">&quot;--disable-features=VizHitTestSurfaceLayer&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--disable-features=TranslateSubFrames&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--disable-search-engine-choice-screen&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--disable-features=PrivacySandboxSettings4&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--disable-features=AutofillServerCommunication&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;--enable-extensions&quot;</span><span class="p">,</span>
+        <span class="p">]</span>
+
+        <span class="c1"># Apply window size and position based on mode</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">spoof_dimension</span><span class="p">:</span>
+            <span class="c1"># 1x1 window completely off-screen for true invisibility</span>
+            <span class="n">stealth_args</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="s2">&quot;--window-size=1,1&quot;</span><span class="p">,</span> <span class="s2">&quot;--window-position=0,0&quot;</span><span class="p">])</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">: Invisible mode: Window set to 1x1 at position 0,0 (off-screen)&quot;</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Standard window or custom size</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">viewport_size</span><span class="p">:</span>
+                <span class="n">stealth_args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;--window-size=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">viewport_size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">,</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">viewport_size</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">stealth_args</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;--window-size=1920,1080&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">spoof_dimension</span><span class="p">:</span>
+            <span class="n">config_desc</span> <span class="o">=</span> <span class="s2">&quot;Invisible (1x1)&quot;</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">viewport_size</span><span class="p">:</span>
+            <span class="n">config_desc</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">viewport_size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">x</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">viewport_size</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">config_desc</span> <span class="o">=</span> <span class="s2">&quot;Default (1920x1080)&quot;</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">: Browser window configuration: </span><span class="si">{</span><span class="n">config_desc</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">stealth_args</span></div>
+
+
+<div class="viewcode-block" id="StealthManager.get_network_evasion_headers">
+<a class="viewcode-back" href="../../../api/stealth.html#scitex_browser.stealth.StealthManager.get_network_evasion_headers">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_network_evasion_headers</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate realistic HTTP headers to avoid network-level detection.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">&quot;Accept&quot;</span><span class="p">:</span> <span class="s2">&quot;text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Accept-Encoding&quot;</span><span class="p">:</span> <span class="s2">&quot;gzip, deflate, br, zstd&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Accept-Language&quot;</span><span class="p">:</span> <span class="s2">&quot;en-US,en;q=0.9&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Cache-Control&quot;</span><span class="p">:</span> <span class="s2">&quot;max-age=0&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;DNT&quot;</span><span class="p">:</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Sec-Ch-Ua&quot;</span><span class="p">:</span> <span class="s1">&#39;&quot;Google Chrome&quot;;v=&quot;132&quot;, &quot;Chromium&quot;;v=&quot;132&quot;, &quot;Not_A Brand&quot;;v=&quot;24&quot;&#39;</span><span class="p">,</span>
+            <span class="s2">&quot;Sec-Ch-Ua-Mobile&quot;</span><span class="p">:</span> <span class="s2">&quot;?0&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Sec-Ch-Ua-Platform&quot;</span><span class="p">:</span> <span class="s1">&#39;&quot;Linux&quot;&#39;</span><span class="p">,</span>
+            <span class="s2">&quot;Sec-Ch-Ua-Platform-Version&quot;</span><span class="p">:</span> <span class="s1">&#39;&quot;5.15.0&quot;&#39;</span><span class="p">,</span>
+            <span class="s2">&quot;Sec-Fetch-Dest&quot;</span><span class="p">:</span> <span class="s2">&quot;document&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Sec-Fetch-Mode&quot;</span><span class="p">:</span> <span class="s2">&quot;navigate&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Sec-Fetch-Site&quot;</span><span class="p">:</span> <span class="s2">&quot;none&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Sec-Fetch-User&quot;</span><span class="p">:</span> <span class="s2">&quot;?1&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Upgrade-Insecure-Requests&quot;</span><span class="p">:</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;X-Forwarded-For&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">254</span><span class="p">)</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">254</span><span class="p">)</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">254</span><span class="p">)</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">254</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;X-Real-IP&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">254</span><span class="p">)</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">254</span><span class="p">)</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">254</span><span class="p">)</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">254</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="p">}</span></div>
+
+
+<div class="viewcode-block" id="StealthManager.add_human_behavior_async">
+<a class="viewcode-back" href="../../../api/stealth.html#scitex_browser.stealth.StealthManager.add_human_behavior_async">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">add_human_behavior_async</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">page</span><span class="p">:</span> <span class="n">Page</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Add human-like behavior patterns to avoid detection.&quot;&quot;&quot;</span>
+        <span class="c1"># Random delay before starting interactions</span>
+        <span class="n">delay</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">: Adding human behavior delay: </span><span class="si">{</span><span class="n">delay</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> seconds&quot;</span><span class="p">)</span>
+        <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">delay</span><span class="p">)</span>
+
+        <span class="c1"># Simulate scrolling behavior</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">await</span> <span class="n">page</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span>
+<span class="w">                </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">                window.scrollTo({</span>
+<span class="sd">                    top: Math.random() * 500,</span>
+<span class="sd">                    behavior: &#39;smooth&#39;</span>
+<span class="sd">                });</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="p">)</span>
+            <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">: Human behavior simulation failed: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="StealthManager.handle_cloudflare_challenge_async">
+<a class="viewcode-back" href="../../../api/stealth.html#scitex_browser.stealth.StealthManager.handle_cloudflare_challenge_async">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">handle_cloudflare_challenge_async</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">page</span><span class="p">:</span> <span class="n">Page</span><span class="p">,</span> <span class="n">max_wait</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">45</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Enhanced Cloudflare challenge detection and handling.&quot;&quot;&quot;</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">: Checking for Cloudflare challenge...&quot;</span><span class="p">)</span>
+
+        <span class="n">cloudflare_indicators</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s2">&quot;Just a moment&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Checking your browser&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;DDoS protection by Cloudflare&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Cloudflare Ray ID&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;cf-browser-verification&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Please wait while we verify you&#39;re a human&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Verify you are human&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Security check&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Browser verification&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;cf-challenge-running&quot;</span><span class="p">,</span>
+        <span class="p">]</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># First check if we&#39;re on a Cloudflare challenge page</span>
+            <span class="n">page_content</span> <span class="o">=</span> <span class="k">await</span> <span class="n">page</span><span class="o">.</span><span class="n">content</span><span class="p">()</span>
+            <span class="n">title</span> <span class="o">=</span> <span class="k">await</span> <span class="n">page</span><span class="o">.</span><span class="n">title</span><span class="p">()</span>
+
+            <span class="n">is_challenge</span> <span class="o">=</span> <span class="nb">any</span><span class="p">(</span>
+                <span class="n">indicator</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="n">page_content</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+                <span class="ow">or</span> <span class="n">indicator</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="n">title</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+                <span class="k">for</span> <span class="n">indicator</span> <span class="ow">in</span> <span class="n">cloudflare_indicators</span>
+            <span class="p">)</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">is_challenge</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">: No Cloudflare challenge detected&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="kc">True</span>
+
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">: Cloudflare challenge detected, waiting for completion...&quot;</span>
+            <span class="p">)</span>
+
+            <span class="c1"># Add human-like behavior during challenge</span>
+            <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_human_behavior_async</span><span class="p">(</span><span class="n">page</span><span class="p">)</span>
+
+            <span class="c1"># Wait for challenge completion with multiple conditions</span>
+            <span class="k">await</span> <span class="n">page</span><span class="o">.</span><span class="n">wait_for_function</span><span class="p">(</span>
+<span class="w">                </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">                () =&gt; {</span>
+<span class="sd">                    const content = document.documentElement.innerText.toLowerCase();</span>
+<span class="sd">                    const title = document.title.toLowerCase();</span>
+
+<span class="sd">                    // Challenge completion indicators</span>
+<span class="sd">                    const challengeComplete = !content.includes(&#39;just a moment&#39;) &amp;&amp;</span>
+<span class="sd">                                            !content.includes(&#39;checking your browser&#39;) &amp;&amp;</span>
+<span class="sd">                                            !content.includes(&#39;ddos protection&#39;) &amp;&amp;</span>
+<span class="sd">                                            !content.includes(&#39;please wait&#39;) &amp;&amp;</span>
+<span class="sd">                                            !content.includes(&#39;verify you are human&#39;) &amp;&amp;</span>
+<span class="sd">                                            !title.includes(&#39;just a moment&#39;);</span>
+
+<span class="sd">                    // Also check if we&#39;ve been redirected or if the URL changed</span>
+<span class="sd">                    const urlChanged = window.location.href !== window.initialUrl;</span>
+<span class="sd">                    window.initialUrl = window.initialUrl || window.location.href;</span>
+
+<span class="sd">                    return challengeComplete || urlChanged;</span>
+<span class="sd">                }</span>
+<span class="sd">                &quot;&quot;&quot;</span><span class="p">,</span>
+                <span class="n">timeout</span><span class="o">=</span><span class="n">max_wait</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">,</span>
+            <span class="p">)</span>
+
+            <span class="c1"># Additional wait to ensure page is fully loaded</span>
+            <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">: Cloudflare challenge passed successfully&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">True</span>
+
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">: Cloudflare challenge handling timeout or error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+
+            <span class="c1"># Try to detect if we&#39;re still on challenge page</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">final_content</span> <span class="o">=</span> <span class="k">await</span> <span class="n">page</span><span class="o">.</span><span class="n">content</span><span class="p">()</span>
+                <span class="n">still_challenged</span> <span class="o">=</span> <span class="nb">any</span><span class="p">(</span>
+                    <span class="n">indicator</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="n">final_content</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+                    <span class="k">for</span> <span class="n">indicator</span> <span class="ow">in</span> <span class="n">cloudflare_indicators</span>
+                <span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">still_challenged</span><span class="p">:</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">: Still on Cloudflare challenge page after timeout&quot;</span>
+                    <span class="p">)</span>
+                    <span class="k">return</span> <span class="kc">False</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">: Challenge may have completed despite timeout&quot;</span>
+                    <span class="p">)</span>
+                    <span class="k">return</span> <span class="kc">True</span>
+
+            <span class="k">except</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="StealthManager.get_init_script">
+<a class="viewcode-back" href="../../../api/stealth.html#scitex_browser.stealth.StealthManager.get_init_script">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_init_script</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">(() =&gt; {</span>
+<span class="s2">    &#39;use strict&#39;;</span>
+
+<span class="s2">    // === CORE WEBDRIVER DETECTION REMOVAL ===</span>
+<span class="s2">    Object.defineProperty(navigator, &#39;webdriver&#39;, {</span>
+<span class="s2">        get: () =&gt; undefined,</span>
+<span class="s2">        configurable: true</span>
+<span class="s2">    });</span>
+
+<span class="s2">    // Remove all automation-related properties</span>
+<span class="s2">    const automationProps = [</span>
+<span class="s2">        &#39;webdriver&#39;, &#39;__driver_evaluate&#39;, &#39;__webdriver_evaluate&#39;, &#39;__selenium_evaluate&#39;,</span>
+<span class="s2">        &#39;__fxdriver_evaluate&#39;, &#39;__driver_unwrapped&#39;, &#39;__webdriver_unwrapped&#39;,</span>
+<span class="s2">        &#39;__selenium_unwrapped&#39;, &#39;__fxdriver_unwrapped&#39;, &#39;__webdriver_script_function&#39;,</span>
+<span class="s2">        &#39;__webdriver_script_func&#39;, &#39;__webdriver_script_fn&#39;, &#39;__fxdriver_script_fn&#39;,</span>
+<span class="s2">        &#39;__selenium_script_fn&#39;, &#39;__webdriver_func&#39;, &#39;__webdriver_fn&#39;, &#39;__$webdriverAsyncExecutor&#39;,</span>
+<span class="s2">        &#39;__lastWatirAlert&#39;, &#39;__lastWatirConfirm&#39;, &#39;__lastWatirPrompt&#39;, &#39;_WEBDRIVER_ELEM_CACHE&#39;,</span>
+<span class="s2">        &#39;ChromeDriverw&#39;, &#39;driver-evaluate&#39;, &#39;webdriver-evaluate&#39;, &#39;selenium-evaluate&#39;,</span>
+<span class="s2">        &#39;webdriverCommand&#39;, &#39;webdriver-evaluate-response&#39;, &#39;__webdriverFunc&#39;, &#39;__webdriver_script_func&#39;,</span>
+<span class="s2">        &#39;__$webdriverAsyncExecutor&#39;, &#39;$chrome_asyncScriptInfo&#39;, &#39;$cdc_asdjflasutopfhvcZLmcfl_&#39;</span>
+<span class="s2">    ];</span>
+
+<span class="s2">    automationProps.forEach(prop =&gt; {</span>
+<span class="s2">        try {</span>
+<span class="s2">            delete window[prop];</span>
+<span class="s2">            delete document[prop];</span>
+<span class="s2">            delete navigator[prop];</span>
+<span class="s2">        } catch (e) </span><span class="si">{}</span>
+<span class="s2">    });</span>
+
+<span class="s2">    // === NAVIGATOR PROPERTIES ===</span>
+<span class="s2">    // Mock realistic Chrome object with proper methods</span>
+<span class="s2">    if (!window.chrome || Object.getPrototypeOf(window.chrome) === Object.prototype) {</span>
+<span class="s2">        window.chrome = {</span>
+<span class="s2">            app: {</span>
+<span class="s2">                isInstalled: false,</span>
+<span class="s2">                InstallState: { DISABLED: &#39;disabled&#39;, INSTALLED: &#39;installed&#39;, NOT_INSTALLED: &#39;not_installed&#39; },</span>
+<span class="s2">                RunningState: { CANNOT_RUN: &#39;cannot_run&#39;, READY_TO_RUN: &#39;ready_to_run&#39;, RUNNING: &#39;running&#39; }</span>
+<span class="s2">            },</span>
+<span class="s2">            runtime: {</span>
+<span class="s2">                onConnect: null,</span>
+<span class="s2">                onMessage: null,</span>
+<span class="s2">                onConnectExternal: null,</span>
+<span class="s2">                onMessageExternal: null,</span>
+<span class="s2">                connect: () =&gt; </span><span class="si">{}</span><span class="s2">,</span>
+<span class="s2">                sendMessage: () =&gt; </span><span class="si">{}</span><span class="s2">,</span>
+<span class="s2">                getManifest: () =&gt; ({ name: &#39;Chrome&#39;, version: &#39;132.0.6834.59&#39; }),</span>
+<span class="s2">                getURL: (path) =&gt; &#39;chrome-extension://invalid/&#39; + path</span>
+<span class="s2">            },</span>
+<span class="s2">            webstore: {</span>
+<span class="s2">                onInstallStageChanged: null,</span>
+<span class="s2">                onDownloadProgress: null,</span>
+<span class="s2">                install: () =&gt; </span><span class="si">{}</span>
+<span class="s2">            },</span>
+<span class="s2">            csi: () =&gt; ({ pageT: Math.random() * 1000, startE: Math.random() * 1000 }),</span>
+<span class="s2">            loadTimes: () =&gt; ({</span>
+<span class="s2">                requestTime: performance.now() / 1000,</span>
+<span class="s2">                startLoadTime: performance.now() / 1000,</span>
+<span class="s2">                commitLoadTime: performance.now() / 1000,</span>
+<span class="s2">                finishDocumentLoadTime: performance.now() / 1000,</span>
+<span class="s2">                finishLoadTime: performance.now() / 1000,</span>
+<span class="s2">                firstPaintTime: performance.now() / 1000,</span>
+<span class="s2">                firstPaintAfterLoadTime: 0,</span>
+<span class="s2">                navigationType: &#39;Other&#39;</span>
+<span class="s2">            })</span>
+<span class="s2">        };</span>
+
+<span class="s2">        // Make chrome object non-enumerable to match real Chrome</span>
+<span class="s2">        Object.defineProperty(window, &#39;chrome&#39;, {</span>
+<span class="s2">            value: window.chrome,</span>
+<span class="s2">            writable: false,</span>
+<span class="s2">            enumerable: false,</span>
+<span class="s2">            configurable: false</span>
+<span class="s2">        });</span>
+<span class="s2">    }</span>
+
+<span class="s2">    // === LANGUAGE AND LOCALE ===</span>
+<span class="s2">    Object.defineProperty(navigator, &#39;languages&#39;, {</span>
+<span class="s2">        get: () =&gt; [&#39;en-US&#39;, &#39;en&#39;],</span>
+<span class="s2">        configurable: true</span>
+<span class="s2">    });</span>
+
+<span class="s2">    Object.defineProperty(navigator, &#39;language&#39;, {</span>
+<span class="s2">        get: () =&gt; &#39;en-US&#39;,</span>
+<span class="s2">        configurable: true</span>
+<span class="s2">    });</span>
+
+<span class="s2">    // === REALISTIC PLUGINS ===</span>
+<span class="s2">    const mockPlugins = [</span>
+<span class="s2">        {</span>
+<span class="s2">            0: { type: &quot;application/x-google-chrome-pdf&quot;, suffixes: &quot;pdf&quot;, description: &quot;Portable Document Format&quot;, enabledPlugin: null },</span>
+<span class="s2">            description: &quot;Portable Document Format&quot;,</span>
+<span class="s2">            filename: &quot;internal-pdf-viewer&quot;,</span>
+<span class="s2">            length: 1,</span>
+<span class="s2">            name: &quot;Chrome PDF Plugin&quot;</span>
+<span class="s2">        },</span>
+<span class="s2">        {</span>
+<span class="s2">            0: { type: &quot;application/pdf&quot;, suffixes: &quot;pdf&quot;, description: &quot;Portable Document Format&quot;, enabledPlugin: null },</span>
+<span class="s2">            description: &quot;Portable Document Format&quot;,</span>
+<span class="s2">            filename: &quot;mhjfbmdgcfjbbpaeojofohoefgiehjai&quot;,</span>
+<span class="s2">            length: 1,</span>
+<span class="s2">            name: &quot;Chrome PDF Viewer&quot;</span>
+<span class="s2">        },</span>
+<span class="s2">        {</span>
+<span class="s2">            0: { type: &quot;application/x-nacl&quot;, suffixes: &quot;&quot;, description: &quot;Native Client Executable&quot;, enabledPlugin: null },</span>
+<span class="s2">            1: { type: &quot;application/x-pnacl&quot;, suffixes: &quot;&quot;, description: &quot;Portable Native Client Executable&quot;, enabledPlugin: null },</span>
+<span class="s2">            description: &quot;Native Client&quot;,</span>
+<span class="s2">            filename: &quot;internal-nacl-plugin&quot;,</span>
+<span class="s2">            length: 2,</span>
+<span class="s2">            name: &quot;Native Client&quot;</span>
+<span class="s2">        }</span>
+<span class="s2">    ];</span>
+
+<span class="s2">    Object.defineProperty(navigator, &#39;plugins&#39;, {</span>
+<span class="s2">        get: () =&gt; mockPlugins,</span>
+<span class="s2">        configurable: true</span>
+<span class="s2">    });</span>
+
+<span class="s2">    // === HARDWARE CONCURRENCY ===</span>
+<span class="s2">    Object.defineProperty(navigator, &#39;hardwareConcurrency&#39;, {</span>
+<span class="s2">        get: () =&gt; Math.max(2, Math.min(16, Math.floor(Math.random() * 8) + 4)),</span>
+<span class="s2">        configurable: true</span>
+<span class="s2">    });</span>
+
+<span class="s2">    // === PERMISSIONS API ===</span>
+<span class="s2">    if (navigator.permissions &amp;&amp; navigator.permissions.query) {</span>
+<span class="s2">        const originalQuery = navigator.permissions.query.bind(navigator.permissions);</span>
+<span class="s2">        navigator.permissions.query = async (parameters) =&gt; {</span>
+<span class="s2">            const permission = parameters.name;</span>
+<span class="s2">            if (permission === &#39;notifications&#39;) {</span>
+<span class="s2">                return Promise.resolve({ state: &#39;default&#39;, onchange: null });</span>
+<span class="s2">            }</span>
+<span class="s2">            if (permission === &#39;geolocation&#39;) {</span>
+<span class="s2">                return Promise.resolve({ state: &#39;prompt&#39;, onchange: null });</span>
+<span class="s2">            }</span>
+<span class="s2">            try {</span>
+<span class="s2">                return await originalQuery(parameters);</span>
+<span class="s2">            } catch (e) {</span>
+<span class="s2">                return Promise.resolve({ state: &#39;prompt&#39;, onchange: null });</span>
+<span class="s2">            }</span>
+<span class="s2">        };</span>
+<span class="s2">    }</span>
+
+<span class="s2">    // === Camvas FINGERPRINTING PROTECTION ===</span>
+<span class="s2">    const getImageData = HTMLCanvasElement.prototype.toDataURL;</span>
+<span class="s2">    HTMLCanvasElement.prototype.toDataURL = function(type) {</span>
+<span class="s2">        const shift = Math.floor(Math.random() * 10) - 5;</span>
+<span class="s2">        const originalImageData = getImageData.apply(this, arguments);</span>
+<span class="s2">        return originalImageData;</span>
+<span class="s2">    };</span>
+
+<span class="s2">    // === WEBGL FINGERPRINTING PROTECTION ===</span>
+<span class="s2">    const glContexts = [&#39;webgl&#39;, &#39;webgl2&#39;, &#39;experimental-webgl&#39;, &#39;experimental-webgl2&#39;];</span>
+
+<span class="s2">    glContexts.forEach(contextType =&gt; {</span>
+<span class="s2">        try {</span>
+<span class="s2">            const canvas = document.createElement(&#39;canvas&#39;);</span>
+<span class="s2">            const gl = canvas.getContext(contextType);</span>
+<span class="s2">            if (gl) {</span>
+<span class="s2">                const getParameter = gl.getParameter.bind(gl);</span>
+<span class="s2">                gl.getParameter = function(parameter) {</span>
+<span class="s2">                    // Vendor and renderer spoofing</span>
+<span class="s2">                    if (parameter === gl.VENDOR || parameter === 37445) {</span>
+<span class="s2">                        return &#39;Intel Inc.&#39;;</span>
+<span class="s2">                    }</span>
+<span class="s2">                    if (parameter === gl.RENDERER || parameter === 37446) {</span>
+<span class="s2">                        return &#39;Intel Iris OpenGL Engine&#39;;</span>
+<span class="s2">                    }</span>
+<span class="s2">                    if (parameter === gl.VERSION) {</span>
+<span class="s2">                        return &#39;OpenGL ES 2.0 (ANGLE 2.1.0.c8ea8ca4eb1a)&#39;;</span>
+<span class="s2">                    }</span>
+<span class="s2">                    if (parameter === gl.SHADING_LANGUAGE_VERSION) {</span>
+<span class="s2">                        return &#39;OpenGL ES GLSL ES 1.0 (ANGLE 2.1.0.c8ea8ca4eb1a)&#39;;</span>
+<span class="s2">                    }</span>
+<span class="s2">                    return getParameter(parameter);</span>
+<span class="s2">                };</span>
+<span class="s2">            }</span>
+<span class="s2">        } catch (e) </span><span class="si">{}</span>
+<span class="s2">    });</span>
+
+<span class="s2">    // === CANVAS FINGERPRINTING PROTECTION ===</span>
+<span class="s2">    const getContext = HTMLCanvasElement.prototype.getContext;</span>
+<span class="s2">    HTMLCanvasElement.prototype.getContext = function(contextType, ...args) {</span>
+<span class="s2">        if (contextType === &#39;2d&#39;) {</span>
+<span class="s2">            const context = getContext.call(this, contextType, ...args);</span>
+<span class="s2">            if (context) {</span>
+<span class="s2">                const originalFillText = context.fillText;</span>
+<span class="s2">                const originalStrokeText = context.strokeText;</span>
+
+<span class="s2">                context.fillText = function(...args) {</span>
+<span class="s2">                    // Add slight noise to prevent consistent fingerprints</span>
+<span class="s2">                    if (args.length &gt;= 3) {</span>
+<span class="s2">                        args[1] += Math.random() * 0.01 - 0.005;</span>
+<span class="s2">                        args[2] += Math.random() * 0.01 - 0.005;</span>
+<span class="s2">                    }</span>
+<span class="s2">                    return originalFillText.apply(this, args);</span>
+<span class="s2">                };</span>
+
+<span class="s2">                context.strokeText = function(...args) {</span>
+<span class="s2">                    if (args.length &gt;= 3) {</span>
+<span class="s2">                        args[1] += Math.random() * 0.01 - 0.005;</span>
+<span class="s2">                        args[2] += Math.random() * 0.01 - 0.005;</span>
+<span class="s2">                    }</span>
+<span class="s2">                    return originalStrokeText.apply(this, args);</span>
+<span class="s2">                };</span>
+<span class="s2">            }</span>
+<span class="s2">            return context;</span>
+<span class="s2">        }</span>
+<span class="s2">        return getContext.call(this, contextType, ...args);</span>
+<span class="s2">    };</span>
+
+<span class="s2">    // === TIMEZONE AND LOCALE CONSISTENCY ===</span>
+<span class="s2">    if (Intl &amp;&amp; Intl.DateTimeFormat) {</span>
+<span class="s2">        const originalResolvedOptions = Intl.DateTimeFormat.prototype.resolvedOptions;</span>
+<span class="s2">        Intl.DateTimeFormat.prototype.resolvedOptions = function() {</span>
+<span class="s2">            const options = originalResolvedOptions.call(this);</span>
+<span class="s2">            options.timeZone = &#39;America/New_York&#39;; // Consistent timezone</span>
+<span class="s2">            return options;</span>
+<span class="s2">        };</span>
+<span class="s2">    }</span>
+
+<span class="s2">    // === SCREEN PROPERTIES ===</span>
+<span class="s2">    const screenProps = {</span>
+<span class="s2">        width: 1920,</span>
+<span class="s2">        height: 1080,</span>
+<span class="s2">        availWidth: 1920,</span>
+<span class="s2">        availHeight: 1040,</span>
+<span class="s2">        colorDepth: 24,</span>
+<span class="s2">        pixelDepth: 24,</span>
+<span class="s2">        orientation: {</span>
+<span class="s2">            angle: 0,</span>
+<span class="s2">            type: &#39;landscape-primary&#39;</span>
+<span class="s2">        }</span>
+<span class="s2">    };</span>
+
+<span class="s2">    Object.keys(screenProps).forEach(prop =&gt; {</span>
+<span class="s2">        if (prop !== &#39;orientation&#39;) {</span>
+<span class="s2">            Object.defineProperty(screen, prop, {</span>
+<span class="s2">                get: () =&gt; screenProps[prop],</span>
+<span class="s2">                configurable: true</span>
+<span class="s2">            });</span>
+<span class="s2">        }</span>
+<span class="s2">    });</span>
+
+<span class="s2">    // === PREVENT TIMING ATTACKS ===</span>
+<span class="s2">    const originalNow = performance.now;</span>
+<span class="s2">    performance.now = function() {</span>
+<span class="s2">        return originalNow.call(this) + Math.random() * 0.1;</span>
+<span class="s2">    };</span>
+
+<span class="s2">    // === MEMORY INFO SPOOFING ===</span>
+<span class="s2">    if (performance.memory) {</span>
+<span class="s2">        Object.defineProperty(performance, &#39;memory&#39;, {</span>
+<span class="s2">            get: () =&gt; ({</span>
+<span class="s2">                jsHeapSizeLimit: 4294705152,</span>
+<span class="s2">                totalJSHeapSize: Math.floor(Math.random() * 50000000) + 10000000,</span>
+<span class="s2">                usedJSHeapSize: Math.floor(Math.random() * 30000000) + 5000000</span>
+<span class="s2">            }),</span>
+<span class="s2">            configurable: true</span>
+<span class="s2">        });</span>
+<span class="s2">    }</span>
+
+<span class="s2">    // === PREVENT IFRAME DETECTION ===</span>
+<span class="s2">    Object.defineProperty(window, &#39;top&#39;, {</span>
+<span class="s2">        get: () =&gt; window,</span>
+<span class="s2">        configurable: true</span>
+<span class="s2">    });</span>
+
+<span class="s2">    Object.defineProperty(window, &#39;parent&#39;, {</span>
+<span class="s2">        get: () =&gt; window,</span>
+<span class="s2">        configurable: true</span>
+<span class="s2">    });</span>
+
+<span class="s2">    // === CONSOLE CLEANING ===</span>
+<span class="s2">    const originalConsole = { ...console };</span>
+<span class="s2">    const cleanMethods = [&#39;debug&#39;, &#39;log&#39;, &#39;info&#39;, &#39;warn&#39;, &#39;error&#39;];</span>
+<span class="s2">    cleanMethods.forEach(method =&gt; {</span>
+<span class="s2">        console[method] = function(...args) {</span>
+<span class="s2">            const text = args.join(&#39; &#39;).toLowerCase();</span>
+<span class="s2">            if (text.includes(&#39;devtools&#39;) || text.includes(&#39;automation&#39;) ||</span>
+<span class="s2">                text.includes(&#39;webdriver&#39;) || text.includes(&#39;selenium&#39;) ||</span>
+<span class="s2">                text.includes(&#39;playwright&#39;) || text.includes(&#39;puppeteer&#39;)) {</span>
+<span class="s2">                return;</span>
+<span class="s2">            }</span>
+<span class="s2">            return originalConsole[method](...args);</span>
+<span class="s2">        };</span>
+<span class="s2">    });</span>
+
+<span class="s2">    // === MOUSE MOVEMENT SIMULATION ===</span>
+<span class="s2">    let mouseActivity = Date.now();</span>
+<span class="s2">    document.addEventListener(&#39;mousemove&#39;, () =&gt; {</span>
+<span class="s2">        mouseActivity = Date.now();</span>
+<span class="s2">    }, true);</span>
+
+<span class="s2">    // Simulate natural mouse movements</span>
+<span class="s2">    setInterval(() =&gt; {</span>
+<span class="s2">        if (Date.now() - mouseActivity &gt; 30000) {</span>
+<span class="s2">            const event = new MouseEvent(&#39;mousemove&#39;, {</span>
+<span class="s2">                view: window,</span>
+<span class="s2">                bubbles: true,</span>
+<span class="s2">                cancelable: true,</span>
+<span class="s2">                clientX: Math.random() * window.innerWidth,</span>
+<span class="s2">                clientY: Math.random() * window.innerHeight</span>
+<span class="s2">            });</span>
+<span class="s2">            document.dispatchEvent(event);</span>
+<span class="s2">        }</span>
+<span class="s2">    }, 30000 + Math.random() * 15000);</span>
+
+<span class="s2">    // === FINAL CLEANUP ===</span>
+<span class="s2">    // Remove any remaining automation traces</span>
+<span class="s2">    delete window.cdc_adoQpoasnfa76pfcZLmcfl_;</span>
+<span class="s2">    delete window.$cdc_asdjflasutopfhvcZLmcfl_;</span>
+<span class="s2">    delete window.$chrome_asyncScriptInfo;</span>
+<span class="s2">    delete window.__$webdriverAsyncExecutor;</span>
+
+<span class="s2">    // Freeze important objects to prevent modification</span>
+<span class="s2">    try {</span>
+<span class="s2">        Object.freeze(navigator);</span>
+<span class="s2">        Object.freeze(screen);</span>
+<span class="s2">    } catch (e) </span><span class="si">{}</span>
+<span class="s2">})();</span>
+<span class="s2">&quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="StealthManager.get_dimension_spoofing_script">
+<a class="viewcode-back" href="../../../api/stealth.html#scitex_browser.stealth.StealthManager.get_dimension_spoofing_script">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_dimension_spoofing_script</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generate comprehensive JavaScript dimension spoofing script for invisible browser mode.</span>
+
+<span class="sd">        This creates a dual-layer window configuration:</span>
+<span class="sd">        - Physical window: 1x1 pixel (invisible to user)</span>
+<span class="sd">        - Reported dimensions: 1920x1080 (natural desktop size for bot detection)</span>
+
+<span class="sd">        The script is bulletproof and handles all dimension-related APIs that</span>
+<span class="sd">        bot detectors commonly check.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">: stealth_manager.get_dimension_spoofing_script called.&quot;</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">spoof_dimension</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">(() =&gt; {</span>
+<span class="s2">    // Target dimensions to report to JavaScript (natural desktop)</span>
+<span class="s2">    const TARGET_WINDOW_WIDTH = 1920;</span>
+<span class="s2">    const TARGET_WINDOW_HEIGHT = 1080;</span>
+<span class="s2">    const TARGET_SCREEN_WIDTH = 1920;</span>
+<span class="s2">    const TARGET_SCREEN_HEIGHT = 1080;</span>
+<span class="s2">    const TARGET_AVAILABLE_WIDTH = 1920;</span>
+<span class="s2">    const TARGET_AVAILABLE_HEIGHT = 1040; // Account for taskbar</span>
+
+<span class="s2">    // === WINDOW DIMENSIONS ===</span>
+<span class="s2">    // Override all window size properties</span>
+<span class="s2">    Object.defineProperty(window, &#39;innerWidth&#39;, {</span>
+<span class="s2">        get: () =&gt; TARGET_WINDOW_WIDTH,</span>
+<span class="s2">        configurable: true</span>
+<span class="s2">    });</span>
+
+<span class="s2">    Object.defineProperty(window, &#39;innerHeight&#39;, {</span>
+<span class="s2">        get: () =&gt; TARGET_WINDOW_HEIGHT,</span>
+<span class="s2">        configurable: true</span>
+<span class="s2">    });</span>
+
+<span class="s2">    Object.defineProperty(window, &#39;outerWidth&#39;, {</span>
+<span class="s2">        get: () =&gt; TARGET_WINDOW_WIDTH,</span>
+<span class="s2">        configurable: true</span>
+<span class="s2">    });</span>
+
+<span class="s2">    Object.defineProperty(window, &#39;outerHeight&#39;, {</span>
+<span class="s2">        get: () =&gt; TARGET_WINDOW_HEIGHT + 100, // Account for browser chrome</span>
+<span class="s2">        configurable: true</span>
+<span class="s2">    });</span>
+
+<span class="s2">    // Override client dimensions (commonly checked by bot detectors)</span>
+<span class="s2">    if (document.documentElement) {</span>
+<span class="s2">        Object.defineProperty(document.documentElement, &#39;clientWidth&#39;, {</span>
+<span class="s2">            get: () =&gt; TARGET_WINDOW_WIDTH,</span>
+<span class="s2">            configurable: true</span>
+<span class="s2">        });</span>
+
+<span class="s2">        Object.defineProperty(document.documentElement, &#39;clientHeight&#39;, {</span>
+<span class="s2">            get: () =&gt; TARGET_WINDOW_HEIGHT,</span>
+<span class="s2">            configurable: true</span>
+<span class="s2">        });</span>
+<span class="s2">    }</span>
+
+<span class="s2">    // === SCREEN DIMENSIONS ===</span>
+<span class="s2">    // Override all screen properties</span>
+<span class="s2">    Object.defineProperty(window.screen, &#39;width&#39;, {</span>
+<span class="s2">        get: () =&gt; TARGET_SCREEN_WIDTH,</span>
+<span class="s2">        configurable: true</span>
+<span class="s2">    });</span>
+
+<span class="s2">    Object.defineProperty(window.screen, &#39;height&#39;, {</span>
+<span class="s2">        get: () =&gt; TARGET_SCREEN_HEIGHT,</span>
+<span class="s2">        configurable: true</span>
+<span class="s2">    });</span>
+
+<span class="s2">    Object.defineProperty(window.screen, &#39;availWidth&#39;, {</span>
+<span class="s2">        get: () =&gt; TARGET_AVAILABLE_WIDTH,</span>
+<span class="s2">        configurable: true</span>
+<span class="s2">    });</span>
+
+<span class="s2">    Object.defineProperty(window.screen, &#39;availHeight&#39;, {</span>
+<span class="s2">        get: () =&gt; TARGET_AVAILABLE_HEIGHT,</span>
+<span class="s2">        configurable: true</span>
+<span class="s2">    });</span>
+
+<span class="s2">    // === VIEWPORT AND VISUAL DIMENSIONS ===</span>
+<span class="s2">    // Override visual viewport (modern API)</span>
+<span class="s2">    if (window.visualViewport) {</span>
+<span class="s2">        Object.defineProperty(window.visualViewport, &#39;width&#39;, {</span>
+<span class="s2">            get: () =&gt; TARGET_WINDOW_WIDTH,</span>
+<span class="s2">            configurable: true</span>
+<span class="s2">        });</span>
+
+<span class="s2">        Object.defineProperty(window.visualViewport, &#39;height&#39;, {</span>
+<span class="s2">            get: () =&gt; TARGET_WINDOW_HEIGHT,</span>
+<span class="s2">            configurable: true</span>
+<span class="s2">        });</span>
+<span class="s2">    }</span>
+
+<span class="s2">    // === DOCUMENT DIMENSIONS ===</span>
+<span class="s2">    // Override document element dimensions (wait for DOM to be ready)</span>
+<span class="s2">    const overrideDocumentDimensions = () =&gt; {</span>
+<span class="s2">        if (document.documentElement) {</span>
+<span class="s2">            Object.defineProperty(document.documentElement, &#39;clientWidth&#39;, {</span>
+<span class="s2">                get: () =&gt; TARGET_WINDOW_WIDTH,</span>
+<span class="s2">                configurable: true</span>
+<span class="s2">            });</span>
+
+<span class="s2">            Object.defineProperty(document.documentElement, &#39;clientHeight&#39;, {</span>
+<span class="s2">                get: () =&gt; TARGET_WINDOW_HEIGHT,</span>
+<span class="s2">                configurable: true</span>
+<span class="s2">            });</span>
+
+<span class="s2">            Object.defineProperty(document.documentElement, &#39;offsetWidth&#39;, {</span>
+<span class="s2">                get: () =&gt; TARGET_WINDOW_WIDTH,</span>
+<span class="s2">                configurable: true</span>
+<span class="s2">            });</span>
+
+<span class="s2">            Object.defineProperty(document.documentElement, &#39;offsetHeight&#39;, {</span>
+<span class="s2">                get: () =&gt; TARGET_WINDOW_HEIGHT,</span>
+<span class="s2">                configurable: true</span>
+<span class="s2">            });</span>
+
+<span class="s2">            Object.defineProperty(document.documentElement, &#39;scrollWidth&#39;, {</span>
+<span class="s2">                get: () =&gt; TARGET_WINDOW_WIDTH,</span>
+<span class="s2">                configurable: true</span>
+<span class="s2">            });</span>
+
+<span class="s2">            Object.defineProperty(document.documentElement, &#39;scrollHeight&#39;, {</span>
+<span class="s2">                get: () =&gt; TARGET_WINDOW_HEIGHT,</span>
+<span class="s2">                configurable: true</span>
+<span class="s2">            });</span>
+<span class="s2">        }</span>
+
+<span class="s2">        if (document.body) {</span>
+<span class="s2">            Object.defineProperty(document.body, &#39;clientWidth&#39;, {</span>
+<span class="s2">                get: () =&gt; TARGET_WINDOW_WIDTH,</span>
+<span class="s2">                configurable: true</span>
+<span class="s2">            });</span>
+
+<span class="s2">            Object.defineProperty(document.body, &#39;clientHeight&#39;, {</span>
+<span class="s2">                get: () =&gt; TARGET_WINDOW_HEIGHT,</span>
+<span class="s2">                configurable: true</span>
+<span class="s2">            });</span>
+<span class="s2">        }</span>
+<span class="s2">    };</span>
+
+<span class="s2">    // Apply immediately if DOM is ready, otherwise wait</span>
+<span class="s2">    if (document.readyState === &#39;loading&#39;) {</span>
+<span class="s2">        document.addEventListener(&#39;DOMContentLoaded&#39;, overrideDocumentDimensions);</span>
+<span class="s2">    } else {</span>
+<span class="s2">        overrideDocumentDimensions();</span>
+<span class="s2">    }</span>
+
+<span class="s2">    // === MEDIA QUERIES ===</span>
+<span class="s2">    // Override matchMedia for responsive design queries</span>
+<span class="s2">    const originalMatchMedia = window.matchMedia;</span>
+<span class="s2">    window.matchMedia = function(query) {</span>
+<span class="s2">        const result = originalMatchMedia.call(this, query);</span>
+
+<span class="s2">        // Override common responsive breakpoints based on our spoofed dimensions</span>
+<span class="s2">        if (query.includes(&#39;max-width&#39;)) {</span>
+<span class="s2">            const maxWidth = parseInt(query.match(/max-width:</span><span class="se">\\</span><span class="s2">s*(\d+)px/)?.[1] || &#39;0&#39;);</span>
+<span class="s2">            if (maxWidth &lt; TARGET_WINDOW_WIDTH) {</span>
+<span class="s2">                Object.defineProperty(result, &#39;matches&#39;, { get: () =&gt; false });</span>
+<span class="s2">            }</span>
+<span class="s2">        }</span>
+
+<span class="s2">        if (query.includes(&#39;min-width&#39;)) {</span>
+<span class="s2">            const minWidth = parseInt(query.match(/min-width:</span><span class="se">\\</span><span class="s2">s*(\d+)px/)?.[1] || &#39;0&#39;);</span>
+<span class="s2">            if (minWidth &lt;= TARGET_WINDOW_WIDTH) {</span>
+<span class="s2">                Object.defineProperty(result, &#39;matches&#39;, { get: () =&gt; true });</span>
+<span class="s2">            }</span>
+<span class="s2">        }</span>
+
+<span class="s2">        return result;</span>
+<span class="s2">    };</span>
+
+<span class="s2">    // === EVENT HANDLING ===</span>
+<span class="s2">    // Override resize events to maintain consistency</span>
+<span class="s2">    const originalAddEventListener = window.addEventListener;</span>
+<span class="s2">    window.addEventListener = function(type, listener, options) {</span>
+<span class="s2">        if (type === &#39;resize&#39;) {</span>
+<span class="s2">            // Intercept resize events and provide spoofed dimensions</span>
+<span class="s2">            const wrappedListener = function(event) {</span>
+<span class="s2">                // Create a mock resize event with spoofed dimensions</span>
+<span class="s2">                const mockEvent = new Event(&#39;resize&#39;);</span>
+<span class="s2">                Object.defineProperty(mockEvent, &#39;target&#39;, {</span>
+<span class="s2">                    value: {</span>
+<span class="s2">                        innerWidth: TARGET_WINDOW_WIDTH,</span>
+<span class="s2">                        innerHeight: TARGET_WINDOW_HEIGHT</span>
+<span class="s2">                    }</span>
+<span class="s2">                });</span>
+<span class="s2">                return listener.call(this, mockEvent);</span>
+<span class="s2">            };</span>
+<span class="s2">            return originalAddEventListener.call(this, type, wrappedListener, options);</span>
+<span class="s2">        }</span>
+<span class="s2">        return originalAddEventListener.call(this, type, listener, options);</span>
+<span class="s2">    };</span>
+<span class="s2">})();</span>
+<span class="s2">        &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="StealthManager.human_delay_async">
+<a class="viewcode-back" href="../../../api/stealth.html#scitex_browser.stealth.StealthManager.human_delay_async">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">human_delay_async</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">min_ms</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">,</span> <span class="n">max_ms</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">3000</span><span class="p">):</span>
+        <span class="n">delay</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="n">min_ms</span><span class="p">,</span> <span class="n">max_ms</span><span class="p">)</span>
+        <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">delay</span> <span class="o">/</span> <span class="mi">1000</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="StealthManager.human_click_async">
+<a class="viewcode-back" href="../../../api/stealth.html#scitex_browser.stealth.StealthManager.human_click_async">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">human_click_async</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">page</span><span class="p">:</span> <span class="n">Page</span><span class="p">,</span> <span class="n">element</span><span class="p">):</span>
+        <span class="k">await</span> <span class="n">element</span><span class="o">.</span><span class="n">hover</span><span class="p">()</span>
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">human_delay_async</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="mi">500</span><span class="p">)</span>
+        <span class="k">await</span> <span class="n">element</span><span class="o">.</span><span class="n">click</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="StealthManager.human_mouse_move_async">
+<a class="viewcode-back" href="../../../api/stealth.html#scitex_browser.stealth.StealthManager.human_mouse_move_async">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">human_mouse_move_async</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">page</span><span class="p">:</span> <span class="n">Page</span><span class="p">):</span>
+        <span class="k">await</span> <span class="n">page</span><span class="o">.</span><span class="n">mouse</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">800</span><span class="p">),</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">600</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="StealthManager.human_scroll_async">
+<a class="viewcode-back" href="../../../api/stealth.html#scitex_browser.stealth.StealthManager.human_scroll_async">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">human_scroll_async</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">page</span><span class="p">:</span> <span class="n">Page</span><span class="p">):</span>
+        <span class="n">scroll_distance</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">300</span><span class="p">,</span> <span class="mi">800</span><span class="p">)</span>
+        <span class="k">await</span> <span class="n">page</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;window.scrollBy(0, </span><span class="si">{</span><span class="n">scroll_distance</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">human_delay_async</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="mi">1500</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="StealthManager.human_type_async">
+<a class="viewcode-back" href="../../../api/stealth.html#scitex_browser.stealth.StealthManager.human_type_async">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">human_type_async</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">page</span><span class="p">:</span> <span class="n">Page</span><span class="p">,</span> <span class="n">selector</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">element</span> <span class="o">=</span> <span class="n">page</span><span class="o">.</span><span class="n">locator</span><span class="p">(</span><span class="n">selector</span><span class="p">)</span>
+        <span class="k">await</span> <span class="n">element</span><span class="o">.</span><span class="n">click</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">char</span> <span class="ow">in</span> <span class="n">text</span><span class="p">:</span>
+            <span class="k">await</span> <span class="n">element</span><span class="o">.</span><span class="n">type</span><span class="p">(</span><span class="n">char</span><span class="p">)</span>
+            <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">human_delay_async</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span></div>
+</div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Demonstrate StealthManager functionality.&quot;&quot;&quot;</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">asyncio</span>
+
+    <span class="kn">from</span><span class="w"> </span><span class="nn">playwright.async_api</span><span class="w"> </span><span class="kn">import</span> <span class="n">async_playwright</span>
+
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">demo</span><span class="p">():</span>
+        <span class="n">stealth_manager</span> <span class="o">=</span> <span class="n">StealthManager</span><span class="p">()</span>
+
+        <span class="k">async</span> <span class="k">with</span> <span class="n">async_playwright</span><span class="p">()</span> <span class="k">as</span> <span class="n">p</span><span class="p">:</span>
+            <span class="n">browser</span> <span class="o">=</span> <span class="k">await</span> <span class="n">p</span><span class="o">.</span><span class="n">chromium</span><span class="o">.</span><span class="n">launch</span><span class="p">(</span>
+                <span class="n">headless</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">args</span><span class="o">=</span><span class="n">stealth_manager</span><span class="o">.</span><span class="n">get_stealth_options_additional</span><span class="p">(),</span>
+            <span class="p">)</span>
+
+            <span class="n">stealth_options</span> <span class="o">=</span> <span class="n">stealth_manager</span><span class="o">.</span><span class="n">get_stealth_options</span><span class="p">()</span>
+            <span class="n">context</span> <span class="o">=</span> <span class="k">await</span> <span class="n">browser</span><span class="o">.</span><span class="n">new_context</span><span class="p">(</span><span class="o">**</span><span class="n">stealth_options</span><span class="p">)</span>
+            <span class="k">await</span> <span class="n">context</span><span class="o">.</span><span class="n">add_init_script</span><span class="p">(</span><span class="n">stealth_manager</span><span class="o">.</span><span class="n">get_init_script</span><span class="p">())</span>
+
+            <span class="n">page</span> <span class="o">=</span> <span class="k">await</span> <span class="n">context</span><span class="o">.</span><span class="n">new_page</span><span class="p">()</span>
+            <span class="k">await</span> <span class="n">page</span><span class="o">.</span><span class="n">goto</span><span class="p">(</span><span class="s2">&quot;https://bot.sannysoft.com/&quot;</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">30000</span><span class="p">)</span>
+            <span class="k">await</span> <span class="n">stealth_manager</span><span class="o">.</span><span class="n">human_delay_async</span><span class="p">(</span><span class="mi">2000</span><span class="p">,</span> <span class="mi">3000</span><span class="p">)</span>
+
+            <span class="k">await</span> <span class="n">page</span><span class="o">.</span><span class="n">screenshot</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s2">&quot;/tmp/stealth_test.png&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;✓ Stealth test complete: /tmp/stealth_test.png&quot;</span><span class="p">)</span>
+
+            <span class="k">await</span> <span class="n">browser</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+    <span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">demo</span><span class="p">())</span>
+    <span class="k">return</span> <span class="mi">0</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">parse_args</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Parse command line arguments.&quot;&quot;&quot;</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">argparse</span>
+
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;StealthManager demo&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">run_main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Initialize scitex framework, run main function, and cleanup.&quot;&quot;&quot;</span>
+    <span class="k">global</span> <span class="n">CONFIG</span><span class="p">,</span> <span class="n">CC</span><span class="p">,</span> <span class="n">sys</span><span class="p">,</span> <span class="n">plt</span><span class="p">,</span> <span class="n">rng</span>
+
+    <span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+
+    <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
+    <span class="kn">import</span><span class="w"> </span><span class="nn">scitex</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">stx</span>
+
+    <span class="n">args</span> <span class="o">=</span> <span class="n">parse_args</span><span class="p">()</span>
+
+    <span class="n">CONFIG</span><span class="p">,</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">,</span> <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">,</span> <span class="n">plt</span><span class="p">,</span> <span class="n">CC</span><span class="p">,</span> <span class="n">rng</span> <span class="o">=</span> <span class="n">stx</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">start</span><span class="p">(</span>
+        <span class="n">sys</span><span class="p">,</span>
+        <span class="n">plt</span><span class="p">,</span>
+        <span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">,</span>
+        <span class="n">file</span><span class="o">=</span><span class="n">__FILE__</span><span class="p">,</span>
+        <span class="n">sdir_suffix</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">agg</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">exit_status</span> <span class="o">=</span> <span class="n">main</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+
+    <span class="n">stx</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">close</span><span class="p">(</span>
+        <span class="n">CONFIG</span><span class="p">,</span>
+        <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">notify</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">message</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="n">exit_status</span><span class="o">=</span><span class="n">exit_status</span><span class="p">,</span>
+    <span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">run_main</span><span class="p">()</span>
+
+<span class="c1"># python -m scitex_browser.stealth.StealthManager</span>
+
+<span class="c1"># EOF</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Yusuke Watanabe.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,898 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>scitex_browser.debugging &mdash; SciTeX Browser v0.1.14</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=468bc497"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="scitex_browser.pdf" href="pdf.html" />
+    <link rel="prev" title="scitex_browser.interaction" href="interaction.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            SciTeX Browser
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#requirements">Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#basic-installation">Basic Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../installation.html#development">Development</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="core.html">scitex_browser.core</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="core.html#scitex_browser.core.BrowserMixin"><code class="docutils literal notranslate"><span class="pre">BrowserMixin</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="core.html#scitex_browser.core.BrowserMixin.__init__"><code class="docutils literal notranslate"><span class="pre">BrowserMixin.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="core.html#scitex_browser.core.BrowserMixin.get_shared_browser_async"><code class="docutils literal notranslate"><span class="pre">BrowserMixin.get_shared_browser_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="core.html#scitex_browser.core.BrowserMixin.cleanup_shared_browser_async"><code class="docutils literal notranslate"><span class="pre">BrowserMixin.cleanup_shared_browser_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="core.html#scitex_browser.core.BrowserMixin.get_browser_async"><code class="docutils literal notranslate"><span class="pre">BrowserMixin.get_browser_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="core.html#scitex_browser.core.BrowserMixin.new_page"><code class="docutils literal notranslate"><span class="pre">BrowserMixin.new_page()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="core.html#scitex_browser.core.BrowserMixin.close_page"><code class="docutils literal notranslate"><span class="pre">BrowserMixin.close_page()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="core.html#scitex_browser.core.BrowserMixin.close_all_pages"><code class="docutils literal notranslate"><span class="pre">BrowserMixin.close_all_pages()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="core.html#scitex_browser.core.BrowserMixin.create_browser_context_async"><code class="docutils literal notranslate"><span class="pre">BrowserMixin.create_browser_context_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="core.html#scitex_browser.core.BrowserMixin.get_session_async"><code class="docutils literal notranslate"><span class="pre">BrowserMixin.get_session_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="core.html#scitex_browser.core.BrowserMixin.close_session"><code class="docutils literal notranslate"><span class="pre">BrowserMixin.close_session()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="core.html#scitex_browser.core.BrowserMixin.accept_cookies_async"><code class="docutils literal notranslate"><span class="pre">BrowserMixin.accept_cookies_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="core.html#scitex_browser.core.BrowserMixin.interactive"><code class="docutils literal notranslate"><span class="pre">BrowserMixin.interactive()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="core.html#scitex_browser.core.BrowserMixin.stealth"><code class="docutils literal notranslate"><span class="pre">BrowserMixin.stealth()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="core.html#scitex_browser.core.BrowserMixin.show_async"><code class="docutils literal notranslate"><span class="pre">BrowserMixin.show_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="core.html#scitex_browser.core.BrowserMixin.hide_async"><code class="docutils literal notranslate"><span class="pre">BrowserMixin.hide_async()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="core.html#scitex_browser.core.ChromeProfileManager"><code class="docutils literal notranslate"><span class="pre">ChromeProfileManager</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="core.html#scitex_browser.core.ChromeProfileManager.EXTENSIONS"><code class="docutils literal notranslate"><span class="pre">ChromeProfileManager.EXTENSIONS</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="core.html#scitex_browser.core.ChromeProfileManager.AVAILABLE_PROFILE_NAMES"><code class="docutils literal notranslate"><span class="pre">ChromeProfileManager.AVAILABLE_PROFILE_NAMES</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="core.html#scitex_browser.core.ChromeProfileManager.__init__"><code class="docutils literal notranslate"><span class="pre">ChromeProfileManager.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="core.html#scitex_browser.core.ChromeProfileManager._get_extension_statuses"><code class="docutils literal notranslate"><span class="pre">ChromeProfileManager._get_extension_statuses()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="core.html#scitex_browser.core.ChromeProfileManager.check_extensions_installed"><code class="docutils literal notranslate"><span class="pre">ChromeProfileManager.check_extensions_installed()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="core.html#scitex_browser.core.ChromeProfileManager._get_installed_extension_paths"><code class="docutils literal notranslate"><span class="pre">ChromeProfileManager._get_installed_extension_paths()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="core.html#scitex_browser.core.ChromeProfileManager.get_extension_args"><code class="docutils literal notranslate"><span class="pre">ChromeProfileManager.get_extension_args()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="core.html#scitex_browser.core.ChromeProfileManager.install_extensions_manually_if_not_installed_async"><code class="docutils literal notranslate"><span class="pre">ChromeProfileManager.install_extensions_manually_if_not_installed_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="core.html#scitex_browser.core.ChromeProfileManager.handle_runtime_extension_dialogs_async"><code class="docutils literal notranslate"><span class="pre">ChromeProfileManager.handle_runtime_extension_dialogs_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="core.html#scitex_browser.core.ChromeProfileManager.sync_from_profile"><code class="docutils literal notranslate"><span class="pre">ChromeProfileManager.sync_from_profile()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="auth.html">scitex_browser.auth</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="auth.html#scitex_browser.auth.GoogleAuthHelper"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="auth.html#scitex_browser.auth.GoogleAuthHelper.__init__"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="auth.html#scitex_browser.auth.GoogleAuthHelper._log"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper._log()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="auth.html#scitex_browser.auth.GoogleAuthHelper.login_via_google_button"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper.login_via_google_button()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="auth.html#scitex_browser.auth.GoogleAuthHelper._handle_google_popup"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper._handle_google_popup()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="auth.html#scitex_browser.auth.GoogleAuthHelper._fill_email"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper._fill_email()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="auth.html#scitex_browser.auth.GoogleAuthHelper._fill_password"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper._fill_password()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="auth.html#scitex_browser.auth.GoogleAuthHelper._handle_consent_screens"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper._handle_consent_screens()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="auth.html#scitex_browser.auth.GoogleAuthHelper._wait_for_2fa"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper._wait_for_2fa()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="auth.html#scitex_browser.auth.GoogleAuthHelper.is_logged_in"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper.is_logged_in()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="auth.html#scitex_browser.auth.google_login"><code class="docutils literal notranslate"><span class="pre">google_login()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="interaction.html">scitex_browser.interaction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="interaction.html#scitex_browser.interaction.click_center_async"><code class="docutils literal notranslate"><span class="pre">click_center_async()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="interaction.html#scitex_browser.interaction.click_with_fallbacks_async"><code class="docutils literal notranslate"><span class="pre">click_with_fallbacks_async()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="interaction.html#scitex_browser.interaction.fill_with_fallbacks_async"><code class="docutils literal notranslate"><span class="pre">fill_with_fallbacks_async()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="interaction.html#scitex_browser.interaction.PopupHandler"><code class="docutils literal notranslate"><span class="pre">PopupHandler</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="interaction.html#scitex_browser.interaction.PopupHandler.COOKIE_SELECTORS"><code class="docutils literal notranslate"><span class="pre">PopupHandler.COOKIE_SELECTORS</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="interaction.html#scitex_browser.interaction.PopupHandler.CLOSE_SELECTORS"><code class="docutils literal notranslate"><span class="pre">PopupHandler.CLOSE_SELECTORS</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="interaction.html#scitex_browser.interaction.PopupHandler.MODAL_SELECTORS"><code class="docutils literal notranslate"><span class="pre">PopupHandler.MODAL_SELECTORS</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="interaction.html#scitex_browser.interaction.PopupHandler.__init__"><code class="docutils literal notranslate"><span class="pre">PopupHandler.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="interaction.html#scitex_browser.interaction.PopupHandler.detect_popups"><code class="docutils literal notranslate"><span class="pre">PopupHandler.detect_popups()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="interaction.html#scitex_browser.interaction.PopupHandler.handle_cookie_popup"><code class="docutils literal notranslate"><span class="pre">PopupHandler.handle_cookie_popup()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="interaction.html#scitex_browser.interaction.PopupHandler.close_popup"><code class="docutils literal notranslate"><span class="pre">PopupHandler.close_popup()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="interaction.html#scitex_browser.interaction.PopupHandler.handle_all_popups"><code class="docutils literal notranslate"><span class="pre">PopupHandler.handle_all_popups()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="interaction.html#scitex_browser.interaction.PopupHandler.wait_and_handle_popups"><code class="docutils literal notranslate"><span class="pre">PopupHandler.wait_and_handle_popups()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="interaction.html#scitex_browser.interaction.close_popups_async"><code class="docutils literal notranslate"><span class="pre">close_popups_async()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="interaction.html#scitex_browser.interaction.ensure_no_popups_async"><code class="docutils literal notranslate"><span class="pre">ensure_no_popups_async()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">scitex_browser.debugging</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#scitex_browser.debugging.show_grid_async"><code class="docutils literal notranslate"><span class="pre">show_grid_async()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#scitex_browser.debugging.highlight_element_async"><code class="docutils literal notranslate"><span class="pre">highlight_element_async()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#scitex_browser.debugging.inject_visual_effects"><code class="docutils literal notranslate"><span class="pre">inject_visual_effects()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#scitex_browser.debugging.inject_visual_effects_async"><code class="docutils literal notranslate"><span class="pre">inject_visual_effects_async()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#scitex_browser.debugging.show_cursor_at"><code class="docutils literal notranslate"><span class="pre">show_cursor_at()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#scitex_browser.debugging.show_cursor_at_async"><code class="docutils literal notranslate"><span class="pre">show_cursor_at_async()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#scitex_browser.debugging.show_click_effect"><code class="docutils literal notranslate"><span class="pre">show_click_effect()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#scitex_browser.debugging.show_click_effect_async"><code class="docutils literal notranslate"><span class="pre">show_click_effect_async()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#scitex_browser.debugging.show_step"><code class="docutils literal notranslate"><span class="pre">show_step()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#scitex_browser.debugging.show_step_async"><code class="docutils literal notranslate"><span class="pre">show_step_async()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#scitex_browser.debugging.show_test_result"><code class="docutils literal notranslate"><span class="pre">show_test_result()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#scitex_browser.debugging.show_test_result_async"><code class="docutils literal notranslate"><span class="pre">show_test_result_async()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#scitex_browser.debugging.setup_console_interceptor"><code class="docutils literal notranslate"><span class="pre">setup_console_interceptor()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#scitex_browser.debugging.collect_console_logs"><code class="docutils literal notranslate"><span class="pre">collect_console_logs()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#scitex_browser.debugging.collect_console_logs_detailed"><code class="docutils literal notranslate"><span class="pre">collect_console_logs_detailed()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#scitex_browser.debugging.format_logs_devtools_style"><code class="docutils literal notranslate"><span class="pre">format_logs_devtools_style()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#scitex_browser.debugging.save_failure_artifacts"><code class="docutils literal notranslate"><span class="pre">save_failure_artifacts()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#scitex_browser.debugging.create_failure_capture_fixture"><code class="docutils literal notranslate"><span class="pre">create_failure_capture_fixture()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#scitex_browser.debugging.TestMonitor"><code class="docutils literal notranslate"><span class="pre">TestMonitor</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#scitex_browser.debugging.TestMonitor.__init__"><code class="docutils literal notranslate"><span class="pre">TestMonitor.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#scitex_browser.debugging.TestMonitor.start"><code class="docutils literal notranslate"><span class="pre">TestMonitor.start()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#scitex_browser.debugging.TestMonitor.stop"><code class="docutils literal notranslate"><span class="pre">TestMonitor.stop()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#scitex_browser.debugging.TestMonitor.get_status"><code class="docutils literal notranslate"><span class="pre">TestMonitor.get_status()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#scitex_browser.debugging.TestMonitor.take_snapshot"><code class="docutils literal notranslate"><span class="pre">TestMonitor.take_snapshot()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#scitex_browser.debugging.TestMonitor.create_gif"><code class="docutils literal notranslate"><span class="pre">TestMonitor.create_gif()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#scitex_browser.debugging.TestMonitor.get_screenshots"><code class="docutils literal notranslate"><span class="pre">TestMonitor.get_screenshots()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#scitex_browser.debugging.create_test_monitor_fixture"><code class="docutils literal notranslate"><span class="pre">create_test_monitor_fixture()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#scitex_browser.debugging.monitor_test"><code class="docutils literal notranslate"><span class="pre">monitor_test()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#scitex_browser.debugging.SyncBrowserSession"><code class="docutils literal notranslate"><span class="pre">SyncBrowserSession</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#scitex_browser.debugging.SyncBrowserSession.__init__"><code class="docutils literal notranslate"><span class="pre">SyncBrowserSession.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#scitex_browser.debugging.SyncBrowserSession.__enter__"><code class="docutils literal notranslate"><span class="pre">SyncBrowserSession.__enter__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#scitex_browser.debugging.SyncBrowserSession.__exit__"><code class="docutils literal notranslate"><span class="pre">SyncBrowserSession.__exit__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#scitex_browser.debugging.SyncBrowserSession._kill_process_tree"><code class="docutils literal notranslate"><span class="pre">SyncBrowserSession._kill_process_tree()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#scitex_browser.debugging.SyncBrowserSession._emergency_cleanup"><code class="docutils literal notranslate"><span class="pre">SyncBrowserSession._emergency_cleanup()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#scitex_browser.debugging.SyncBrowserSession.kill_zombie_browsers"><code class="docutils literal notranslate"><span class="pre">SyncBrowserSession.kill_zombie_browsers()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#scitex_browser.debugging.sync_browser_session"><code class="docutils literal notranslate"><span class="pre">sync_browser_session()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#scitex_browser.debugging.create_browser_session_fixture"><code class="docutils literal notranslate"><span class="pre">create_browser_session_fixture()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pdf.html">scitex_browser.pdf</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pdf.html#scitex_browser.pdf.save_as_pdf"><code class="docutils literal notranslate"><span class="pre">save_as_pdf()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="pdf.html#scitex_browser.pdf.save_as_pdf_async"><code class="docutils literal notranslate"><span class="pre">save_as_pdf_async()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="pdf.html#scitex_browser.pdf.detect_chrome_pdf_viewer_async"><code class="docutils literal notranslate"><span class="pre">detect_chrome_pdf_viewer_async()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="pdf.html#scitex_browser.pdf.click_download_for_chrome_pdf_viewer_async"><code class="docutils literal notranslate"><span class="pre">click_download_for_chrome_pdf_viewer_async()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="stealth.html">scitex_browser.stealth</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="stealth.html#scitex_browser.stealth.StealthManager"><code class="docutils literal notranslate"><span class="pre">StealthManager</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="stealth.html#scitex_browser.stealth.StealthManager.__init__"><code class="docutils literal notranslate"><span class="pre">StealthManager.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="stealth.html#scitex_browser.stealth.StealthManager.get_random_user_agent"><code class="docutils literal notranslate"><span class="pre">StealthManager.get_random_user_agent()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="stealth.html#scitex_browser.stealth.StealthManager.get_random_viewport"><code class="docutils literal notranslate"><span class="pre">StealthManager.get_random_viewport()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="stealth.html#scitex_browser.stealth.StealthManager.get_stealth_options"><code class="docutils literal notranslate"><span class="pre">StealthManager.get_stealth_options()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="stealth.html#scitex_browser.stealth.StealthManager.get_stealth_options_additional"><code class="docutils literal notranslate"><span class="pre">StealthManager.get_stealth_options_additional()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="stealth.html#scitex_browser.stealth.StealthManager.get_network_evasion_headers"><code class="docutils literal notranslate"><span class="pre">StealthManager.get_network_evasion_headers()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="stealth.html#scitex_browser.stealth.StealthManager.add_human_behavior_async"><code class="docutils literal notranslate"><span class="pre">StealthManager.add_human_behavior_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="stealth.html#scitex_browser.stealth.StealthManager.handle_cloudflare_challenge_async"><code class="docutils literal notranslate"><span class="pre">StealthManager.handle_cloudflare_challenge_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="stealth.html#scitex_browser.stealth.StealthManager.get_init_script"><code class="docutils literal notranslate"><span class="pre">StealthManager.get_init_script()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="stealth.html#scitex_browser.stealth.StealthManager.get_dimension_spoofing_script"><code class="docutils literal notranslate"><span class="pre">StealthManager.get_dimension_spoofing_script()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="stealth.html#scitex_browser.stealth.StealthManager.human_delay_async"><code class="docutils literal notranslate"><span class="pre">StealthManager.human_delay_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="stealth.html#scitex_browser.stealth.StealthManager.human_click_async"><code class="docutils literal notranslate"><span class="pre">StealthManager.human_click_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="stealth.html#scitex_browser.stealth.StealthManager.human_mouse_move_async"><code class="docutils literal notranslate"><span class="pre">StealthManager.human_mouse_move_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="stealth.html#scitex_browser.stealth.StealthManager.human_scroll_async"><code class="docutils literal notranslate"><span class="pre">StealthManager.human_scroll_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="stealth.html#scitex_browser.stealth.StealthManager.human_type_async"><code class="docutils literal notranslate"><span class="pre">StealthManager.human_type_async()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="stealth.html#scitex_browser.stealth.HumanBehavior"><code class="docutils literal notranslate"><span class="pre">HumanBehavior</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="stealth.html#scitex_browser.stealth.HumanBehavior.__init__"><code class="docutils literal notranslate"><span class="pre">HumanBehavior.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="stealth.html#scitex_browser.stealth.HumanBehavior.random_delay_async"><code class="docutils literal notranslate"><span class="pre">HumanBehavior.random_delay_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="stealth.html#scitex_browser.stealth.HumanBehavior.reading_delay_async"><code class="docutils literal notranslate"><span class="pre">HumanBehavior.reading_delay_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="stealth.html#scitex_browser.stealth.HumanBehavior.mouse_move_async"><code class="docutils literal notranslate"><span class="pre">HumanBehavior.mouse_move_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="stealth.html#scitex_browser.stealth.HumanBehavior.hover_and_click_async"><code class="docutils literal notranslate"><span class="pre">HumanBehavior.hover_and_click_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="stealth.html#scitex_browser.stealth.HumanBehavior.scroll_async"><code class="docutils literal notranslate"><span class="pre">HumanBehavior.scroll_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="stealth.html#scitex_browser.stealth.HumanBehavior.type_text_async"><code class="docutils literal notranslate"><span class="pre">HumanBehavior.type_text_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="stealth.html#scitex_browser.stealth.HumanBehavior.random_mouse_movement_async"><code class="docutils literal notranslate"><span class="pre">HumanBehavior.random_mouse_movement_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="stealth.html#scitex_browser.stealth.HumanBehavior.pdf_viewing_behavior_async"><code class="docutils literal notranslate"><span class="pre">HumanBehavior.pdf_viewing_behavior_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="stealth.html#scitex_browser.stealth.HumanBehavior.wait_for_download_async"><code class="docutils literal notranslate"><span class="pre">HumanBehavior.wait_for_download_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="stealth.html#scitex_browser.stealth.HumanBehavior.form_interaction_async"><code class="docutils literal notranslate"><span class="pre">HumanBehavior.form_interaction_async()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="automation.html">scitex_browser.automation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="automation.html#scitex_browser.automation.CookieAutoAcceptor"><code class="docutils literal notranslate"><span class="pre">CookieAutoAcceptor</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="automation.html#scitex_browser.automation.CookieAutoAcceptor.__init__"><code class="docutils literal notranslate"><span class="pre">CookieAutoAcceptor.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="automation.html#scitex_browser.automation.CookieAutoAcceptor.inject_auto_acceptor_async"><code class="docutils literal notranslate"><span class="pre">CookieAutoAcceptor.inject_auto_acceptor_async()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="automation.html#scitex_browser.automation.CookieAutoAcceptor.get_auto_acceptor_script"><code class="docutils literal notranslate"><span class="pre">CookieAutoAcceptor.get_auto_acceptor_script()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="automation.html#scitex_browser.automation.CookieAutoAcceptor.check_cookie_banner_exists_async"><code class="docutils literal notranslate"><span class="pre">CookieAutoAcceptor.check_cookie_banner_exists_async()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="collaboration.html">scitex_browser.collaboration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="collaboration.html#scitex_browser.collaboration.SharedBrowserSession"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="collaboration.html#scitex_browser.collaboration.SharedBrowserSession.__init__"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="collaboration.html#scitex_browser.collaboration.SharedBrowserSession.start"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.start()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="collaboration.html#scitex_browser.collaboration.SharedBrowserSession.navigate"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.navigate()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="collaboration.html#scitex_browser.collaboration.SharedBrowserSession.screenshot"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.screenshot()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="collaboration.html#scitex_browser.collaboration.SharedBrowserSession.wait"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.wait()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="collaboration.html#scitex_browser.collaboration.SharedBrowserSession.close"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.close()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="collaboration.html#scitex_browser.collaboration.SharedBrowserSession.__aenter__"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.__aenter__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="collaboration.html#scitex_browser.collaboration.SharedBrowserSession.__aexit__"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.__aexit__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="collaboration.html#scitex_browser.collaboration.SharedBrowserSession._log_event"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession._log_event()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="collaboration.html#scitex_browser.collaboration.SharedBrowserSession._auto_screenshot_loop"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession._auto_screenshot_loop()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="collaboration.html#scitex_browser.collaboration.SharedBrowserSession.get_info"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.get_info()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="collaboration.html#scitex_browser.collaboration.SharedBrowserSession.type"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.type()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="collaboration.html#scitex_browser.collaboration.SharedBrowserSession.click"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.click()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="collaboration.html#scitex_browser.collaboration.SharedBrowserSession.hover"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.hover()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="collaboration.html#scitex_browser.collaboration.SharedBrowserSession.press"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.press()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="collaboration.html#scitex_browser.collaboration.SharedBrowserSession.scroll_down"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.scroll_down()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="collaboration.html#scitex_browser.collaboration.SharedBrowserSession.scroll_to"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.scroll_to()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="collaboration.html#scitex_browser.collaboration.SharedBrowserSession.wait_for"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.wait_for()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="collaboration.html#scitex_browser.collaboration.SharedBrowserSession.wait_for_text"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.wait_for_text()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="collaboration.html#scitex_browser.collaboration.SharedBrowserSession.wait_for_url"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.wait_for_url()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="collaboration.html#scitex_browser.collaboration.SharedBrowserSession.get_text"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.get_text()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="collaboration.html#scitex_browser.collaboration.SharedBrowserSession.get_value"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.get_value()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="collaboration.html#scitex_browser.collaboration.SharedBrowserSession.is_visible"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.is_visible()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="collaboration.html#scitex_browser.collaboration.SharedBrowserSession.ask"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.ask()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="collaboration.html#scitex_browser.collaboration.SharedBrowserSession.confirm"><code class="docutils literal notranslate"><span class="pre">SharedBrowserSession.confirm()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="collaboration.html#scitex_browser.collaboration.SessionConfig"><code class="docutils literal notranslate"><span class="pre">SessionConfig</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="collaboration.html#scitex_browser.collaboration.SessionConfig.session_id"><code class="docutils literal notranslate"><span class="pre">SessionConfig.session_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="collaboration.html#scitex_browser.collaboration.SessionConfig.browser_type"><code class="docutils literal notranslate"><span class="pre">SessionConfig.browser_type</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="collaboration.html#scitex_browser.collaboration.SessionConfig.headless"><code class="docutils literal notranslate"><span class="pre">SessionConfig.headless</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="collaboration.html#scitex_browser.collaboration.SessionConfig.viewport"><code class="docutils literal notranslate"><span class="pre">SessionConfig.viewport</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="collaboration.html#scitex_browser.collaboration.SessionConfig.user_data_dir"><code class="docutils literal notranslate"><span class="pre">SessionConfig.user_data_dir</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="collaboration.html#scitex_browser.collaboration.SessionConfig.enable_screenshots"><code class="docutils literal notranslate"><span class="pre">SessionConfig.enable_screenshots</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="collaboration.html#scitex_browser.collaboration.SessionConfig.screenshot_interval"><code class="docutils literal notranslate"><span class="pre">SessionConfig.screenshot_interval</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="collaboration.html#scitex_browser.collaboration.SessionConfig.__init__"><code class="docutils literal notranslate"><span class="pre">SessionConfig.__init__()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="collaboration.html#scitex_browser.collaboration.VisualFeedback"><code class="docutils literal notranslate"><span class="pre">VisualFeedback</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="collaboration.html#scitex_browser.collaboration.VisualFeedback.__init__"><code class="docutils literal notranslate"><span class="pre">VisualFeedback.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="collaboration.html#scitex_browser.collaboration.VisualFeedback.initialize"><code class="docutils literal notranslate"><span class="pre">VisualFeedback.initialize()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="collaboration.html#scitex_browser.collaboration.VisualFeedback.show_message"><code class="docutils literal notranslate"><span class="pre">VisualFeedback.show_message()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="collaboration.html#scitex_browser.collaboration.VisualFeedback.show_participant"><code class="docutils literal notranslate"><span class="pre">VisualFeedback.show_participant()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="collaboration.html#scitex_browser.collaboration.VisualFeedback.show_action"><code class="docutils literal notranslate"><span class="pre">VisualFeedback.show_action()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="collaboration.html#scitex_browser.collaboration.VisualFeedback.clear"><code class="docutils literal notranslate"><span class="pre">VisualFeedback.clear()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="collaboration.html#scitex_browser.collaboration.CredentialManager"><code class="docutils literal notranslate"><span class="pre">CredentialManager</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="collaboration.html#scitex_browser.collaboration.CredentialManager.__init__"><code class="docutils literal notranslate"><span class="pre">CredentialManager.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="collaboration.html#scitex_browser.collaboration.CredentialManager.get_credential"><code class="docutils literal notranslate"><span class="pre">CredentialManager.get_credential()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="collaboration.html#scitex_browser.collaboration.CredentialManager._is_terminal_available"><code class="docutils literal notranslate"><span class="pre">CredentialManager._is_terminal_available()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="collaboration.html#scitex_browser.collaboration.CredentialManager._prompt_terminal"><code class="docutils literal notranslate"><span class="pre">CredentialManager._prompt_terminal()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="collaboration.html#scitex_browser.collaboration.CredentialManager._prompt_browser"><code class="docutils literal notranslate"><span class="pre">CredentialManager._prompt_browser()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="collaboration.html#scitex_browser.collaboration.CredentialManager.get_login_credentials"><code class="docutils literal notranslate"><span class="pre">CredentialManager.get_login_credentials()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="collaboration.html#scitex_browser.collaboration.CredentialManager.clear_cache"><code class="docutils literal notranslate"><span class="pre">CredentialManager.clear_cache()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="collaboration.html#scitex_browser.collaboration.GoogleAuthHelper"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="collaboration.html#scitex_browser.collaboration.GoogleAuthHelper.__init__"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="collaboration.html#scitex_browser.collaboration.GoogleAuthHelper._log"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper._log()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="collaboration.html#scitex_browser.collaboration.GoogleAuthHelper.login_via_google_button"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper.login_via_google_button()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="collaboration.html#scitex_browser.collaboration.GoogleAuthHelper._handle_google_popup"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper._handle_google_popup()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="collaboration.html#scitex_browser.collaboration.GoogleAuthHelper._fill_email"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper._fill_email()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="collaboration.html#scitex_browser.collaboration.GoogleAuthHelper._fill_password"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper._fill_password()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="collaboration.html#scitex_browser.collaboration.GoogleAuthHelper._handle_consent_screens"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper._handle_consent_screens()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="collaboration.html#scitex_browser.collaboration.GoogleAuthHelper._wait_for_2fa"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper._wait_for_2fa()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="collaboration.html#scitex_browser.collaboration.GoogleAuthHelper.is_logged_in"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper.is_logged_in()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="collaboration.html#scitex_browser.collaboration.google_login"><code class="docutils literal notranslate"><span class="pre">google_login()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="remote.html">scitex_browser.remote</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">SciTeX Browser</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">scitex_browser.debugging</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/ywatanabe1989/scitex-browser/blob/develop/docs/sphinx/api/debugging.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-scitex_browser.debugging">
+<span id="scitex-browser-debugging"></span><h1>scitex_browser.debugging<a class="headerlink" href="#module-scitex_browser.debugging" title="Link to this heading"></a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="scitex_browser.debugging.show_grid_async">
+<span class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">scitex_browser.debugging.</span></span><span class="sig-name descname"><span class="pre">show_grid_async</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">page</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">func_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'show_grid_async'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_browser/debugging/_show_grid.html#show_grid_async"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_browser.debugging.show_grid_async" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="scitex_browser.debugging.highlight_element_async">
+<span class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">scitex_browser.debugging.</span></span><span class="sig-name descname"><span class="pre">highlight_element_async</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">duration_ms</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">func_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'highlight_element_async'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_browser/debugging/_highlight_element.html#highlight_element_async"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_browser.debugging.highlight_element_async" title="Link to this definition"></a></dt>
+<dd><p>Highlight element with red overlay rectangle.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>element</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Locator</span></code></span>) – Locator to highlight</p></li>
+<li><p><strong>duration_ms</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – Duration to display highlight in milliseconds</p></li>
+<li><p><strong>func_name</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Name of calling function for logging context</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="scitex_browser.debugging.inject_visual_effects">
+<span class="sig-prename descclassname"><span class="pre">scitex_browser.debugging.</span></span><span class="sig-name descname"><span class="pre">inject_visual_effects</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">page</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_browser/debugging/_visual_cursor.html#inject_visual_effects"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_browser.debugging.inject_visual_effects" title="Link to this definition"></a></dt>
+<dd><p>Inject CSS and elements for visual effects (sync version).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="scitex_browser.debugging.inject_visual_effects_async">
+<span class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">scitex_browser.debugging.</span></span><span class="sig-name descname"><span class="pre">inject_visual_effects_async</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">page</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_browser/debugging/_visual_cursor.html#inject_visual_effects_async"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_browser.debugging.inject_visual_effects_async" title="Link to this definition"></a></dt>
+<dd><p>Inject CSS and elements for visual effects (async version).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="scitex_browser.debugging.show_cursor_at">
+<span class="sig-prename descclassname"><span class="pre">scitex_browser.debugging.</span></span><span class="sig-name descname"><span class="pre">show_cursor_at</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">page</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'normal'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_browser/debugging/_visual_cursor.html#show_cursor_at"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_browser.debugging.show_cursor_at" title="Link to this definition"></a></dt>
+<dd><p>Move visual cursor to position (sync version).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>page</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Page</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Page</span></code>]</span>) – Playwright page object</p></li>
+<li><p><strong>x</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span>) – X coordinate</p></li>
+<li><p><strong>y</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span>) – Y coordinate</p></li>
+<li><p><strong>state</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Cursor state - “normal”, “clicking”, or “dragging”</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="scitex_browser.debugging.show_cursor_at_async">
+<span class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">scitex_browser.debugging.</span></span><span class="sig-name descname"><span class="pre">show_cursor_at_async</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">page</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'normal'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_browser/debugging/_visual_cursor.html#show_cursor_at_async"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_browser.debugging.show_cursor_at_async" title="Link to this definition"></a></dt>
+<dd><p>Move visual cursor to position (async version).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="scitex_browser.debugging.show_click_effect">
+<span class="sig-prename descclassname"><span class="pre">scitex_browser.debugging.</span></span><span class="sig-name descname"><span class="pre">show_click_effect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">page</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_browser/debugging/_visual_cursor.html#show_click_effect"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_browser.debugging.show_click_effect" title="Link to this definition"></a></dt>
+<dd><p>Show click ripple effect at position (sync version).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="scitex_browser.debugging.show_click_effect_async">
+<span class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">scitex_browser.debugging.</span></span><span class="sig-name descname"><span class="pre">show_click_effect_async</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">page</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_browser/debugging/_visual_cursor.html#show_click_effect_async"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_browser.debugging.show_click_effect_async" title="Link to this definition"></a></dt>
+<dd><p>Show click ripple effect at position (async version).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="scitex_browser.debugging.show_step">
+<span class="sig-prename descclassname"><span class="pre">scitex_browser.debugging.</span></span><span class="sig-name descname"><span class="pre">show_step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">page</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">total</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">message</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'info'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_browser/debugging/_visual_cursor.html#show_step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_browser.debugging.show_step" title="Link to this definition"></a></dt>
+<dd><p>Show numbered step message in browser (sync version).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>page</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Page</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Page</span></code>]</span>) – Playwright page object</p></li>
+<li><p><strong>step</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – Current step number</p></li>
+<li><p><strong>total</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – Total number of steps</p></li>
+<li><p><strong>message</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Message to display</p></li>
+<li><p><strong>level</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Message level - “info”, “success”, “warning”, or “error”</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="scitex_browser.debugging.show_step_async">
+<span class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">scitex_browser.debugging.</span></span><span class="sig-name descname"><span class="pre">show_step_async</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">page</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">total</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">message</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'info'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_browser/debugging/_visual_cursor.html#show_step_async"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_browser.debugging.show_step_async" title="Link to this definition"></a></dt>
+<dd><p>Show numbered step message in browser (async version).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="scitex_browser.debugging.show_test_result">
+<span class="sig-prename descclassname"><span class="pre">scitex_browser.debugging.</span></span><span class="sig-name descname"><span class="pre">show_test_result</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">page</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">success</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delay_ms</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3000</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_browser/debugging/_visual_cursor.html#show_test_result"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_browser.debugging.show_test_result" title="Link to this definition"></a></dt>
+<dd><p>Show test result banner (PASS/FAIL) and wait (sync version).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>page</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">Page</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Page</span></code>]</span>) – Playwright page object</p></li>
+<li><p><strong>success</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span>) – True for PASS, False for FAIL</p></li>
+<li><p><strong>message</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Optional message to display</p></li>
+<li><p><strong>delay_ms</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – How long to display before continuing</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="scitex_browser.debugging.show_test_result_async">
+<span class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">scitex_browser.debugging.</span></span><span class="sig-name descname"><span class="pre">show_test_result_async</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">page</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">success</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delay_ms</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3000</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_browser/debugging/_visual_cursor.html#show_test_result_async"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_browser.debugging.show_test_result_async" title="Link to this definition"></a></dt>
+<dd><p>Show test result banner (PASS/FAIL) and wait (async version).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="scitex_browser.debugging.setup_console_interceptor">
+<span class="sig-prename descclassname"><span class="pre">scitex_browser.debugging.</span></span><span class="sig-name descname"><span class="pre">setup_console_interceptor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">page</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_browser/debugging/_failure_capture.html#setup_console_interceptor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_browser.debugging.setup_console_interceptor" title="Link to this definition"></a></dt>
+<dd><p>Set up console log interceptor with source tracking and error capture.</p>
+<p>Features (mirroring console-interceptor.ts):
+- Intercepts console.log, info, warn, error, debug
+- Captures source file and line number
+- Captures unhandled JS errors
+- Captures unhandled promise rejections
+- Captures resource loading failures</p>
+<p>Call this at the start of each test to begin capturing logs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="scitex_browser.debugging.collect_console_logs">
+<span class="sig-prename descclassname"><span class="pre">scitex_browser.debugging.</span></span><span class="sig-name descname"><span class="pre">collect_console_logs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">page</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_browser/debugging/_failure_capture.html#collect_console_logs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_browser.debugging.collect_console_logs" title="Link to this definition"></a></dt>
+<dd><p>Collect all captured console logs from the browser.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a></span></p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of log strings in format “[LEVEL] source message”</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="scitex_browser.debugging.collect_console_logs_detailed">
+<span class="sig-prename descclassname"><span class="pre">scitex_browser.debugging.</span></span><span class="sig-name descname"><span class="pre">collect_console_logs_detailed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">page</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_browser/debugging/_failure_capture.html#collect_console_logs_detailed"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_browser.debugging.collect_console_logs_detailed" title="Link to this definition"></a></dt>
+<dd><p>Collect all captured console logs with full details.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>level, message, source, timestamp, url</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of dicts with keys</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="scitex_browser.debugging.format_logs_devtools_style">
+<span class="sig-prename descclassname"><span class="pre">scitex_browser.debugging.</span></span><span class="sig-name descname"><span class="pre">format_logs_devtools_style</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">logs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_browser/debugging/_failure_capture.html#format_logs_devtools_style"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_browser.debugging.format_logs_devtools_style" title="Link to this definition"></a></dt>
+<dd><p>Format logs in DevTools-like style.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>logs</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a></span>) – List of detailed log entries from collect_console_logs_detailed()</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Formatted string like browser DevTools output</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="scitex_browser.debugging.save_failure_artifacts">
+<span class="sig-prename descclassname"><span class="pre">scitex_browser.debugging.</span></span><span class="sig-name descname"><span class="pre">save_failure_artifacts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">page</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">artifacts_dir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">console_logs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_browser/debugging/_failure_capture.html#save_failure_artifacts"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_browser.debugging.save_failure_artifacts" title="Link to this definition"></a></dt>
+<dd><p>Save screenshot, console logs, and page HTML on test failure.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>page</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Page</span></code></span>) – Playwright page object</p></li>
+<li><p><strong>test_name</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Name of the failed test (e.g., request.node.nodeid)</p></li>
+<li><p><strong>artifacts_dir</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Path</span></code></a> | <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Directory to save artifacts</p></li>
+<li><p><strong>console_logs</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> | <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a></span>) – Pre-collected console logs (optional, will collect if None)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Dict with paths to saved artifacts</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="scitex_browser.debugging.create_failure_capture_fixture">
+<span class="sig-prename descclassname"><span class="pre">scitex_browser.debugging.</span></span><span class="sig-name descname"><span class="pre">create_failure_capture_fixture</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">artifacts_dir</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_browser/debugging/_failure_capture.html#create_failure_capture_fixture"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_browser.debugging.create_failure_capture_fixture" title="Link to this definition"></a></dt>
+<dd><p>Create a pytest fixture for automatic failure capture.</p>
+<dl>
+<dt>Usage in conftest.py:</dt><dd><p>from scitex_browser.debugging import create_failure_capture_fixture</p>
+<dl class="simple">
+<dt>capture_on_failure = create_failure_capture_fixture(</dt><dd><p>Path(__file__).parent / “artifacts”</p>
+</dd>
+</dl>
+<p>)</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>artifacts_dir</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Path</span></code></a> | <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Directory to save failure artifacts</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A pytest fixture function</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="scitex_browser.debugging.TestMonitor">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">scitex_browser.debugging.</span></span><span class="sig-name descname"><span class="pre">TestMonitor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interval</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quality</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">70</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_browser/debugging/_test_monitor.html#TestMonitor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_browser.debugging.TestMonitor" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Monitor E2E tests with periodic screenshots using scitex.capture.</p>
+<p>Captures screenshots at regular intervals during test execution,
+allowing visual inspection of test progress and debugging.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="scitex_browser.debugging.TestMonitor.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interval</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quality</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">70</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_browser/debugging/_test_monitor.html#TestMonitor.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_browser.debugging.TestMonitor.__init__" title="Link to this definition"></a></dt>
+<dd><p>Initialize test monitor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>output_dir</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | <a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Path</span></code></a></span>) – Directory for screenshots (default: $SCITEX_DIR/test_monitor)</p></li>
+<li><p><strong>interval</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span>) – Seconds between screenshots (default: 2.0)</p></li>
+<li><p><strong>quality</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – JPEG quality 1-100 (default: 70)</p></li>
+<li><p><strong>verbose</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span>) – Print capture messages</p></li>
+<li><p><strong>test_name</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Optional test name for session identification</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scitex_browser.debugging.TestMonitor.start">
+<span class="sig-name descname"><span class="pre">start</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">test_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_browser/debugging/_test_monitor.html#TestMonitor.start"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_browser.debugging.TestMonitor.start" title="Link to this definition"></a></dt>
+<dd><p>Start periodic screenshot capture.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>test_name</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Optional test name to include in session</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Session ID for this capture session</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scitex_browser.debugging.TestMonitor.stop">
+<span class="sig-name descname"><span class="pre">stop</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_browser/debugging/_test_monitor.html#TestMonitor.stop"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_browser.debugging.TestMonitor.stop" title="Link to this definition"></a></dt>
+<dd><p>Stop screenshot capture.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></span></p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Status dict with session info</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scitex_browser.debugging.TestMonitor.get_status">
+<span class="sig-name descname"><span class="pre">get_status</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_browser/debugging/_test_monitor.html#TestMonitor.get_status"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_browser.debugging.TestMonitor.get_status" title="Link to this definition"></a></dt>
+<dd><p>Get current monitor status.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scitex_browser.debugging.TestMonitor.take_snapshot">
+<span class="sig-name descname"><span class="pre">take_snapshot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_browser/debugging/_test_monitor.html#TestMonitor.take_snapshot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_browser.debugging.TestMonitor.take_snapshot" title="Link to this definition"></a></dt>
+<dd><p>Take an immediate snapshot (in addition to periodic captures).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>message</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Optional message to include in filename</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Path to saved screenshot</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scitex_browser.debugging.TestMonitor.create_gif">
+<span class="sig-name descname"><span class="pre">create_gif</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">duration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_browser/debugging/_test_monitor.html#TestMonitor.create_gif"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_browser.debugging.TestMonitor.create_gif" title="Link to this definition"></a></dt>
+<dd><p>Create GIF from captured screenshots.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>duration</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span>) – Duration per frame in seconds</p></li>
+<li><p><strong>output_path</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Output path for GIF (auto-generated if None)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Path to created GIF</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scitex_browser.debugging.TestMonitor.get_screenshots">
+<span class="sig-name descname"><span class="pre">get_screenshots</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_browser/debugging/_test_monitor.html#TestMonitor.get_screenshots"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_browser.debugging.TestMonitor.get_screenshots" title="Link to this definition"></a></dt>
+<dd><p>Get list of captured screenshot paths.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="scitex_browser.debugging.create_test_monitor_fixture">
+<span class="sig-prename descclassname"><span class="pre">scitex_browser.debugging.</span></span><span class="sig-name descname"><span class="pre">create_test_monitor_fixture</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interval</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auto_gif</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_browser/debugging/_test_monitor.html#create_test_monitor_fixture"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_browser.debugging.create_test_monitor_fixture" title="Link to this definition"></a></dt>
+<dd><p>Create a pytest fixture for test monitoring.</p>
+<dl>
+<dt>Usage in conftest.py:</dt><dd><p>from scitex_browser.debugging import create_test_monitor_fixture</p>
+<p>test_monitor = create_test_monitor_fixture(interval=2.0, auto_gif=True)</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>output_dir</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> | <a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Path</span></code></a></span>) – Directory for screenshots</p></li>
+<li><p><strong>interval</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span>) – Seconds between screenshots</p></li>
+<li><p><strong>auto_gif</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span>) – Create GIF automatically on test completion</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A pytest fixture function</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="scitex_browser.debugging.monitor_test">
+<span class="sig-prename descclassname"><span class="pre">scitex_browser.debugging.</span></span><span class="sig-name descname"><span class="pre">monitor_test</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">test_func</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interval</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auto_gif</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_browser/debugging/_test_monitor.html#monitor_test"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_browser.debugging.monitor_test" title="Link to this definition"></a></dt>
+<dd><p>Decorator for monitoring tests with periodic screenshots.</p>
+<dl>
+<dt>Usage:</dt><dd><p>&#64;monitor_test(interval=1.0, auto_gif=True)
+def test_my_feature(page):</p>
+<blockquote>
+<div><p># test code…</p>
+</div></blockquote>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>test_func</strong> – Test function (for use without parentheses)</p></li>
+<li><p><strong>interval</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span>) – Seconds between screenshots</p></li>
+<li><p><strong>auto_gif</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span>) – Create GIF on completion</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="scitex_browser.debugging.SyncBrowserSession">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">scitex_browser.debugging.</span></span><span class="sig-name descname"><span class="pre">SyncBrowserSession</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">page</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">60</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on_enter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on_exit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_browser/debugging/_sync_session.html#SyncBrowserSession"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_browser.debugging.SyncBrowserSession" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Sync context manager for playwright browser sessions.</p>
+<p>Ensures zombie process cleanup on test failures, timeouts, or crashes.
+Tracks browser PIDs and kills orphaned processes on exit.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="scitex_browser.debugging.SyncBrowserSession.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">page</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">60</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on_enter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on_exit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_browser/debugging/_sync_session.html#SyncBrowserSession.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_browser.debugging.SyncBrowserSession.__init__" title="Link to this definition"></a></dt>
+<dd><p>Initialize sync browser session.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>page</strong> (<span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Page</span></code></span>) – Playwright page instance from pytest-playwright</p></li>
+<li><p><strong>timeout</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – Default timeout for operations in seconds</p></li>
+<li><p><strong>on_enter</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code></a>[[<code class="xref py py-class docutils literal notranslate"><span class="pre">Page</span></code>], <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>]]</span>) – Callback when entering context</p></li>
+<li><p><strong>on_exit</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code></a>[[<code class="xref py py-class docutils literal notranslate"><span class="pre">Page</span></code>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>], <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>]]</span>) – Callback when exiting context (receives page and success flag)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scitex_browser.debugging.SyncBrowserSession.__enter__">
+<span class="sig-name descname"><span class="pre">__enter__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_browser/debugging/_sync_session.html#SyncBrowserSession.__enter__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_browser.debugging.SyncBrowserSession.__enter__" title="Link to this definition"></a></dt>
+<dd><p>Enter context - track browser PIDs and run setup callback.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference internal" href="#scitex_browser.debugging.SyncBrowserSession" title="scitex_browser.debugging._sync_session.SyncBrowserSession"><code class="xref py py-class docutils literal notranslate"><span class="pre">SyncBrowserSession</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scitex_browser.debugging.SyncBrowserSession.__exit__">
+<span class="sig-name descname"><span class="pre">__exit__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">exc_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exc_val</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exc_tb</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_browser/debugging/_sync_session.html#SyncBrowserSession.__exit__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_browser.debugging.SyncBrowserSession.__exit__" title="Link to this definition"></a></dt>
+<dd><p>Exit context - ensure cleanup happens.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scitex_browser.debugging.SyncBrowserSession._kill_process_tree">
+<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">_kill_process_tree</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pid</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_browser/debugging/_sync_session.html#SyncBrowserSession._kill_process_tree"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_browser.debugging.SyncBrowserSession._kill_process_tree" title="Link to this definition"></a></dt>
+<dd><p>Kill a process and all its children (zombies).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scitex_browser.debugging.SyncBrowserSession._emergency_cleanup">
+<span class="property"><span class="k"><span class="pre">classmethod</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">_emergency_cleanup</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_browser/debugging/_sync_session.html#SyncBrowserSession._emergency_cleanup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_browser.debugging.SyncBrowserSession._emergency_cleanup" title="Link to this definition"></a></dt>
+<dd><p>Emergency cleanup of all active sessions on process exit.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="scitex_browser.debugging.SyncBrowserSession.kill_zombie_browsers">
+<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">kill_zombie_browsers</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_browser/debugging/_sync_session.html#SyncBrowserSession.kill_zombie_browsers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_browser.debugging.SyncBrowserSession.kill_zombie_browsers" title="Link to this definition"></a></dt>
+<dd><p>Kill all zombie chromium/chrome processes from failed tests.</p>
+<p>Call this at the start of test sessions to clean up from previous runs.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="scitex_browser.debugging.sync_browser_session">
+<span class="sig-prename descclassname"><span class="pre">scitex_browser.debugging.</span></span><span class="sig-name descname"><span class="pre">sync_browser_session</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">page</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">60</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on_enter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on_exit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_browser/debugging/_sync_session.html#sync_browser_session"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_browser.debugging.sync_browser_session" title="Link to this definition"></a></dt>
+<dd><p>Context manager for sync playwright sessions.</p>
+<dl>
+<dt>Usage:</dt><dd><dl class="simple">
+<dt>with sync_browser_session(page) as session:</dt><dd><p>session.page.goto(url)
+# … test code</p>
+</dd>
+</dl>
+<p># Cleanup happens automatically</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="scitex_browser.debugging.create_browser_session_fixture">
+<span class="sig-prename descclassname"><span class="pre">scitex_browser.debugging.</span></span><span class="sig-name descname"><span class="pre">create_browser_session_fixture</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">60</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">setup</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">teardown</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kill_zombies_on_start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_browser/debugging/_sync_session.html#create_browser_session_fixture"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_browser.debugging.create_browser_session_fixture" title="Link to this definition"></a></dt>
+<dd><p>Create a pytest fixture for browser session with cleanup.</p>
+<dl>
+<dt>Usage in conftest.py:</dt><dd><p>from scitex_browser import create_browser_session_fixture</p>
+<dl class="simple">
+<dt>browser_session = create_browser_session_fixture(</dt><dd><p>timeout=60,
+setup=lambda page: print(f”Starting test”),
+teardown=lambda page, success: print(f”Test {‘passed’ if success else ‘failed’}”),
+kill_zombies_on_start=True,</p>
+</dd>
+</dl>
+<p>)</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>timeout</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – Default timeout for operations</p></li>
+<li><p><strong>setup</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code></a>[[<code class="xref py py-class docutils literal notranslate"><span class="pre">Page</span></code>], <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>]]</span>) – Callback when entering session</p></li>
+<li><p><strong>teardown</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.14)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code></a>[[<code class="xref py py-class docutils literal notranslate"><span class="pre">Page</span></code>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>], <a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></a>]]</span>) – Callback when exiting (receives page and success flag)</p></li>
+<li><p><strong>kill_zombies_on_start</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span>) – Kill orphaned browsers before first test</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A pytest fixture function</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="interaction.html" class="btn btn-neutral float-left" title="scitex_browser.interaction" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="pdf.html" class="btn btn-neutral float-right" title="scitex_browser.pdf" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Yusuke Watanabe.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
