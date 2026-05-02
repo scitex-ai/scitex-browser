@@ -15,9 +15,9 @@ __DIR__ = os.path.dirname(__FILE__)
 Browser manager specifically for the ZenRows Scraping Browser service.
 This provides cloud-based Chrome instances with built-in anti-bot bypass.
 """
-import scitex_logging as logging
 from typing import Any, Dict, Optional
 
+import scitex_logging as logging
 from playwright.async_api import Browser, BrowserContext, async_playwright
 
 try:
@@ -25,7 +25,7 @@ try:
 except ImportError:
     CookieAutoAcceptor = None
 
-from ._ZenRowsAPIBrowser import ZenRowsAPIBrowser
+from .ZenRowsAPIClient import ZenRowsAPIBrowser
 
 logger = logging.getLogger(__name__)
 
@@ -443,7 +443,7 @@ if __name__ == "__main__":
         # Test 4: Test the API client as well
         print("\nTesting ZenRows API Client for comparison...")
         try:
-            from ._ZenRowsAPIClient import ZenRowsAPIClient
+            from .ZenRowsAPIClient import ZenRowsAPIBrowser as ZenRowsAPIClient
 
             print("Testing basic API request...")
             api_client = ZenRowsAPIClient()
