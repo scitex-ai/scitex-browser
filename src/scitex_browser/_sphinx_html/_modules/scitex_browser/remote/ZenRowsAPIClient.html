@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>scitex_browser.collaboration.shared_session &mdash; SciTeX Browser v0.1.14</title>
+  <title>scitex_browser.remote.ZenRowsAPIClient &mdash; SciTeX Browser v0.1.14</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
@@ -350,7 +350,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
-      <li class="breadcrumb-item active">scitex_browser.collaboration.shared_session</li>
+      <li class="breadcrumb-item active">scitex_browser.remote.ZenRowsAPIClient</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -359,486 +359,365 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <h1>Source code for scitex_browser.collaboration.shared_session</h1><div class="highlight"><pre>
+  <h1>Source code for scitex_browser.remote.ZenRowsAPIClient</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python3</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="c1"># Timestamp: &quot;2025-10-19 05:20:00 (ywatanabe)&quot;</span>
-<span class="c1"># File: ./src/scitex/browser/collaboration/shared_session.py</span>
+<span class="c1"># Timestamp: 2025-07-31 23:30:00</span>
+<span class="c1"># Author: ywatanabe</span>
+<span class="c1"># File: /home/ywatanabe/proj/SciTeX-Code/src/scitex/scholar/browser/remote/_ZenRowsAPIBrowser.py</span>
 <span class="c1"># ----------------------------------------</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+
+<span class="n">__FILE__</span> <span class="o">=</span> <span class="s2">&quot;./src/scitex/scholar/browser/remote/_ZenRowsAPIBrowser.py&quot;</span>
+<span class="n">__DIR__</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">__FILE__</span><span class="p">)</span>
+<span class="c1"># ----------------------------------------</span>
+
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">SharedBrowserSession - Persistent browser session for AI-human collaboration.</span>
-
-<span class="sd">Inspired by scitex.scholar.browser.ScholarBrowserManager&#39;s persistent context pattern.</span>
-
-<span class="sd">Key features:</span>
-<span class="sd">- Persistent browser that stays open</span>
-<span class="sd">- Session continuity (cookies, auth persist)</span>
-<span class="sd">- Multiple participants can use same browser</span>
-<span class="sd">- Screenshots integrated with scitex.capture</span>
+<span class="sd">ZenRows API-based browser for reliable page rendering and screenshot capture.</span>
+<span class="sd">This uses the ZenRows API directly instead of WebSocket for better reliability.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">asyncio</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">base64</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">playwright.async_api</span><span class="w"> </span><span class="kn">import</span> <span class="n">Browser</span><span class="p">,</span> <span class="n">BrowserContext</span><span class="p">,</span> <span class="n">Page</span><span class="p">,</span> <span class="n">async_playwright</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">aiohttp</span>
 
+<span class="kn">import</span><span class="w"> </span><span class="nn">scitex_logging</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scitex_browser._compat</span><span class="w"> </span><span class="kn">import</span> <span class="n">ScholarError</span>
 
-<div class="viewcode-block" id="SessionConfig">
-<a class="viewcode-back" href="../../../api/collaboration.html#scitex_browser.collaboration.SessionConfig">[docs]</a>
-<span class="nd">@dataclass</span>
-<span class="k">class</span><span class="w"> </span><span class="nc">SessionConfig</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Configuration for shared browser session.&quot;&quot;&quot;</span>
-
-    <span class="n">session_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;default&quot;</span>
-    <span class="n">browser_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;chromium&quot;</span>  <span class="c1"># chromium, firefox, webkit</span>
-    <span class="n">headless</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># False so humans can see</span>
-    <span class="n">viewport</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;width&quot;</span><span class="p">:</span> <span class="mi">1920</span><span class="p">,</span> <span class="s2">&quot;height&quot;</span><span class="p">:</span> <span class="mi">1080</span><span class="p">})</span>
-    <span class="n">user_data_dir</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># For persistent profile</span>
-    <span class="n">enable_screenshots</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
-    <span class="n">screenshot_interval</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># Auto-screenshot every N seconds</span></div>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
+<div class="viewcode-block" id="ZenRowsAPIBrowser">
+<a class="viewcode-back" href="../../../api/remote.html#scitex_browser.remote.ZenRowsAPIBrowser">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ZenRowsAPIBrowser</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Browser-like interface using ZenRows API for page rendering.</span>
 
-<div class="viewcode-block" id="SharedBrowserSession">
-<a class="viewcode-back" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">SharedBrowserSession</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Persistent browser session shared between AI agents and humans.</span>
-
-<span class="sd">    Simple, incremental start - just the basics.</span>
-
-<span class="sd">    Example:</span>
-<span class="sd">        # Start session</span>
-<span class="sd">        session = SharedBrowserSession()</span>
-<span class="sd">        await session.start()</span>
-
-<span class="sd">        # Navigate</span>
-<span class="sd">        await session.navigate(&quot;http://127.0.0.1:8000&quot;)</span>
-
-<span class="sd">        # Take screenshot</span>
-<span class="sd">        screenshot = await session.screenshot()</span>
-
-<span class="sd">        # Keep running</span>
-<span class="sd">        await session.wait()</span>
-
-<span class="sd">        # Close when done</span>
-<span class="sd">        await session.close()</span>
+<span class="sd">    This provides a simpler, more reliable alternative to WebSocket-based</span>
+<span class="sd">    browser connections. It&#39;s especially good for:</span>
+<span class="sd">    - Taking screenshots</span>
+<span class="sd">    - Handling CAPTCHAs automatically</span>
+<span class="sd">    - Getting rendered HTML content</span>
+<span class="sd">    - Bypassing anti-bot measures</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="SharedBrowserSession.__init__">
-<a class="viewcode-back" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.__init__">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">SessionConfig</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize shared session.&quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="n">config</span> <span class="ow">or</span> <span class="n">SessionConfig</span><span class="p">()</span>
+<div class="viewcode-block" id="ZenRowsAPIBrowser.__init__">
+<a class="viewcode-back" href="../../../api/remote.html#scitex_browser.remote.ZenRowsAPIBrowser.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">api_key</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">proxy_country</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;au&quot;</span><span class="p">,</span>
+        <span class="n">enable_antibot</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">premium_proxy</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize ZenRows API browser.</span>
 
-        <span class="c1"># Browser state</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">playwright</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Browser</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">BrowserContext</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">page</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Page</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-
-        <span class="c1"># Session state</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">running</span> <span class="o">=</span> <span class="kc">False</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">start_time</span> <span class="o">=</span> <span class="kc">None</span>
-
-        <span class="c1"># Simple event log</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">screenshots</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
-
-        <span class="c1"># Get screenshot directory from SCITEX_DIR</span>
-        <span class="n">scitex_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;SCITEX_DIR&quot;</span><span class="p">,</span> <span class="n">Path</span><span class="o">.</span><span class="n">home</span><span class="p">()</span> <span class="o">/</span> <span class="s2">&quot;.scitex&quot;</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">screenshot_dir</span> <span class="o">=</span> <span class="n">scitex_dir</span> <span class="o">/</span> <span class="s2">&quot;capture&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">screenshot_dir</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="SharedBrowserSession.start">
-<a class="viewcode-back" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.start">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Start the persistent browser session.</span>
-
-<span class="sd">        Uses persistent context pattern from ScholarBrowserManager.</span>
+<span class="sd">        Args:</span>
+<span class="sd">            api_key: ZenRows API key (or from env)</span>
+<span class="sd">            proxy_country: Country code for proxy</span>
+<span class="sd">            enable_antibot: Enable anti-bot bypass features</span>
+<span class="sd">            premium_proxy: Use premium residential proxies</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">running</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Session already running&quot;</span><span class="p">)</span>
-
-        <span class="c1"># Get user data directory</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">user_data_dir</span><span class="p">:</span>
-            <span class="n">user_data_dir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">user_data_dir</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">scitex_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;SCITEX_DIR&quot;</span><span class="p">,</span> <span class="n">Path</span><span class="o">.</span><span class="n">home</span><span class="p">()</span> <span class="o">/</span> <span class="s2">&quot;.scitex&quot;</span><span class="p">))</span>
-            <span class="n">user_data_dir</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
-                <span class="n">scitex_dir</span> <span class="o">/</span> <span class="s2">&quot;browser&quot;</span> <span class="o">/</span> <span class="s2">&quot;sessions&quot;</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">session_id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">api_key</span> <span class="o">=</span> <span class="n">api_key</span> <span class="ow">or</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;SCITEX_SCHOLAR_ZENROWS_API_KEY&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">api_key</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;ZenRows API key required. Set SCITEX_SCHOLAR_ZENROWS_API_KEY&quot;</span>
             <span class="p">)</span>
 
-        <span class="c1"># Start playwright</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">playwright</span> <span class="o">=</span> <span class="k">await</span> <span class="n">async_playwright</span><span class="p">()</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
-
-        <span class="c1"># Launch persistent context (like ScholarBrowserManager)</span>
-        <span class="n">browser_type</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">playwright</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">browser_type</span><span class="p">)</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">context</span> <span class="o">=</span> <span class="k">await</span> <span class="n">browser_type</span><span class="o">.</span><span class="n">launch_persistent_context</span><span class="p">(</span>
-            <span class="n">user_data_dir</span><span class="o">=</span><span class="n">user_data_dir</span><span class="p">,</span>
-            <span class="n">headless</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">headless</span><span class="p">,</span>
-            <span class="n">viewport</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">viewport</span><span class="p">,</span>
-        <span class="p">)</span>
-
-        <span class="c1"># Get or create page</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">pages</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">page</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">pages</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">page</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">new_page</span><span class="p">()</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">running</span> <span class="o">=</span> <span class="kc">True</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-
-        <span class="c1"># Log event</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_log_event</span><span class="p">(</span>
-            <span class="s2">&quot;session_started&quot;</span><span class="p">,</span>
-            <span class="p">{</span>
-                <span class="s2">&quot;session_id&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">session_id</span><span class="p">,</span>
-                <span class="s2">&quot;user_data_dir&quot;</span><span class="p">:</span> <span class="n">user_data_dir</span><span class="p">,</span>
-            <span class="p">},</span>
-        <span class="p">)</span>
-
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;✅ Shared browser session started: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">session_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   User data: </span><span class="si">{</span><span class="n">user_data_dir</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   Screenshots: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">screenshot_dir</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-
-        <span class="c1"># Start auto-screenshot if configured</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">screenshot_interval</span><span class="p">:</span>
-            <span class="n">asyncio</span><span class="o">.</span><span class="n">create_task</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_auto_screenshot_loop</span><span class="p">())</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">proxy_country</span> <span class="o">=</span> <span class="n">proxy_country</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">enable_antibot</span> <span class="o">=</span> <span class="n">enable_antibot</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">premium_proxy</span> <span class="o">=</span> <span class="n">premium_proxy</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">base_url</span> <span class="o">=</span> <span class="s2">&quot;https://api.zenrows.com/v1/&quot;</span></div>
 
 
-<div class="viewcode-block" id="SharedBrowserSession.navigate">
-<a class="viewcode-back" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.navigate">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">navigate</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">wait_until</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;load&quot;</span><span class="p">,</span> <span class="n">timeout</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">60000</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Navigate to URL.</span>
+<div class="viewcode-block" id="ZenRowsAPIBrowser.navigate_and_screenshot_async">
+<a class="viewcode-back" href="../../../api/remote.html#scitex_browser.remote.ZenRowsAPIBrowser.navigate_and_screenshot_async">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">navigate_and_screenshot_async</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">screenshot_path</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">wait_ms</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5000</span><span class="p">,</span>
+        <span class="n">js_instructions</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">return_html</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Navigate to URL and optionally take screenshot.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            url: URL to navigate to</span>
-<span class="sd">            wait_until: &quot;load&quot;, &quot;domcontentloaded&quot;, or &quot;networkidle&quot; (default: &quot;load&quot;)</span>
-<span class="sd">            timeout: Timeout in milliseconds (default: 60000)</span>
+<span class="sd">            url: Target URL</span>
+<span class="sd">            screenshot_path: Path to save screenshot (None to skip)</span>
+<span class="sd">            wait_ms: Additional wait time in milliseconds</span>
+<span class="sd">            js_instructions: Custom JavaScript instructions</span>
+<span class="sd">            return_html: Whether to return rendered HTML</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            Current URL after navigation</span>
+<span class="sd">            Dict with results including screenshot info and HTML</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">running</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Session not started. Call start() first.&quot;</span><span class="p">)</span>
+        <span class="c1"># Default JS instructions for reliable rendering</span>
+        <span class="k">if</span> <span class="n">js_instructions</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">js_instructions</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="p">{</span><span class="s2">&quot;wait&quot;</span><span class="p">:</span> <span class="mi">3000</span><span class="p">},</span>  <span class="c1"># Initial wait</span>
+                <span class="p">{</span><span class="s2">&quot;wait_event&quot;</span><span class="p">:</span> <span class="s2">&quot;networkidle&quot;</span><span class="p">},</span>  <span class="c1"># Wait for network</span>
+                <span class="p">{</span><span class="s2">&quot;scroll_y&quot;</span><span class="p">:</span> <span class="mi">300</span><span class="p">},</span>  <span class="c1"># Trigger lazy loading</span>
+                <span class="p">{</span><span class="s2">&quot;wait&quot;</span><span class="p">:</span> <span class="mi">2000</span><span class="p">},</span>  <span class="c1"># Final wait</span>
+            <span class="p">]</span>
 
-        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">page</span><span class="o">.</span><span class="n">goto</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">wait_until</span><span class="o">=</span><span class="n">wait_until</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">)</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">_log_event</span><span class="p">(</span><span class="s2">&quot;navigated&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="n">url</span><span class="p">})</span>
-
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">page</span><span class="o">.</span><span class="n">url</span></div>
-
-
-<div class="viewcode-block" id="SharedBrowserSession.screenshot">
-<a class="viewcode-back" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.screenshot">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">screenshot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Take screenshot and save to scitex.capture directory.</span>
-
-<span class="sd">        Returns:</span>
-<span class="sd">            Path to screenshot file</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">running</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Session not started. Call start() first.&quot;</span><span class="p">)</span>
-
-        <span class="c1"># Generate filename</span>
-        <span class="n">timestamp</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">_%H%M%S_</span><span class="si">%f</span><span class="s2">&quot;</span><span class="p">)[:</span><span class="o">-</span><span class="mi">3</span><span class="p">]</span>
-
-        <span class="n">url_slug</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">page</span><span class="o">.</span><span class="n">url</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;://&quot;</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;?&quot;</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">url_slug</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">50</span><span class="p">:</span>
-            <span class="n">url_slug</span> <span class="o">=</span> <span class="n">url_slug</span><span class="p">[:</span><span class="mi">50</span><span class="p">]</span>
-
-        <span class="k">if</span> <span class="n">message</span><span class="p">:</span>
-            <span class="n">filename</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">timestamp</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">session_id</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">message</span><span class="si">}</span><span class="s2">.jpg&quot;</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">filename</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">timestamp</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">session_id</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">url_slug</span><span class="si">}</span><span class="s2">.jpg&quot;</span>
-
-        <span class="n">screenshot_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">screenshot_dir</span> <span class="o">/</span> <span class="n">filename</span>
-
-        <span class="c1"># Take screenshot (JPEG format supports quality)</span>
-        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">page</span><span class="o">.</span><span class="n">screenshot</span><span class="p">(</span>
-            <span class="n">path</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">screenshot_path</span><span class="p">),</span>
-            <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;jpeg&quot;</span><span class="p">,</span>
-            <span class="n">quality</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span>
-        <span class="p">)</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">screenshots</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">screenshot_path</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_log_event</span><span class="p">(</span><span class="s2">&quot;screenshot_taken&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">screenshot_path</span><span class="p">)})</span>
-
-        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">screenshot_path</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="SharedBrowserSession.wait">
-<a class="viewcode-back" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.wait">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">wait</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">duration</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Wait for duration or until stopped.</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            duration: Seconds to wait, or None to wait indefinitely</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">duration</span><span class="p">:</span>
-            <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">duration</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="c1"># Wait until closed</span>
-            <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">running</span><span class="p">:</span>
-                <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="SharedBrowserSession.close">
-<a class="viewcode-back" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.close">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Close the session.&quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">running</span><span class="p">:</span>
-            <span class="k">return</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">running</span> <span class="o">=</span> <span class="kc">False</span>
-
-        <span class="c1"># Close page and context</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">page</span><span class="p">:</span>
-            <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">page</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">:</span>
-            <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">playwright</span><span class="p">:</span>
-            <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">playwright</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
-
-        <span class="n">duration</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_time</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_time</span> <span class="k">else</span> <span class="mi">0</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">_log_event</span><span class="p">(</span>
-            <span class="s2">&quot;session_closed&quot;</span><span class="p">,</span>
-            <span class="p">{</span>
-                <span class="s2">&quot;duration&quot;</span><span class="p">:</span> <span class="n">duration</span><span class="p">,</span>
-                <span class="s2">&quot;screenshot_count&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">screenshots</span><span class="p">),</span>
-            <span class="p">},</span>
-        <span class="p">)</span>
-
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;✅ Shared browser session closed: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">session_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   Duration: </span><span class="si">{</span><span class="n">duration</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">s&quot;</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   Screenshots: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">screenshots</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="SharedBrowserSession.__aenter__">
-<a class="viewcode-back" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.__aenter__">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="fm">__aenter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Context manager entry.&quot;&quot;&quot;</span>
-        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
-        <span class="k">return</span> <span class="bp">self</span></div>
-
-
-<div class="viewcode-block" id="SharedBrowserSession.__aexit__">
-<a class="viewcode-back" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.__aexit__">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="fm">__aexit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Context manager exit.&quot;&quot;&quot;</span>
-        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
-
-
-<div class="viewcode-block" id="SharedBrowserSession._log_event">
-<a class="viewcode-back" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession._log_event">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">_log_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Simple event logging.&quot;&quot;&quot;</span>
-        <span class="n">event</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="n">event_type</span><span class="p">,</span>
-            <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="n">data</span><span class="p">,</span>
-            <span class="s2">&quot;timestamp&quot;</span><span class="p">:</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">(),</span>
+        <span class="c1"># Build parameters</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="n">url</span><span class="p">,</span>
+            <span class="s2">&quot;apikey&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">api_key</span><span class="p">,</span>
+            <span class="s2">&quot;js_render&quot;</span><span class="p">:</span> <span class="s2">&quot;true&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;js_instructions&quot;</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">js_instructions</span><span class="p">),</span>
+            <span class="s2">&quot;wait&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">wait_ms</span><span class="p">),</span>
         <span class="p">}</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">event</span><span class="p">)</span></div>
+
+        <span class="c1"># Add optional features</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">enable_antibot</span><span class="p">:</span>
+            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;antibot&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;true&quot;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">premium_proxy</span><span class="p">:</span>
+            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;premium_proxy&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;true&quot;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">proxy_country</span><span class="p">:</span>
+            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;proxy_country&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">proxy_country</span>
+
+        <span class="k">if</span> <span class="n">screenshot_path</span><span class="p">:</span>
+            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;screenshot&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;true&quot;</span>
+
+        <span class="k">if</span> <span class="n">return_html</span> <span class="ow">or</span> <span class="n">screenshot_path</span><span class="p">:</span>
+            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;json_response&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;true&quot;</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Navigating to: </span><span class="si">{</span><span class="n">url</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">async</span> <span class="k">with</span> <span class="n">aiohttp</span><span class="o">.</span><span class="n">ClientSession</span><span class="p">()</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+                <span class="n">timeout</span> <span class="o">=</span> <span class="n">aiohttp</span><span class="o">.</span><span class="n">ClientTimeout</span><span class="p">(</span><span class="n">total</span><span class="o">=</span><span class="mi">60</span><span class="p">)</span>
+
+                <span class="k">async</span> <span class="k">with</span> <span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">base_url</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span>
+                <span class="p">)</span> <span class="k">as</span> <span class="n">response</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">status</span> <span class="o">!=</span> <span class="mi">200</span><span class="p">:</span>
+                        <span class="n">error_text</span> <span class="o">=</span> <span class="k">await</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">()</span>
+                        <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
+                            <span class="sa">f</span><span class="s2">&quot;ZenRows error </span><span class="si">{</span><span class="n">response</span><span class="o">.</span><span class="n">status</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">error_text</span><span class="p">[:</span><span class="mi">200</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+                        <span class="p">)</span>
+                        <span class="k">return</span> <span class="p">{</span>
+                            <span class="s2">&quot;success&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+                            <span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;API error </span><span class="si">{</span><span class="n">response</span><span class="o">.</span><span class="n">status</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="n">url</span><span class="p">,</span>
+                        <span class="p">}</span>
+
+                    <span class="c1"># Handle response based on content type</span>
+                    <span class="n">content_type</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;content-type&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+                    <span class="k">if</span> <span class="s2">&quot;json&quot;</span> <span class="ow">in</span> <span class="n">content_type</span><span class="p">:</span>
+                        <span class="c1"># JSON response with detailed data</span>
+                        <span class="n">data</span> <span class="o">=</span> <span class="k">await</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+                        <span class="n">result</span> <span class="o">=</span> <span class="p">{</span>
+                            <span class="s2">&quot;success&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                            <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="n">url</span><span class="p">,</span>
+                            <span class="s2">&quot;html&quot;</span><span class="p">:</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;html&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="n">return_html</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+                            <span class="s2">&quot;html_length&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;html&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)),</span>
+                        <span class="p">}</span>
+
+                        <span class="c1"># Handle screenshot</span>
+                        <span class="k">if</span> <span class="n">screenshot_path</span> <span class="ow">and</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;screenshot&quot;</span><span class="p">):</span>
+                            <span class="n">screenshot_data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;screenshot&quot;</span><span class="p">]</span>
+                            <span class="k">if</span> <span class="n">screenshot_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">):</span>
+                                <span class="n">image_bytes</span> <span class="o">=</span> <span class="n">base64</span><span class="o">.</span><span class="n">b64decode</span><span class="p">(</span><span class="n">screenshot_data</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">])</span>
+
+                                <span class="n">Path</span><span class="p">(</span><span class="n">screenshot_path</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span>
+                                    <span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span>
+                                <span class="p">)</span>
+                                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">screenshot_path</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                                    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">image_bytes</span><span class="p">)</span>
+
+                                <span class="n">result</span><span class="p">[</span><span class="s2">&quot;screenshot&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                                    <span class="s2">&quot;saved&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                                    <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="n">screenshot_path</span><span class="p">,</span>
+                                    <span class="s2">&quot;width&quot;</span><span class="p">:</span> <span class="n">screenshot_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;width&quot;</span><span class="p">),</span>
+                                    <span class="s2">&quot;height&quot;</span><span class="p">:</span> <span class="n">screenshot_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;height&quot;</span><span class="p">),</span>
+                                <span class="p">}</span>
+                                <span class="n">logger</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Screenshot saved: </span><span class="si">{</span><span class="n">screenshot_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+                        <span class="c1"># Check JS execution report</span>
+                        <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;js_instructions_report&quot;</span><span class="p">):</span>
+                            <span class="n">report</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;js_instructions_report&quot;</span><span class="p">]</span>
+                            <span class="n">result</span><span class="p">[</span><span class="s2">&quot;js_report&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                                <span class="s2">&quot;executed&quot;</span><span class="p">:</span> <span class="n">report</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;instructions_executed&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+                                <span class="s2">&quot;succeeded&quot;</span><span class="p">:</span> <span class="n">report</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;instructions_succeeded&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+                                <span class="s2">&quot;failed&quot;</span><span class="p">:</span> <span class="n">report</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;instructions_failed&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+                            <span class="p">}</span>
+
+                            <span class="c1"># Check for CAPTCHA solving</span>
+                            <span class="k">for</span> <span class="n">inst</span> <span class="ow">in</span> <span class="n">report</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;instructions&quot;</span><span class="p">,</span> <span class="p">[]):</span>
+                                <span class="k">if</span> <span class="n">inst</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                                    <span class="s2">&quot;instruction&quot;</span>
+                                <span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;solve_captcha&quot;</span> <span class="ow">and</span> <span class="n">inst</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;success&quot;</span><span class="p">):</span>
+                                    <span class="n">result</span><span class="p">[</span><span class="s2">&quot;captcha_solved&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+                                    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                                        <span class="sa">f</span><span class="s2">&quot;CAPTCHA solved: </span><span class="si">{</span><span class="n">inst</span><span class="p">[</span><span class="s1">&#39;params&#39;</span><span class="p">][</span><span class="s1">&#39;type&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+                                    <span class="p">)</span>
+
+                        <span class="k">return</span> <span class="n">result</span>
+
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="c1"># Direct response (image or HTML)</span>
+                        <span class="n">content</span> <span class="o">=</span> <span class="k">await</span> <span class="n">response</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+
+                        <span class="k">if</span> <span class="n">screenshot_path</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">content</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1000</span><span class="p">:</span>
+                            <span class="c1"># Save as image</span>
+                            <span class="n">Path</span><span class="p">(</span><span class="n">screenshot_path</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span>
+                                <span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span>
+                            <span class="p">)</span>
+                            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">screenshot_path</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                                <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
+
+                            <span class="n">logger</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Screenshot saved: </span><span class="si">{</span><span class="n">screenshot_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                            <span class="k">return</span> <span class="p">{</span>
+                                <span class="s2">&quot;success&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                                <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="n">url</span><span class="p">,</span>
+                                <span class="s2">&quot;screenshot&quot;</span><span class="p">:</span> <span class="p">{</span>
+                                    <span class="s2">&quot;saved&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                                    <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="n">screenshot_path</span><span class="p">,</span>
+                                    <span class="s2">&quot;size_bytes&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">content</span><span class="p">),</span>
+                                <span class="p">},</span>
+                            <span class="p">}</span>
+                        <span class="k">elif</span> <span class="n">return_html</span><span class="p">:</span>
+                            <span class="c1"># Return as HTML</span>
+                            <span class="n">html</span> <span class="o">=</span> <span class="n">content</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
+                            <span class="k">return</span> <span class="p">{</span>
+                                <span class="s2">&quot;success&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                                <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="n">url</span><span class="p">,</span>
+                                <span class="s2">&quot;html&quot;</span><span class="p">:</span> <span class="n">html</span><span class="p">,</span>
+                                <span class="s2">&quot;html_length&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">html</span><span class="p">),</span>
+                            <span class="p">}</span>
+
+                        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;success&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="n">url</span><span class="p">}</span>
+
+        <span class="k">except</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">TimeoutError</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Request timed out - page may require manual intervention&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;success&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="s2">&quot;Timeout&quot;</span><span class="p">,</span> <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="n">url</span><span class="p">}</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error navigating to </span><span class="si">{</span><span class="n">url</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;success&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">),</span> <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="n">url</span><span class="p">}</span></div>
 
 
-<div class="viewcode-block" id="SharedBrowserSession._auto_screenshot_loop">
-<a class="viewcode-back" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession._auto_screenshot_loop">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">_auto_screenshot_loop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Automatically take screenshots at intervals.&quot;&quot;&quot;</span>
-        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">running</span><span class="p">:</span>
-            <span class="k">try</span><span class="p">:</span>
-                <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">screenshot</span><span class="p">(</span><span class="n">message</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span><span class="p">)</span>
-                <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">screenshot_interval</span><span class="p">)</span>
-            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Auto-screenshot error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+<div class="viewcode-block" id="ZenRowsAPIBrowser.get_pdf_url_async">
+<a class="viewcode-back" href="../../../api/remote.html#scitex_browser.remote.ZenRowsAPIBrowser.get_pdf_url_async">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_pdf_url_async</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">doi</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">use_openurl</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Try to get PDF URL for a DOI.</span>
 
+<span class="sd">        Args:</span>
+<span class="sd">            doi: DOI to resolve</span>
+<span class="sd">            use_openurl: Whether to try OpenURL resolver first</span>
 
-<div class="viewcode-block" id="SharedBrowserSession.get_info">
-<a class="viewcode-back" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.get_info">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get session information.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="p">{</span>
-            <span class="s2">&quot;session_id&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">session_id</span><span class="p">,</span>
-            <span class="s2">&quot;running&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">running</span><span class="p">,</span>
-            <span class="s2">&quot;current_url&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">page</span><span class="o">.</span><span class="n">url</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">page</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
-            <span class="s2">&quot;uptime&quot;</span><span class="p">:</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_time</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_time</span> <span class="k">else</span> <span class="mi">0</span><span class="p">,</span>
-            <span class="s2">&quot;screenshot_count&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">screenshots</span><span class="p">),</span>
-            <span class="s2">&quot;event_count&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="p">),</span>
-        <span class="p">}</span></div>
-
-
-    <span class="c1"># ========================================</span>
-    <span class="c1"># Natural Human-Like Interaction Primitives</span>
-    <span class="c1"># ========================================</span>
-
-<div class="viewcode-block" id="SharedBrowserSession.type">
-<a class="viewcode-back" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.type">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selector</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">delay</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">50</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Type text like a human (with delay between keys).&quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">running</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Session not started&quot;</span><span class="p">)</span>
-
-        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">page</span><span class="o">.</span><span class="n">type</span><span class="p">(</span><span class="n">selector</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="n">delay</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_log_event</span><span class="p">(</span><span class="s2">&quot;typed&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;selector&quot;</span><span class="p">:</span> <span class="n">selector</span><span class="p">,</span> <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="n">text</span><span class="p">})</span></div>
-
-
-<div class="viewcode-block" id="SharedBrowserSession.click">
-<a class="viewcode-back" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.click">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">click</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selector</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Click element.&quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">running</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Session not started&quot;</span><span class="p">)</span>
-
-        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">page</span><span class="o">.</span><span class="n">click</span><span class="p">(</span><span class="n">selector</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_log_event</span><span class="p">(</span><span class="s2">&quot;clicked&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;selector&quot;</span><span class="p">:</span> <span class="n">selector</span><span class="p">})</span></div>
-
-
-<div class="viewcode-block" id="SharedBrowserSession.hover">
-<a class="viewcode-back" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.hover">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">hover</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selector</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Hover over element.&quot;&quot;&quot;</span>
-        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">page</span><span class="o">.</span><span class="n">hover</span><span class="p">(</span><span class="n">selector</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="SharedBrowserSession.press">
-<a class="viewcode-back" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.press">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">press</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Press keyboard key (Enter, Tab, Escape, etc.).&quot;&quot;&quot;</span>
-        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">page</span><span class="o">.</span><span class="n">keyboard</span><span class="o">.</span><span class="n">press</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_log_event</span><span class="p">(</span><span class="s2">&quot;pressed_key&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;key&quot;</span><span class="p">:</span> <span class="n">key</span><span class="p">})</span></div>
-
-
-<div class="viewcode-block" id="SharedBrowserSession.scroll_down">
-<a class="viewcode-back" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.scroll_down">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">scroll_down</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">amount</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">500</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Scroll down.&quot;&quot;&quot;</span>
-        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">page</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;window.scrollBy(0, </span><span class="si">{</span><span class="n">amount</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="SharedBrowserSession.scroll_to">
-<a class="viewcode-back" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.scroll_to">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">scroll_to</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selector</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Scroll element into view.&quot;&quot;&quot;</span>
-        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">page</span><span class="o">.</span><span class="n">locator</span><span class="p">(</span><span class="n">selector</span><span class="p">)</span><span class="o">.</span><span class="n">scroll_into_view_if_needed</span><span class="p">()</span></div>
-
-
-<div class="viewcode-block" id="SharedBrowserSession.wait_for">
-<a class="viewcode-back" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.wait_for">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">wait_for</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selector</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">timeout</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5000</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Wait for element to appear.&quot;&quot;&quot;</span>
-        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">page</span><span class="o">.</span><span class="n">wait_for_selector</span><span class="p">(</span><span class="n">selector</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="SharedBrowserSession.wait_for_text">
-<a class="viewcode-back" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.wait_for_text">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">wait_for_text</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">timeout</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5000</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Wait for text to appear.&quot;&quot;&quot;</span>
-        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">page</span><span class="o">.</span><span class="n">wait_for_selector</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;text=</span><span class="si">{</span><span class="n">text</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="SharedBrowserSession.wait_for_url">
-<a class="viewcode-back" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.wait_for_url">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">wait_for_url</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pattern</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">timeout</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5000</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Wait for URL to match pattern.&quot;&quot;&quot;</span>
-        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">page</span><span class="o">.</span><span class="n">wait_for_url</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="SharedBrowserSession.get_text">
-<a class="viewcode-back" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.get_text">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_text</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selector</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get text content of element.&quot;&quot;&quot;</span>
-        <span class="n">element</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">page</span><span class="o">.</span><span class="n">query_selector</span><span class="p">(</span><span class="n">selector</span><span class="p">)</span>
-        <span class="k">return</span> <span class="k">await</span> <span class="n">element</span><span class="o">.</span><span class="n">text_content</span><span class="p">()</span> <span class="k">if</span> <span class="n">element</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span></div>
-
-
-<div class="viewcode-block" id="SharedBrowserSession.get_value">
-<a class="viewcode-back" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.get_value">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selector</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get value of input element.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">page</span><span class="o">.</span><span class="n">input_value</span><span class="p">(</span><span class="n">selector</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="SharedBrowserSession.is_visible">
-<a class="viewcode-back" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.is_visible">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">is_visible</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selector</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if element is visible.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">page</span><span class="o">.</span><span class="n">is_visible</span><span class="p">(</span><span class="n">selector</span><span class="p">)</span></div>
-
-
-    <span class="c1"># ========================================</span>
-    <span class="c1"># Interactive Prompts (Ask User in Browser)</span>
-    <span class="c1"># ========================================</span>
-
-<div class="viewcode-block" id="SharedBrowserSession.ask">
-<a class="viewcode-back" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.ask">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">ask</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">question</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">options</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Ask user a question in the browser.</span>
-
-<span class="sd">        Returns user&#39;s response.</span>
-
-<span class="sd">        Example:</span>
-<span class="sd">            response = await session.ask(&quot;What username to use?&quot;)</span>
-<span class="sd">            response = await session.ask(&quot;Choose:&quot;, [&quot;Option A&quot;, &quot;Option B&quot;])</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            PDF URL if found, None otherwise</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">options</span><span class="p">:</span>
-            <span class="c1"># Multiple choice</span>
-            <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">page</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">                () =&gt; </span><span class="se">{{</span>
-<span class="s2">                    const choice = prompt(&#39;</span><span class="si">{</span><span class="n">question</span><span class="si">}</span><span class="se">\\</span><span class="s2">n</span><span class="se">\\</span><span class="s2">nOptions: </span><span class="si">{</span><span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">options</span><span class="p">)</span><span class="si">}</span><span class="s2">&#39;);</span>
-<span class="s2">                    return choice;</span>
-<span class="s2">                </span><span class="se">}}</span>
-<span class="s2">            &quot;&quot;&quot;</span>
+        <span class="n">urls_to_try</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># Try OpenURL first if requested</span>
+        <span class="k">if</span> <span class="n">use_openurl</span><span class="p">:</span>
+            <span class="n">openurl_base</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span>
+                <span class="s2">&quot;SCITEX_SCHOLAR_OPENURL_RESOLVER_URL&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;https://unimelb.hosted.exlibrisgroup.com/sfxlcl41&quot;</span><span class="p">,</span>
             <span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="c1"># Free text</span>
-            <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">page</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">                () =&gt; prompt(&#39;</span><span class="si">{</span><span class="n">question</span><span class="si">}</span><span class="s2">&#39;)</span>
-<span class="s2">            &quot;&quot;&quot;</span>
+            <span class="n">openurl</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">openurl_base</span><span class="si">}</span><span class="s2">?url_ver=Z39.88-2004&amp;rft_id=info:doi/</span><span class="si">{</span><span class="n">doi</span><span class="si">}</span><span class="s2">&amp;svc_id=fulltext&quot;</span>
+            <span class="n">urls_to_try</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">openurl</span><span class="p">)</span>
+
+        <span class="c1"># Direct DOI</span>
+        <span class="n">urls_to_try</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;https://doi.org/</span><span class="si">{</span><span class="n">doi</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">url</span> <span class="ow">in</span> <span class="n">urls_to_try</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">navigate_and_screenshot_async</span><span class="p">(</span>
+                <span class="n">url</span><span class="p">,</span>
+                <span class="n">return_html</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">wait_ms</span><span class="o">=</span><span class="mi">8000</span><span class="p">,</span>  <span class="c1"># Longer wait for redirects</span>
             <span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">_log_event</span><span class="p">(</span><span class="s2">&quot;user_input&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;question&quot;</span><span class="p">:</span> <span class="n">question</span><span class="p">,</span> <span class="s2">&quot;response&quot;</span><span class="p">:</span> <span class="n">result</span><span class="p">})</span>
-        <span class="k">return</span> <span class="n">result</span></div>
+            <span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;success&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;html&quot;</span><span class="p">):</span>
+                <span class="n">html</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="s2">&quot;html&quot;</span><span class="p">]</span>
+
+                <span class="c1"># Simple PDF URL extraction</span>
+                <span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+
+                <span class="n">pdf_patterns</span> <span class="o">=</span> <span class="p">[</span>
+                    <span class="sa">r</span><span class="s1">&#39;href=&quot;([^&quot;]+\.pdf[^&quot;]*)&quot;&#39;</span><span class="p">,</span>
+                    <span class="sa">r</span><span class="s1">&#39;content=&quot;([^&quot;]+\.pdf[^&quot;]*)&quot;&#39;</span><span class="p">,</span>
+                    <span class="sa">r</span><span class="s1">&#39;url[&quot;</span><span class="se">\&#39;</span><span class="s1">]?\s*:\s*[&quot;</span><span class="se">\&#39;</span><span class="s1">]([^&quot;</span><span class="se">\&#39;</span><span class="s1">]+\.pdf[^&quot;</span><span class="se">\&#39;</span><span class="s1">]*)&#39;</span><span class="p">,</span>
+                <span class="p">]</span>
+
+                <span class="k">for</span> <span class="n">pattern</span> <span class="ow">in</span> <span class="n">pdf_patterns</span><span class="p">:</span>
+                    <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">html</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">IGNORECASE</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">match</span><span class="p">:</span>
+                        <span class="n">pdf_url</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Found PDF URL: </span><span class="si">{</span><span class="n">pdf_url</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                        <span class="k">return</span> <span class="n">pdf_url</span>
+
+        <span class="k">return</span> <span class="kc">None</span></div>
 
 
-<div class="viewcode-block" id="SharedBrowserSession.confirm">
-<a class="viewcode-back" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.confirm">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">confirm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Ask user for confirmation in browser.</span>
+<div class="viewcode-block" id="ZenRowsAPIBrowser.batch_screenshot_async">
+<a class="viewcode-back" href="../../../api/remote.html#scitex_browser.remote.ZenRowsAPIBrowser.batch_screenshot_async">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">batch_screenshot_async</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">urls</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">output_dir</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">max_concurrent</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">3</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Take screenshots of multiple URLs concurrently.</span>
 
-<span class="sd">        Returns True if user clicks OK, False if Cancel.</span>
+<span class="sd">        Args:</span>
+<span class="sd">            urls: List of URLs to screenshot</span>
+<span class="sd">            output_dir: Directory to save screenshots</span>
+<span class="sd">            max_concurrent: Max concurrent requests</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List of results for each URL</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">page</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">            () =&gt; confirm(&#39;</span><span class="si">{</span><span class="n">message</span><span class="si">}</span><span class="s2">&#39;)</span>
-<span class="s2">        &quot;&quot;&quot;</span>
-        <span class="p">)</span>
+        <span class="n">Path</span><span class="p">(</span><span class="n">output_dir</span><span class="p">)</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">_log_event</span><span class="p">(</span><span class="s2">&quot;user_confirmation&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="n">message</span><span class="p">,</span> <span class="s2">&quot;confirmed&quot;</span><span class="p">:</span> <span class="n">result</span><span class="p">})</span>
-        <span class="k">return</span> <span class="n">result</span></div>
+        <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">process_url_async</span><span class="p">(</span><span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;Process single URL.&quot;&quot;&quot;</span>
+            <span class="n">filename</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;screenshot_</span><span class="si">{</span><span class="n">index</span><span class="si">:</span><span class="s2">03d</span><span class="si">}</span><span class="s2">.png&quot;</span>
+            <span class="n">filepath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_dir</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+
+            <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">navigate_and_screenshot_async</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">filepath</span><span class="p">)</span>
+            <span class="n">result</span><span class="p">[</span><span class="s2">&quot;index&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">index</span>
+            <span class="k">return</span> <span class="n">result</span>
+
+        <span class="c1"># Process with limited concurrency</span>
+        <span class="n">semaphore</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">Semaphore</span><span class="p">(</span><span class="n">max_concurrent</span><span class="p">)</span>
+
+        <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">process_with_limit_async</span><span class="p">(</span><span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="k">async</span> <span class="k">with</span> <span class="n">semaphore</span><span class="p">:</span>
+                <span class="k">return</span> <span class="k">await</span> <span class="n">process_url_async</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">index</span><span class="p">)</span>
+
+        <span class="n">tasks</span> <span class="o">=</span> <span class="p">[</span><span class="n">process_with_limit_async</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">url</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">urls</span><span class="p">)]</span>
+
+        <span class="n">results</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span><span class="o">*</span><span class="n">tasks</span><span class="p">,</span> <span class="n">return_exceptions</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="c1"># Convert exceptions to error results</span>
+        <span class="n">final_results</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">result</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">results</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="ne">Exception</span><span class="p">):</span>
+                <span class="n">final_results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="p">{</span><span class="s2">&quot;success&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">result</span><span class="p">),</span> <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="n">urls</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="s2">&quot;index&quot;</span><span class="p">:</span> <span class="n">i</span><span class="p">}</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">final_results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+
+        <span class="c1"># Summary</span>
+        <span class="n">successful</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="mi">1</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">final_results</span> <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;success&quot;</span><span class="p">))</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Screenshots: </span><span class="si">{</span><span class="n">successful</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">urls</span><span class="p">)</span><span class="si">}</span><span class="s2"> successful&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">final_results</span></div>
 </div>
 
-
-
-<span class="c1"># EOF</span>
 </pre></div>
 
            </div>

@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>scitex_browser.collaboration.shared_session &mdash; SciTeX Browser v0.1.14</title>
+  <title>scitex_browser.remote.CaptchaHandler &mdash; SciTeX Browser v0.1.14</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
@@ -350,7 +350,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
-      <li class="breadcrumb-item active">scitex_browser.collaboration.shared_session</li>
+      <li class="breadcrumb-item active">scitex_browser.remote.CaptchaHandler</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -359,486 +359,516 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <h1>Source code for scitex_browser.collaboration.shared_session</h1><div class="highlight"><pre>
+  <h1>Source code for scitex_browser.remote.CaptchaHandler</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python3</span>
 <span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="c1"># Timestamp: &quot;2025-10-19 05:20:00 (ywatanabe)&quot;</span>
-<span class="c1"># File: ./src/scitex/browser/collaboration/shared_session.py</span>
+<span class="c1"># Timestamp: 2025-07-31 17:45:00</span>
+<span class="c1"># Author: ywatanabe</span>
+<span class="c1"># File: /home/ywatanabe/proj/SciTeX-Code/src/scitex/scholar/browser/remote/_CaptchaHandler.py</span>
 <span class="c1"># ----------------------------------------</span>
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">SharedBrowserSession - Persistent browser session for AI-human collaboration.</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
-<span class="sd">Inspired by scitex.scholar.browser.ScholarBrowserManager&#39;s persistent context pattern.</span>
-
-<span class="sd">Key features:</span>
-<span class="sd">- Persistent browser that stays open</span>
-<span class="sd">- Session continuity (cookies, auth persist)</span>
-<span class="sd">- Multiple participants can use same browser</span>
-<span class="sd">- Screenshots integrated with scitex.capture</span>
-<span class="sd">&quot;&quot;&quot;</span>
-
-<span class="kn">import</span><span class="w"> </span><span class="nn">asyncio</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+
+<span class="n">__FILE__</span> <span class="o">=</span> <span class="s2">&quot;./src/scitex/scholar/browser/remote/_CaptchaHandler.py&quot;</span>
+<span class="n">__DIR__</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">__FILE__</span><span class="p">)</span>
+<span class="c1"># ----------------------------------------</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Functionalities:</span>
+<span class="sd">  - Handles CAPTCHA solving using 2Captcha service</span>
+<span class="sd">  - Detects and solves Cloudflare, reCAPTCHA, and hCaptcha challenges</span>
+<span class="sd">  - Provides automated CAPTCHA resolution for browser automation</span>
+<span class="sd">  - Demonstrates captcha handling when run standalone</span>
+
+<span class="sd">Dependencies:</span>
+<span class="sd">  - packages:</span>
+<span class="sd">    - playwright</span>
+<span class="sd">    - aiohttp</span>
+
+<span class="sd">IO:</span>
+<span class="sd">  - input-files:</span>
+<span class="sd">    - None</span>
+<span class="sd">  - output-files:</span>
+<span class="sd">    - None</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">&quot;&quot;&quot;Imports&quot;&quot;&quot;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">argparse</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">asyncio</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">playwright.async_api</span><span class="w"> </span><span class="kn">import</span> <span class="n">Browser</span><span class="p">,</span> <span class="n">BrowserContext</span><span class="p">,</span> <span class="n">Page</span><span class="p">,</span> <span class="n">async_playwright</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">aiohttp</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">playwright.async_api</span><span class="w"> </span><span class="kn">import</span> <span class="n">Frame</span><span class="p">,</span> <span class="n">Page</span>
 
+<span class="kn">import</span><span class="w"> </span><span class="nn">scitex_logging</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scitex_browser._compat</span><span class="w"> </span><span class="kn">import</span> <span class="n">ScholarError</span>
 
-<div class="viewcode-block" id="SessionConfig">
-<a class="viewcode-back" href="../../../api/collaboration.html#scitex_browser.collaboration.SessionConfig">[docs]</a>
-<span class="nd">@dataclass</span>
-<span class="k">class</span><span class="w"> </span><span class="nc">SessionConfig</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Configuration for shared browser session.&quot;&quot;&quot;</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
-    <span class="n">session_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;default&quot;</span>
-    <span class="n">browser_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;chromium&quot;</span>  <span class="c1"># chromium, firefox, webkit</span>
-    <span class="n">headless</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># False so humans can see</span>
-    <span class="n">viewport</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;width&quot;</span><span class="p">:</span> <span class="mi">1920</span><span class="p">,</span> <span class="s2">&quot;height&quot;</span><span class="p">:</span> <span class="mi">1080</span><span class="p">})</span>
-    <span class="n">user_data_dir</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># For persistent profile</span>
-    <span class="n">enable_screenshots</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
-    <span class="n">screenshot_interval</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># Auto-screenshot every N seconds</span></div>
+<span class="sd">&quot;&quot;&quot;Functions &amp; Classes&quot;&quot;&quot;</span>
 
 
+<div class="viewcode-block" id="CaptchaHandler">
+<a class="viewcode-back" href="../../../api/remote.html#scitex_browser.remote.CaptchaHandler">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">CaptchaHandler</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Handles CAPTCHA solving using 2Captcha service.&quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="SharedBrowserSession">
-<a class="viewcode-back" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">SharedBrowserSession</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Persistent browser session shared between AI agents and humans.</span>
+<div class="viewcode-block" id="CaptchaHandler.__init__">
+<a class="viewcode-back" href="../../../api/remote.html#scitex_browser.remote.CaptchaHandler.__init__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">api_key</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize with 2Captcha API key.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">api_key</span> <span class="o">=</span> <span class="n">api_key</span> <span class="ow">or</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;SCITEX_SCHOLAR_2CAPTCHA_API_KEY&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">api_key</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;2Captcha API key not configured - CAPTCHA solving disabled&quot;</span><span class="p">)</span>
 
-<span class="sd">    Simple, incremental start - just the basics.</span>
-
-<span class="sd">    Example:</span>
-<span class="sd">        # Start session</span>
-<span class="sd">        session = SharedBrowserSession()</span>
-<span class="sd">        await session.start()</span>
-
-<span class="sd">        # Navigate</span>
-<span class="sd">        await session.navigate(&quot;http://127.0.0.1:8000&quot;)</span>
-
-<span class="sd">        # Take screenshot</span>
-<span class="sd">        screenshot = await session.screenshot()</span>
-
-<span class="sd">        # Keep running</span>
-<span class="sd">        await session.wait()</span>
-
-<span class="sd">        # Close when done</span>
-<span class="sd">        await session.close()</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-<div class="viewcode-block" id="SharedBrowserSession.__init__">
-<a class="viewcode-back" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.__init__">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">SessionConfig</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize shared session.&quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="n">config</span> <span class="ow">or</span> <span class="n">SessionConfig</span><span class="p">()</span>
-
-        <span class="c1"># Browser state</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">playwright</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">browser</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Browser</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">BrowserContext</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">page</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Page</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-
-        <span class="c1"># Session state</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">running</span> <span class="o">=</span> <span class="kc">False</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">start_time</span> <span class="o">=</span> <span class="kc">None</span>
-
-        <span class="c1"># Simple event log</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">screenshots</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
-
-        <span class="c1"># Get screenshot directory from SCITEX_DIR</span>
-        <span class="n">scitex_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;SCITEX_DIR&quot;</span><span class="p">,</span> <span class="n">Path</span><span class="o">.</span><span class="n">home</span><span class="p">()</span> <span class="o">/</span> <span class="s2">&quot;.scitex&quot;</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">screenshot_dir</span> <span class="o">=</span> <span class="n">scitex_dir</span> <span class="o">/</span> <span class="s2">&quot;capture&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">screenshot_dir</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">base_url</span> <span class="o">=</span> <span class="s2">&quot;http://2captcha.com&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">timeout</span> <span class="o">=</span> <span class="mi">180</span>  <span class="c1"># 3 minutes max wait time</span></div>
 
 
-<div class="viewcode-block" id="SharedBrowserSession.start">
-<a class="viewcode-back" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.start">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Start the persistent browser session.</span>
+<div class="viewcode-block" id="CaptchaHandler.handle_page_async">
+<a class="viewcode-back" href="../../../api/remote.html#scitex_browser.remote.CaptchaHandler.handle_page_async">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">handle_page_async</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">page</span><span class="p">:</span> <span class="n">Page</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check and handle captcha on the current page.</span>
 
-<span class="sd">        Uses persistent context pattern from ScholarBrowserManager.</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            bool: True if captcha was found and solved, False otherwise</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">running</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Session already running&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">api_key</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
 
-        <span class="c1"># Get user data directory</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">user_data_dir</span><span class="p">:</span>
-            <span class="n">user_data_dir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">user_data_dir</span>
+        <span class="c1"># Check for common captcha indicators</span>
+        <span class="n">captcha_found</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_detect_captcha_async</span><span class="p">(</span><span class="n">page</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">captcha_found</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Captcha detected on page - attempting to solve&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Determine captcha type and solve</span>
+        <span class="k">if</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_cloudflare_challenge_async</span><span class="p">(</span><span class="n">page</span><span class="p">):</span>
+            <span class="k">return</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_solve_cloudflare_challenge_async</span><span class="p">(</span><span class="n">page</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_has_recaptcha_async</span><span class="p">(</span><span class="n">page</span><span class="p">):</span>
+            <span class="k">return</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_solve_recaptcha_async</span><span class="p">(</span><span class="n">page</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_has_hcaptcha_async</span><span class="p">(</span><span class="n">page</span><span class="p">):</span>
+            <span class="k">return</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_solve_hcaptcha_async</span><span class="p">(</span><span class="n">page</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">scitex_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;SCITEX_DIR&quot;</span><span class="p">,</span> <span class="n">Path</span><span class="o">.</span><span class="n">home</span><span class="p">()</span> <span class="o">/</span> <span class="s2">&quot;.scitex&quot;</span><span class="p">))</span>
-            <span class="n">user_data_dir</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
-                <span class="n">scitex_dir</span> <span class="o">/</span> <span class="s2">&quot;browser&quot;</span> <span class="o">/</span> <span class="s2">&quot;sessions&quot;</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">session_id</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Unknown captcha type detected&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="CaptchaHandler._detect_captcha_async">
+<a class="viewcode-back" href="../../../api/remote.html#scitex_browser.remote.CaptchaHandler._detect_captcha_async">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">_detect_captcha_async</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">page</span><span class="p">:</span> <span class="n">Page</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Detect if page has a captcha.&quot;&quot;&quot;</span>
+        <span class="c1"># Check for common captcha elements</span>
+        <span class="n">selectors</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="c1"># Cloudflare</span>
+            <span class="s2">&quot;iframe[title*=&#39;Cloudflare&#39;]&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;#cf-challenge-running&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;.cf-challenge&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;div:has-text(&#39;Verifying you are human&#39;)&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;div:has-text(&#39;Checking your browser&#39;)&quot;</span><span class="p">,</span>
+            <span class="c1"># reCAPTCHA</span>
+            <span class="s2">&quot;iframe[src*=&#39;recaptcha&#39;]&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;.g-recaptcha&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;#g-recaptcha&quot;</span><span class="p">,</span>
+            <span class="c1"># hCaptcha</span>
+            <span class="s2">&quot;iframe[src*=&#39;hcaptcha&#39;]&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;.h-captcha&quot;</span><span class="p">,</span>
+            <span class="c1"># Generic</span>
+            <span class="s2">&quot;div:has-text(&#39;I am not a robot&#39;)&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;div:has-text(&#39;Verify you are human&#39;)&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;div:has-text(&#39;Security check&#39;)&quot;</span><span class="p">,</span>
+        <span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">selector</span> <span class="ow">in</span> <span class="n">selectors</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">if</span> <span class="k">await</span> <span class="n">page</span><span class="o">.</span><span class="n">locator</span><span class="p">(</span><span class="n">selector</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="o">.</span><span class="n">is_visible</span><span class="p">():</span>
+                    <span class="k">return</span> <span class="kc">True</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="CaptchaHandler._is_cloudflare_challenge_async">
+<a class="viewcode-back" href="../../../api/remote.html#scitex_browser.remote.CaptchaHandler._is_cloudflare_challenge_async">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">_is_cloudflare_challenge_async</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">page</span><span class="p">:</span> <span class="n">Page</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if this is a Cloudflare challenge.&quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># Check for Cloudflare-specific elements</span>
+            <span class="n">cf_indicators</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="s2">&quot;iframe[title*=&#39;Cloudflare&#39;]&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;#cf-challenge-running&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;.cf-challenge&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;div:has-text(&#39;Verifying you are human&#39;)&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;div:has-text(&#39;Checking your browser&#39;)&quot;</span><span class="p">,</span>
+            <span class="p">]</span>
+
+            <span class="k">for</span> <span class="n">indicator</span> <span class="ow">in</span> <span class="n">cf_indicators</span><span class="p">:</span>
+                <span class="k">if</span> <span class="k">await</span> <span class="n">page</span><span class="o">.</span><span class="n">locator</span><span class="p">(</span><span class="n">indicator</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="o">.</span><span class="n">is_visible</span><span class="p">():</span>
+                    <span class="k">return</span> <span class="kc">True</span>
+
+            <span class="c1"># Check page title</span>
+            <span class="n">title</span> <span class="o">=</span> <span class="k">await</span> <span class="n">page</span><span class="o">.</span><span class="n">title</span><span class="p">()</span>
+            <span class="k">if</span> <span class="s2">&quot;Just a moment&quot;</span> <span class="ow">in</span> <span class="n">title</span> <span class="ow">or</span> <span class="s2">&quot;Attention Required&quot;</span> <span class="ow">in</span> <span class="n">title</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">True</span>
+
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="CaptchaHandler._solve_cloudflare_challenge_async">
+<a class="viewcode-back" href="../../../api/remote.html#scitex_browser.remote.CaptchaHandler._solve_cloudflare_challenge_async">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">_solve_cloudflare_challenge_async</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">page</span><span class="p">:</span> <span class="n">Page</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Handle Cloudflare challenge/turnstile.&quot;&quot;&quot;</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Handling Cloudflare challenge&quot;</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># First, wait a bit to see if it auto-solves</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Waiting for Cloudflare auto-solve...&quot;</span><span class="p">)</span>
+            <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+
+            <span class="c1"># Check if still on challenge page</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_cloudflare_challenge_async</span><span class="p">(</span><span class="n">page</span><span class="p">):</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Cloudflare challenge auto-solved&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="kc">True</span>
+
+            <span class="c1"># If Turnstile captcha is present, solve it</span>
+            <span class="n">turnstile_frame</span> <span class="o">=</span> <span class="n">page</span><span class="o">.</span><span class="n">frame_locator</span><span class="p">(</span><span class="s2">&quot;iframe[title*=&#39;Cloudflare&#39;]&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">first</span>
+            <span class="k">if</span> <span class="n">turnstile_frame</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Cloudflare Turnstile detected - solving with 2Captcha&quot;</span><span class="p">)</span>
+
+                <span class="c1"># Get site key</span>
+                <span class="n">site_key</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_extract_turnstile_key_async</span><span class="p">(</span><span class="n">page</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">site_key</span><span class="p">:</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Could not extract Turnstile site key&quot;</span><span class="p">)</span>
+                    <span class="k">return</span> <span class="kc">False</span>
+
+                <span class="c1"># Submit to 2Captcha</span>
+                <span class="n">task_id</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_submit_turnstile_async</span><span class="p">(</span><span class="n">page</span><span class="o">.</span><span class="n">url</span><span class="p">,</span> <span class="n">site_key</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">task_id</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="kc">False</span>
+
+                <span class="c1"># Get solution</span>
+                <span class="n">solution</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_captcha_result_async</span><span class="p">(</span><span class="n">task_id</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">solution</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="kc">False</span>
+
+                <span class="c1"># Inject solution</span>
+                <span class="k">await</span> <span class="n">page</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">                    window.turnstile.render.solutions = window.turnstile.render.solutions || [];</span>
+<span class="s2">                    window.turnstile.render.solutions.push(&#39;</span><span class="si">{</span><span class="n">solution</span><span class="si">}</span><span class="s2">&#39;);</span>
+<span class="s2">                &quot;&quot;&quot;</span>
+                <span class="p">)</span>
+
+                <span class="c1"># Click verify if needed</span>
+                <span class="n">verify_btn</span> <span class="o">=</span> <span class="n">page</span><span class="o">.</span><span class="n">locator</span><span class="p">(</span><span class="s2">&quot;input[type=&#39;submit&#39;][value*=&#39;Verify&#39;]&quot;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="k">await</span> <span class="n">verify_btn</span><span class="o">.</span><span class="n">is_visible</span><span class="p">():</span>
+                    <span class="k">await</span> <span class="n">verify_btn</span><span class="o">.</span><span class="n">click</span><span class="p">()</span>
+
+                <span class="c1"># Wait for navigation</span>
+                <span class="k">await</span> <span class="n">page</span><span class="o">.</span><span class="n">wait_for_load_state</span><span class="p">(</span><span class="s2">&quot;networkidle&quot;</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">30000</span><span class="p">)</span>
+
+                <span class="k">return</span> <span class="ow">not</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_cloudflare_challenge_async</span><span class="p">(</span><span class="n">page</span><span class="p">)</span>
+
+            <span class="c1"># For other Cloudflare challenges, just wait</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Waiting for Cloudflare challenge to complete...&quot;</span><span class="p">)</span>
+            <span class="k">await</span> <span class="n">page</span><span class="o">.</span><span class="n">wait_for_function</span><span class="p">(</span>
+                <span class="s2">&quot;!document.querySelector(&#39;#cf-challenge-running&#39;)&quot;</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">30000</span>
             <span class="p">)</span>
 
-        <span class="c1"># Start playwright</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">playwright</span> <span class="o">=</span> <span class="k">await</span> <span class="n">async_playwright</span><span class="p">()</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
-
-        <span class="c1"># Launch persistent context (like ScholarBrowserManager)</span>
-        <span class="n">browser_type</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">playwright</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">browser_type</span><span class="p">)</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">context</span> <span class="o">=</span> <span class="k">await</span> <span class="n">browser_type</span><span class="o">.</span><span class="n">launch_persistent_context</span><span class="p">(</span>
-            <span class="n">user_data_dir</span><span class="o">=</span><span class="n">user_data_dir</span><span class="p">,</span>
-            <span class="n">headless</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">headless</span><span class="p">,</span>
-            <span class="n">viewport</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">viewport</span><span class="p">,</span>
-        <span class="p">)</span>
-
-        <span class="c1"># Get or create page</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">pages</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">page</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">pages</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">page</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">new_page</span><span class="p">()</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">running</span> <span class="o">=</span> <span class="kc">True</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-
-        <span class="c1"># Log event</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_log_event</span><span class="p">(</span>
-            <span class="s2">&quot;session_started&quot;</span><span class="p">,</span>
-            <span class="p">{</span>
-                <span class="s2">&quot;session_id&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">session_id</span><span class="p">,</span>
-                <span class="s2">&quot;user_data_dir&quot;</span><span class="p">:</span> <span class="n">user_data_dir</span><span class="p">,</span>
-            <span class="p">},</span>
-        <span class="p">)</span>
-
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;✅ Shared browser session started: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">session_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   User data: </span><span class="si">{</span><span class="n">user_data_dir</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   Screenshots: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">screenshot_dir</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-
-        <span class="c1"># Start auto-screenshot if configured</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">screenshot_interval</span><span class="p">:</span>
-            <span class="n">asyncio</span><span class="o">.</span><span class="n">create_task</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_auto_screenshot_loop</span><span class="p">())</span></div>
-
-
-<div class="viewcode-block" id="SharedBrowserSession.navigate">
-<a class="viewcode-back" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.navigate">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">navigate</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">wait_until</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;load&quot;</span><span class="p">,</span> <span class="n">timeout</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">60000</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Navigate to URL.</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            url: URL to navigate to</span>
-<span class="sd">            wait_until: &quot;load&quot;, &quot;domcontentloaded&quot;, or &quot;networkidle&quot; (default: &quot;load&quot;)</span>
-<span class="sd">            timeout: Timeout in milliseconds (default: 60000)</span>
-
-<span class="sd">        Returns:</span>
-<span class="sd">            Current URL after navigation</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">running</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Session not started. Call start() first.&quot;</span><span class="p">)</span>
-
-        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">page</span><span class="o">.</span><span class="n">goto</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">wait_until</span><span class="o">=</span><span class="n">wait_until</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">)</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">_log_event</span><span class="p">(</span><span class="s2">&quot;navigated&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="n">url</span><span class="p">})</span>
-
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">page</span><span class="o">.</span><span class="n">url</span></div>
-
-
-<div class="viewcode-block" id="SharedBrowserSession.screenshot">
-<a class="viewcode-back" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.screenshot">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">screenshot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Take screenshot and save to scitex.capture directory.</span>
-
-<span class="sd">        Returns:</span>
-<span class="sd">            Path to screenshot file</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">running</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Session not started. Call start() first.&quot;</span><span class="p">)</span>
-
-        <span class="c1"># Generate filename</span>
-        <span class="n">timestamp</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">_%H%M%S_</span><span class="si">%f</span><span class="s2">&quot;</span><span class="p">)[:</span><span class="o">-</span><span class="mi">3</span><span class="p">]</span>
-
-        <span class="n">url_slug</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">page</span><span class="o">.</span><span class="n">url</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;://&quot;</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;?&quot;</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">url_slug</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">50</span><span class="p">:</span>
-            <span class="n">url_slug</span> <span class="o">=</span> <span class="n">url_slug</span><span class="p">[:</span><span class="mi">50</span><span class="p">]</span>
-
-        <span class="k">if</span> <span class="n">message</span><span class="p">:</span>
-            <span class="n">filename</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">timestamp</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">session_id</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">message</span><span class="si">}</span><span class="s2">.jpg&quot;</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">filename</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">timestamp</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">session_id</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">url_slug</span><span class="si">}</span><span class="s2">.jpg&quot;</span>
-
-        <span class="n">screenshot_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">screenshot_dir</span> <span class="o">/</span> <span class="n">filename</span>
-
-        <span class="c1"># Take screenshot (JPEG format supports quality)</span>
-        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">page</span><span class="o">.</span><span class="n">screenshot</span><span class="p">(</span>
-            <span class="n">path</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">screenshot_path</span><span class="p">),</span>
-            <span class="nb">type</span><span class="o">=</span><span class="s2">&quot;jpeg&quot;</span><span class="p">,</span>
-            <span class="n">quality</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span>
-        <span class="p">)</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">screenshots</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">screenshot_path</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_log_event</span><span class="p">(</span><span class="s2">&quot;screenshot_taken&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">screenshot_path</span><span class="p">)})</span>
-
-        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">screenshot_path</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="SharedBrowserSession.wait">
-<a class="viewcode-back" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.wait">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">wait</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">duration</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Wait for duration or until stopped.</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            duration: Seconds to wait, or None to wait indefinitely</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">duration</span><span class="p">:</span>
-            <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">duration</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="c1"># Wait until closed</span>
-            <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">running</span><span class="p">:</span>
-                <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="SharedBrowserSession.close">
-<a class="viewcode-back" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.close">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Close the session.&quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">running</span><span class="p">:</span>
-            <span class="k">return</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">running</span> <span class="o">=</span> <span class="kc">False</span>
-
-        <span class="c1"># Close page and context</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">page</span><span class="p">:</span>
-            <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">page</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="p">:</span>
-            <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">playwright</span><span class="p">:</span>
-            <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">playwright</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
-
-        <span class="n">duration</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_time</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_time</span> <span class="k">else</span> <span class="mi">0</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">_log_event</span><span class="p">(</span>
-            <span class="s2">&quot;session_closed&quot;</span><span class="p">,</span>
-            <span class="p">{</span>
-                <span class="s2">&quot;duration&quot;</span><span class="p">:</span> <span class="n">duration</span><span class="p">,</span>
-                <span class="s2">&quot;screenshot_count&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">screenshots</span><span class="p">),</span>
-            <span class="p">},</span>
-        <span class="p">)</span>
-
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;✅ Shared browser session closed: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">session_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   Duration: </span><span class="si">{</span><span class="n">duration</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">s&quot;</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   Screenshots: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">screenshots</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="SharedBrowserSession.__aenter__">
-<a class="viewcode-back" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.__aenter__">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="fm">__aenter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Context manager entry.&quot;&quot;&quot;</span>
-        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
-        <span class="k">return</span> <span class="bp">self</span></div>
-
-
-<div class="viewcode-block" id="SharedBrowserSession.__aexit__">
-<a class="viewcode-back" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.__aexit__">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="fm">__aexit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Context manager exit.&quot;&quot;&quot;</span>
-        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
-
-
-<div class="viewcode-block" id="SharedBrowserSession._log_event">
-<a class="viewcode-back" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession._log_event">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">_log_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Simple event logging.&quot;&quot;&quot;</span>
-        <span class="n">event</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="n">event_type</span><span class="p">,</span>
-            <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="n">data</span><span class="p">,</span>
-            <span class="s2">&quot;timestamp&quot;</span><span class="p">:</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">(),</span>
-        <span class="p">}</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">event</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="SharedBrowserSession._auto_screenshot_loop">
-<a class="viewcode-back" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession._auto_screenshot_loop">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">_auto_screenshot_loop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Automatically take screenshots at intervals.&quot;&quot;&quot;</span>
-        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">running</span><span class="p">:</span>
-            <span class="k">try</span><span class="p">:</span>
-                <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">screenshot</span><span class="p">(</span><span class="n">message</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span><span class="p">)</span>
-                <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">screenshot_interval</span><span class="p">)</span>
-            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Auto-screenshot error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="SharedBrowserSession.get_info">
-<a class="viewcode-back" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.get_info">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">get_info</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get session information.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="p">{</span>
-            <span class="s2">&quot;session_id&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">session_id</span><span class="p">,</span>
-            <span class="s2">&quot;running&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">running</span><span class="p">,</span>
-            <span class="s2">&quot;current_url&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">page</span><span class="o">.</span><span class="n">url</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">page</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
-            <span class="s2">&quot;uptime&quot;</span><span class="p">:</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_time</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_time</span> <span class="k">else</span> <span class="mi">0</span><span class="p">,</span>
-            <span class="s2">&quot;screenshot_count&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">screenshots</span><span class="p">),</span>
-            <span class="s2">&quot;event_count&quot;</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="p">),</span>
-        <span class="p">}</span></div>
-
-
-    <span class="c1"># ========================================</span>
-    <span class="c1"># Natural Human-Like Interaction Primitives</span>
-    <span class="c1"># ========================================</span>
-
-<div class="viewcode-block" id="SharedBrowserSession.type">
-<a class="viewcode-back" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.type">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selector</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">delay</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">50</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Type text like a human (with delay between keys).&quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">running</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Session not started&quot;</span><span class="p">)</span>
-
-        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">page</span><span class="o">.</span><span class="n">type</span><span class="p">(</span><span class="n">selector</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="n">delay</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_log_event</span><span class="p">(</span><span class="s2">&quot;typed&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;selector&quot;</span><span class="p">:</span> <span class="n">selector</span><span class="p">,</span> <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="n">text</span><span class="p">})</span></div>
-
-
-<div class="viewcode-block" id="SharedBrowserSession.click">
-<a class="viewcode-back" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.click">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">click</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selector</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Click element.&quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">running</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Session not started&quot;</span><span class="p">)</span>
-
-        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">page</span><span class="o">.</span><span class="n">click</span><span class="p">(</span><span class="n">selector</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_log_event</span><span class="p">(</span><span class="s2">&quot;clicked&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;selector&quot;</span><span class="p">:</span> <span class="n">selector</span><span class="p">})</span></div>
-
-
-<div class="viewcode-block" id="SharedBrowserSession.hover">
-<a class="viewcode-back" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.hover">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">hover</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selector</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Hover over element.&quot;&quot;&quot;</span>
-        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">page</span><span class="o">.</span><span class="n">hover</span><span class="p">(</span><span class="n">selector</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="SharedBrowserSession.press">
-<a class="viewcode-back" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.press">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">press</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Press keyboard key (Enter, Tab, Escape, etc.).&quot;&quot;&quot;</span>
-        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">page</span><span class="o">.</span><span class="n">keyboard</span><span class="o">.</span><span class="n">press</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_log_event</span><span class="p">(</span><span class="s2">&quot;pressed_key&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;key&quot;</span><span class="p">:</span> <span class="n">key</span><span class="p">})</span></div>
-
-
-<div class="viewcode-block" id="SharedBrowserSession.scroll_down">
-<a class="viewcode-back" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.scroll_down">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">scroll_down</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">amount</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">500</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Scroll down.&quot;&quot;&quot;</span>
-        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">page</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;window.scrollBy(0, </span><span class="si">{</span><span class="n">amount</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="SharedBrowserSession.scroll_to">
-<a class="viewcode-back" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.scroll_to">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">scroll_to</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selector</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Scroll element into view.&quot;&quot;&quot;</span>
-        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">page</span><span class="o">.</span><span class="n">locator</span><span class="p">(</span><span class="n">selector</span><span class="p">)</span><span class="o">.</span><span class="n">scroll_into_view_if_needed</span><span class="p">()</span></div>
-
-
-<div class="viewcode-block" id="SharedBrowserSession.wait_for">
-<a class="viewcode-back" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.wait_for">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">wait_for</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selector</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">timeout</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5000</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Wait for element to appear.&quot;&quot;&quot;</span>
-        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">page</span><span class="o">.</span><span class="n">wait_for_selector</span><span class="p">(</span><span class="n">selector</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="SharedBrowserSession.wait_for_text">
-<a class="viewcode-back" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.wait_for_text">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">wait_for_text</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">timeout</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5000</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Wait for text to appear.&quot;&quot;&quot;</span>
-        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">page</span><span class="o">.</span><span class="n">wait_for_selector</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;text=</span><span class="si">{</span><span class="n">text</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="SharedBrowserSession.wait_for_url">
-<a class="viewcode-back" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.wait_for_url">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">wait_for_url</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pattern</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">timeout</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5000</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Wait for URL to match pattern.&quot;&quot;&quot;</span>
-        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">page</span><span class="o">.</span><span class="n">wait_for_url</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="SharedBrowserSession.get_text">
-<a class="viewcode-back" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.get_text">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_text</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selector</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get text content of element.&quot;&quot;&quot;</span>
-        <span class="n">element</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">page</span><span class="o">.</span><span class="n">query_selector</span><span class="p">(</span><span class="n">selector</span><span class="p">)</span>
-        <span class="k">return</span> <span class="k">await</span> <span class="n">element</span><span class="o">.</span><span class="n">text_content</span><span class="p">()</span> <span class="k">if</span> <span class="n">element</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span></div>
-
-
-<div class="viewcode-block" id="SharedBrowserSession.get_value">
-<a class="viewcode-back" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.get_value">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selector</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get value of input element.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">page</span><span class="o">.</span><span class="n">input_value</span><span class="p">(</span><span class="n">selector</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="SharedBrowserSession.is_visible">
-<a class="viewcode-back" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.is_visible">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">is_visible</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selector</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if element is visible.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">page</span><span class="o">.</span><span class="n">is_visible</span><span class="p">(</span><span class="n">selector</span><span class="p">)</span></div>
-
-
-    <span class="c1"># ========================================</span>
-    <span class="c1"># Interactive Prompts (Ask User in Browser)</span>
-    <span class="c1"># ========================================</span>
-
-<div class="viewcode-block" id="SharedBrowserSession.ask">
-<a class="viewcode-back" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.ask">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">ask</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">question</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">options</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Ask user a question in the browser.</span>
-
-<span class="sd">        Returns user&#39;s response.</span>
-
-<span class="sd">        Example:</span>
-<span class="sd">            response = await session.ask(&quot;What username to use?&quot;)</span>
-<span class="sd">            response = await session.ask(&quot;Choose:&quot;, [&quot;Option A&quot;, &quot;Option B&quot;])</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">options</span><span class="p">:</span>
-            <span class="c1"># Multiple choice</span>
-            <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">page</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span>
+            <span class="k">return</span> <span class="kc">True</span>
+
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to solve Cloudflare challenge: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="CaptchaHandler._has_recaptcha_async">
+<a class="viewcode-back" href="../../../api/remote.html#scitex_browser.remote.CaptchaHandler._has_recaptcha_async">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">_has_recaptcha_async</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">page</span><span class="p">:</span> <span class="n">Page</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if page has reCAPTCHA.&quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="k">await</span> <span class="n">page</span><span class="o">.</span><span class="n">locator</span><span class="p">(</span><span class="s2">&quot;iframe[src*=&#39;recaptcha&#39;]&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="o">.</span><span class="n">is_visible</span><span class="p">()</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="CaptchaHandler._solve_recaptcha_async">
+<a class="viewcode-back" href="../../../api/remote.html#scitex_browser.remote.CaptchaHandler._solve_recaptcha_async">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">_solve_recaptcha_async</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">page</span><span class="p">:</span> <span class="n">Page</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Solve reCAPTCHA v2.&quot;&quot;&quot;</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Solving reCAPTCHA&quot;</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># Get site key</span>
+            <span class="n">site_key</span> <span class="o">=</span> <span class="k">await</span> <span class="n">page</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span>
+<span class="w">                </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">                () =&gt; {</span>
+<span class="sd">                    const elem = document.querySelector(&#39;[data-sitekey]&#39;);</span>
+<span class="sd">                    return elem ? elem.getAttribute(&#39;data-sitekey&#39;) : null;</span>
+<span class="sd">                }</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="p">)</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">site_key</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Could not find reCAPTCHA site key&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="kc">False</span>
+
+            <span class="c1"># Submit to 2Captcha</span>
+            <span class="n">task_id</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_submit_recaptcha_async</span><span class="p">(</span><span class="n">page</span><span class="o">.</span><span class="n">url</span><span class="p">,</span> <span class="n">site_key</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">task_id</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">False</span>
+
+            <span class="c1"># Get solution</span>
+            <span class="n">solution</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_captcha_result_async</span><span class="p">(</span><span class="n">task_id</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">solution</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">False</span>
+
+            <span class="c1"># Inject solution</span>
+            <span class="k">await</span> <span class="n">page</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span>
                 <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">                () =&gt; </span><span class="se">{{</span>
-<span class="s2">                    const choice = prompt(&#39;</span><span class="si">{</span><span class="n">question</span><span class="si">}</span><span class="se">\\</span><span class="s2">n</span><span class="se">\\</span><span class="s2">nOptions: </span><span class="si">{</span><span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">options</span><span class="p">)</span><span class="si">}</span><span class="s2">&#39;);</span>
-<span class="s2">                    return choice;</span>
+<span class="s2">                document.getElementById(&#39;g-recaptcha-response&#39;).innerHTML = &#39;</span><span class="si">{</span><span class="n">solution</span><span class="si">}</span><span class="s2">&#39;;</span>
+<span class="s2">                if (typeof ___grecaptcha_cfg !== &#39;undefined&#39;) </span><span class="se">{{</span>
+<span class="s2">                    Object.entries(___grecaptcha_cfg.clients).forEach(([key, client]) =&gt; </span><span class="se">{{</span>
+<span class="s2">                        if (client.callback) </span><span class="se">{{</span>
+<span class="s2">                            client.callback(&#39;</span><span class="si">{</span><span class="n">solution</span><span class="si">}</span><span class="s2">&#39;);</span>
+<span class="s2">                        </span><span class="se">}}</span>
+<span class="s2">                    </span><span class="se">}}</span><span class="s2">);</span>
 <span class="s2">                </span><span class="se">}}</span>
 <span class="s2">            &quot;&quot;&quot;</span>
             <span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="c1"># Free text</span>
-            <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">page</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span>
+
+            <span class="c1"># Submit form if present</span>
+            <span class="n">submit_btn</span> <span class="o">=</span> <span class="n">page</span><span class="o">.</span><span class="n">locator</span><span class="p">(</span>
+                <span class="s2">&quot;button[type=&#39;submit&#39;], input[type=&#39;submit&#39;]&quot;</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">first</span>
+            <span class="k">if</span> <span class="k">await</span> <span class="n">submit_btn</span><span class="o">.</span><span class="n">is_visible</span><span class="p">():</span>
+                <span class="k">await</span> <span class="n">submit_btn</span><span class="o">.</span><span class="n">click</span><span class="p">()</span>
+                <span class="k">await</span> <span class="n">page</span><span class="o">.</span><span class="n">wait_for_load_state</span><span class="p">(</span><span class="s2">&quot;networkidle&quot;</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">10000</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="kc">True</span>
+
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to solve reCAPTCHA: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="CaptchaHandler._has_hcaptcha_async">
+<a class="viewcode-back" href="../../../api/remote.html#scitex_browser.remote.CaptchaHandler._has_hcaptcha_async">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">_has_hcaptcha_async</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">page</span><span class="p">:</span> <span class="n">Page</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if page has hCaptcha.&quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="k">await</span> <span class="n">page</span><span class="o">.</span><span class="n">locator</span><span class="p">(</span><span class="s2">&quot;iframe[src*=&#39;hcaptcha&#39;]&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="o">.</span><span class="n">is_visible</span><span class="p">()</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="CaptchaHandler._solve_hcaptcha_async">
+<a class="viewcode-back" href="../../../api/remote.html#scitex_browser.remote.CaptchaHandler._solve_hcaptcha_async">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">_solve_hcaptcha_async</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">page</span><span class="p">:</span> <span class="n">Page</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Solve hCaptcha.&quot;&quot;&quot;</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Solving hCaptcha&quot;</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># Get site key</span>
+            <span class="n">site_key</span> <span class="o">=</span> <span class="k">await</span> <span class="n">page</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span>
+<span class="w">                </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">                () =&gt; {</span>
+<span class="sd">                    const elem = document.querySelector(&#39;[data-sitekey]&#39;);</span>
+<span class="sd">                    return elem ? elem.getAttribute(&#39;data-sitekey&#39;) : null;</span>
+<span class="sd">                }</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="p">)</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">site_key</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Could not find hCaptcha site key&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="kc">False</span>
+
+            <span class="c1"># Submit to 2Captcha</span>
+            <span class="n">task_id</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_submit_hcaptcha_async</span><span class="p">(</span><span class="n">page</span><span class="o">.</span><span class="n">url</span><span class="p">,</span> <span class="n">site_key</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">task_id</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">False</span>
+
+            <span class="c1"># Get solution</span>
+            <span class="n">solution</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_captcha_result_async</span><span class="p">(</span><span class="n">task_id</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">solution</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">False</span>
+
+            <span class="c1"># Inject solution</span>
+            <span class="k">await</span> <span class="n">page</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span>
                 <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">                () =&gt; prompt(&#39;</span><span class="si">{</span><span class="n">question</span><span class="si">}</span><span class="s2">&#39;)</span>
+<span class="s2">                document.querySelector(&#39;[name=&quot;h-captcha-response&quot;]&#39;).value = &#39;</span><span class="si">{</span><span class="n">solution</span><span class="si">}</span><span class="s2">&#39;;</span>
+<span class="s2">                document.querySelector(&#39;[name=&quot;g-recaptcha-response&quot;]&#39;).value = &#39;</span><span class="si">{</span><span class="n">solution</span><span class="si">}</span><span class="s2">&#39;;</span>
+<span class="s2">                if (window.hcaptcha) </span><span class="se">{{</span>
+<span class="s2">                    window.hcaptcha.execute();</span>
+<span class="s2">                </span><span class="se">}}</span>
 <span class="s2">            &quot;&quot;&quot;</span>
             <span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">_log_event</span><span class="p">(</span><span class="s2">&quot;user_input&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;question&quot;</span><span class="p">:</span> <span class="n">question</span><span class="p">,</span> <span class="s2">&quot;response&quot;</span><span class="p">:</span> <span class="n">result</span><span class="p">})</span>
-        <span class="k">return</span> <span class="n">result</span></div>
+            <span class="k">return</span> <span class="kc">True</span>
+
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to solve hCaptcha: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span></div>
 
 
-<div class="viewcode-block" id="SharedBrowserSession.confirm">
-<a class="viewcode-back" href="../../../api/collaboration.html#scitex_browser.collaboration.SharedBrowserSession.confirm">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">confirm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Ask user for confirmation in browser.</span>
+<div class="viewcode-block" id="CaptchaHandler._extract_turnstile_key_async">
+<a class="viewcode-back" href="../../../api/remote.html#scitex_browser.remote.CaptchaHandler._extract_turnstile_key_async">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">_extract_turnstile_key_async</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">page</span><span class="p">:</span> <span class="n">Page</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Extract Cloudflare Turnstile site key.&quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># Try different methods to get the key</span>
+            <span class="n">site_key</span> <span class="o">=</span> <span class="k">await</span> <span class="n">page</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span>
+<span class="w">                </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">                () =&gt; {</span>
+<span class="sd">                    // Method 1: Check data attributes</span>
+<span class="sd">                    const elem = document.querySelector(&#39;[data-sitekey]&#39;);</span>
+<span class="sd">                    if (elem) return elem.getAttribute(&#39;data-sitekey&#39;);</span>
 
-<span class="sd">        Returns True if user clicks OK, False if Cancel.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">page</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">            () =&gt; confirm(&#39;</span><span class="si">{</span><span class="n">message</span><span class="si">}</span><span class="s2">&#39;)</span>
-<span class="s2">        &quot;&quot;&quot;</span>
-        <span class="p">)</span>
+<span class="sd">                    // Method 2: Check Turnstile config</span>
+<span class="sd">                    if (window.turnstile?.config?.sitekey) {</span>
+<span class="sd">                        return window.turnstile.config.sitekey;</span>
+<span class="sd">                    }</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">_log_event</span><span class="p">(</span><span class="s2">&quot;user_confirmation&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="n">message</span><span class="p">,</span> <span class="s2">&quot;confirmed&quot;</span><span class="p">:</span> <span class="n">result</span><span class="p">})</span>
-        <span class="k">return</span> <span class="n">result</span></div>
+<span class="sd">                    // Method 3: Parse from script</span>
+<span class="sd">                    const scripts = Array.from(document.scripts);</span>
+<span class="sd">                    for (const script of scripts) {</span>
+<span class="sd">                        const match = script.textContent.match(/sitekey[&#39;&quot;]\s*:\s*[&#39;&quot;]([^&#39;&quot;]+)/);</span>
+<span class="sd">                        if (match) return match[1];</span>
+<span class="sd">                    }</span>
+
+<span class="sd">                    return null;</span>
+<span class="sd">                }</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="p">)</span>
+
+            <span class="k">return</span> <span class="n">site_key</span>
+
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to extract Turnstile key: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="CaptchaHandler._submit_recaptcha_async">
+<a class="viewcode-back" href="../../../api/remote.html#scitex_browser.remote.CaptchaHandler._submit_recaptcha_async">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">_submit_recaptcha_async</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">page_url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">site_key</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Submit reCAPTCHA to 2Captcha.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_submit_captcha_async</span><span class="p">(</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;key&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">api_key</span><span class="p">,</span>
+                <span class="s2">&quot;method&quot;</span><span class="p">:</span> <span class="s2">&quot;userrecaptcha&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;googlekey&quot;</span><span class="p">:</span> <span class="n">site_key</span><span class="p">,</span>
+                <span class="s2">&quot;pageurl&quot;</span><span class="p">:</span> <span class="n">page_url</span><span class="p">,</span>
+                <span class="s2">&quot;json&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CaptchaHandler._submit_hcaptcha_async">
+<a class="viewcode-back" href="../../../api/remote.html#scitex_browser.remote.CaptchaHandler._submit_hcaptcha_async">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">_submit_hcaptcha_async</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">page_url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">site_key</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Submit hCaptcha to 2Captcha.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_submit_captcha_async</span><span class="p">(</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;key&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">api_key</span><span class="p">,</span>
+                <span class="s2">&quot;method&quot;</span><span class="p">:</span> <span class="s2">&quot;hcaptcha&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;sitekey&quot;</span><span class="p">:</span> <span class="n">site_key</span><span class="p">,</span>
+                <span class="s2">&quot;pageurl&quot;</span><span class="p">:</span> <span class="n">page_url</span><span class="p">,</span>
+                <span class="s2">&quot;json&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CaptchaHandler._submit_turnstile_async">
+<a class="viewcode-back" href="../../../api/remote.html#scitex_browser.remote.CaptchaHandler._submit_turnstile_async">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">_submit_turnstile_async</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">page_url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">site_key</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Submit Turnstile to 2Captcha.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_submit_captcha_async</span><span class="p">(</span>
+            <span class="p">{</span>
+                <span class="s2">&quot;key&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">api_key</span><span class="p">,</span>
+                <span class="s2">&quot;method&quot;</span><span class="p">:</span> <span class="s2">&quot;turnstile&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;sitekey&quot;</span><span class="p">:</span> <span class="n">site_key</span><span class="p">,</span>
+                <span class="s2">&quot;pageurl&quot;</span><span class="p">:</span> <span class="n">page_url</span><span class="p">,</span>
+                <span class="s2">&quot;json&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CaptchaHandler._submit_captcha_async">
+<a class="viewcode-back" href="../../../api/remote.html#scitex_browser.remote.CaptchaHandler._submit_captcha_async">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">_submit_captcha_async</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Submit captcha to 2Captcha and get task ID.&quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">async</span> <span class="k">with</span> <span class="n">aiohttp</span><span class="o">.</span><span class="n">ClientSession</span><span class="p">()</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+                <span class="k">async</span> <span class="k">with</span> <span class="n">session</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">base_url</span><span class="si">}</span><span class="s2">/in.php&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">params</span>
+                <span class="p">)</span> <span class="k">as</span> <span class="n">response</span><span class="p">:</span>
+                    <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+
+                    <span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;status&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                        <span class="n">task_id</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;request&quot;</span><span class="p">)</span>
+                        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Captcha submitted, task ID: </span><span class="si">{</span><span class="n">task_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                        <span class="k">return</span> <span class="n">task_id</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;2Captcha submission failed: </span><span class="si">{</span><span class="n">result</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                        <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to submit captcha: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="CaptchaHandler._get_captcha_result_async">
+<a class="viewcode-back" href="../../../api/remote.html#scitex_browser.remote.CaptchaHandler._get_captcha_result_async">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">_get_captcha_result_async</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">task_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Poll 2Captcha for result.&quot;&quot;&quot;</span>
+        <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+        <span class="k">while</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">timeout</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">async</span> <span class="k">with</span> <span class="n">aiohttp</span><span class="o">.</span><span class="n">ClientSession</span><span class="p">()</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+                    <span class="k">async</span> <span class="k">with</span> <span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">base_url</span><span class="si">}</span><span class="s2">/res.php&quot;</span><span class="p">,</span>
+                        <span class="n">params</span><span class="o">=</span><span class="p">{</span>
+                            <span class="s2">&quot;key&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">api_key</span><span class="p">,</span>
+                            <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;get&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="n">task_id</span><span class="p">,</span>
+                            <span class="s2">&quot;json&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+                        <span class="p">},</span>
+                    <span class="p">)</span> <span class="k">as</span> <span class="n">response</span><span class="p">:</span>
+                        <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+
+                        <span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;status&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                            <span class="n">solution</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;request&quot;</span><span class="p">)</span>
+                            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Captcha solved successfully&quot;</span><span class="p">)</span>
+                            <span class="k">return</span> <span class="n">solution</span>
+                        <span class="k">elif</span> <span class="n">result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;request&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;CAPCHA_NOT_READY&quot;</span><span class="p">:</span>
+                            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Captcha not ready yet, waiting...&quot;</span><span class="p">)</span>
+                            <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;2Captcha error: </span><span class="si">{</span><span class="n">result</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                            <span class="k">return</span> <span class="kc">None</span>
+
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to get captcha result: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+
+        <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Captcha solving timeout&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
 </div>
 
-
-
-<span class="c1"># EOF</span>
 </pre></div>
 
            </div>
