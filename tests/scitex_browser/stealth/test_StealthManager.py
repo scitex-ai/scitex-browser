@@ -1,3 +1,10 @@
+def test_module_importable():
+    """Smoke test: parent module imports without error."""
+    import importlib
+    mod = importlib.import_module("scitex_browser.stealth")
+    assert mod is not None
+
+
 # Add your tests here
 
 if __name__ == "__main__":
