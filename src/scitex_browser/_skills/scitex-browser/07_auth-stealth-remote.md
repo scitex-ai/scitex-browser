@@ -1,7 +1,8 @@
 ---
-name: auth-stealth-remote
-description: Auth, Stealth, Remote — see file body for details.
-tags: [scitex-browser, scitex-package]
+description: |
+  [TOPIC] Auth Stealth Remote
+  [DETAILS] Auth, Stealth, Remote — see file body for details.
+tags: [scitex-browser-auth-stealth-remote]
 ---
 
 # Auth, Stealth, Remote

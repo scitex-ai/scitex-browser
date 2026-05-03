@@ -1,7 +1,8 @@
 ---
-name: quick-start
-description: Quick Start — see file body for details.
-tags: [scitex-browser, scitex-package]
+description: |
+  [TOPIC] Quick Start
+  [DETAILS] Quick Start — see file body for details.
+tags: [scitex-browser-quick-start]
 ---
 
 # Quick Start

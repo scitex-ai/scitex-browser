@@ -1,7 +1,8 @@
 ---
-name: session-lifecycle
-description: Session Lifecycle — see file body for details.
-tags: [scitex-browser, scitex-package]
+description: |
+  [TOPIC] Session Lifecycle
+  [DETAILS] Session Lifecycle — see file body for details.
+tags: [scitex-browser-session-lifecycle]
 ---
 
 # Session Lifecycle

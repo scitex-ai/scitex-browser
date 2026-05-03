@@ -1,7 +1,8 @@
 ---
-name: pdf-capture
-description: PDF Capture — see file body for details.
-tags: [scitex-browser, scitex-package]
+description: |
+  [TOPIC] Pdf Capture
+  [DETAILS] PDF Capture — see file body for details.
+tags: [scitex-browser-pdf-capture]
 ---
 
 # PDF Capture

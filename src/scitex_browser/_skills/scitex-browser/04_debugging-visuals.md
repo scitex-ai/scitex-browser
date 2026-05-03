@@ -1,7 +1,8 @@
 ---
-name: debugging-visuals
-description: Debugging Visuals — see file body for details.
-tags: [scitex-browser, scitex-package]
+description: |
+  [TOPIC] Debugging Visuals
+  [DETAILS] Debugging Visuals — see file body for details.
+tags: [scitex-browser-debugging-visuals]
 ---
 
 # Debugging Visuals

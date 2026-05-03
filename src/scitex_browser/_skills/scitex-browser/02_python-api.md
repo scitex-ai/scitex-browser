@@ -1,7 +1,8 @@
 ---
-name: python-api
-description: Python API — see file body for details.
-tags: [scitex-browser, scitex-package]
+description: |
+  [TOPIC] Python Api
+  [DETAILS] Python API — see file body for details.
+tags: [scitex-browser-python-api]
 ---
 
 # Python API

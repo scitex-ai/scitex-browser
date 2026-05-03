@@ -1,7 +1,8 @@
 ---
-name: interaction
-description: Interaction Helpers — see file body for details.
-tags: [scitex-browser, scitex-package]
+description: |
+  [TOPIC] Interaction
+  [DETAILS] Interaction Helpers — see file body for details.
+tags: [scitex-browser-interaction]
 ---
 
 # Interaction Helpers
