@@ -48,18 +48,19 @@ rule and empirical verification table.
 
 ### Core
 
-* [01_quick-start](01_quick-start.md) — Minimal save-as-pdf / session / visuals
-* [02_python-api](02_python-api.md) — Public symbols grouped by sub-package
-* [03_session-lifecycle](03_session-lifecycle.md) — Sync/shared sessions, fixtures
+* [01_installation](01_installation.md) — pip install + `playwright install`
+* [02_quick-start](02_quick-start.md) — Minimal save-as-pdf / session / visuals
+* [03_python-api](03_python-api.md) — Public symbols grouped by sub-package
+* [10_session-lifecycle](10_session-lifecycle.md) — Sync/shared sessions, fixtures
 
 ### Sub-packages
 
-* [04_debugging-visuals](04_debugging-visuals.md) — Cursor/click/step overlays, console logs
-* [05_pdf-capture](05_pdf-capture.md) — `save_as_pdf`, Chrome PDF viewer
-* [06_interaction](06_interaction.md) — Resilient click/fill, popup handling
-* [07_auth-stealth-remote](07_auth-stealth-remote.md) — OAuth, stealth, ZenRows, CAPTCHA
+* [11_debugging-visuals](11_debugging-visuals.md) — Cursor/click/step overlays, console logs
+* [12_pdf-capture](12_pdf-capture.md) — `save_as_pdf`, Chrome PDF viewer
+* [13_interaction](13_interaction.md) — Resilient click/fill, popup handling
+* [14_auth-stealth-remote](14_auth-stealth-remote.md) — OAuth, stealth, ZenRows, CAPTCHA
 
 
 ## Environment
 
-- [08_env-vars.md](08_env-vars.md) — SCITEX_* env vars read by scitex-browser at runtime
+- [20_env-vars.md](20_env-vars.md) — SCITEX_* env vars read by scitex-browser at runtime
