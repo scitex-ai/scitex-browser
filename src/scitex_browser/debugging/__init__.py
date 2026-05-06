@@ -5,6 +5,7 @@
 
 # from ._log_page import log_page_async, BrowserLogger
 from ._browser_logger import browser_logger
+from ._capture_debug import capture_debug_artifacts_async
 from ._failure_capture import (
     collect_console_logs,
     collect_console_logs_detailed,
@@ -57,6 +58,7 @@ __all__ = [
     "format_logs_devtools_style",
     "save_failure_artifacts",
     "create_failure_capture_fixture",
+    "capture_debug_artifacts_async",
     # Test monitoring (periodic screenshots via scitex.capture)
     "TestMonitor",
     "create_test_monitor_fixture",
