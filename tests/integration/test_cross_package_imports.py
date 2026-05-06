@@ -16,9 +16,8 @@ import pytest
 # ===== AUTO-GENERATED: cross-package imports =====
 CROSS_PACKAGE_IMPORTS = [
     'scitex',
-    'scitex.capture',
-    'scitex.config',
-    'scitex.logging',
+    'scitex_capture',
+    'scitex_config',
     'scitex_config._ecosystem',
     'scitex_logging',
 ]
