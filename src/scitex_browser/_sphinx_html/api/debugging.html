@@ -145,6 +145,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#scitex_browser.debugging.format_logs_devtools_style"><code class="docutils literal notranslate"><span class="pre">format_logs_devtools_style()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#scitex_browser.debugging.save_failure_artifacts"><code class="docutils literal notranslate"><span class="pre">save_failure_artifacts()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#scitex_browser.debugging.create_failure_capture_fixture"><code class="docutils literal notranslate"><span class="pre">create_failure_capture_fixture()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#scitex_browser.debugging.capture_debug_artifacts_async"><code class="docutils literal notranslate"><span class="pre">capture_debug_artifacts_async()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="#scitex_browser.debugging.TestMonitor"><code class="docutils literal notranslate"><span class="pre">TestMonitor</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#scitex_browser.debugging.TestMonitor.__init__"><code class="docutils literal notranslate"><span class="pre">TestMonitor.__init__()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#scitex_browser.debugging.TestMonitor.start"><code class="docutils literal notranslate"><span class="pre">TestMonitor.start()</span></code></a></li>
@@ -623,6 +624,31 @@
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>A pytest fixture function</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="scitex_browser.debugging.capture_debug_artifacts_async">
+<span class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">scitex_browser.debugging.</span></span><span class="sig-name descname"><span class="pre">capture_debug_artifacts_async</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">page</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">base_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">full_page</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_html</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_browser/debugging/_capture_debug.html#capture_debug_artifacts_async"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_browser.debugging.capture_debug_artifacts_async" title="Link to this definition"></a></dt>
+<dd><p>Save a screenshot and (optionally) the page HTML.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>page</strong> (<em>playwright.async_api.Page</em>) – Live page object.</p></li>
+<li><p><strong>label</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Short tag used as the filename prefix (e.g. “mfa_picker_before”).
+Sanitized: non-alphanum chars become “_”.</p></li>
+<li><p><strong>base_dir</strong> (<em>path-like</em><em> or </em><em>None</em>) – Where to write. Defaults to <code class="docutils literal notranslate"><span class="pre">~/.scitex/browser/cache/debug/</span></code>.</p></li>
+<li><p><strong>full_page</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a>) – Capture the full scrollable page (default True). Pass False for
+viewport-only.</p></li>
+<li><p><strong>include_html</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a>) – Save <code class="docutils literal notranslate"><span class="pre">page.content()</span></code> alongside the screenshot (default True).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Paths actually written, or None on failure.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>(png_path, html_path)</p>
 </dd>
 </dl>
 </dd></dl>

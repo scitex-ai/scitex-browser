@@ -142,6 +142,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.format_logs_devtools_style"><code class="docutils literal notranslate"><span class="pre">format_logs_devtools_style()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.save_failure_artifacts"><code class="docutils literal notranslate"><span class="pre">save_failure_artifacts()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.create_failure_capture_fixture"><code class="docutils literal notranslate"><span class="pre">create_failure_capture_fixture()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.capture_debug_artifacts_async"><code class="docutils literal notranslate"><span class="pre">capture_debug_artifacts_async()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.TestMonitor"><code class="docutils literal notranslate"><span class="pre">TestMonitor</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.TestMonitor.__init__"><code class="docutils literal notranslate"><span class="pre">TestMonitor.__init__()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.TestMonitor.start"><code class="docutils literal notranslate"><span class="pre">TestMonitor.start()</span></code></a></li>
@@ -373,9 +374,8 @@
 <span class="n">__DIR__</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">__FILE__</span><span class="p">)</span>
 <span class="c1"># ----------------------------------------</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">playwright.async_api</span><span class="w"> </span><span class="kn">import</span> <span class="n">Page</span>
-
 <span class="kn">import</span><span class="w"> </span><span class="nn">scitex_logging</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">playwright.async_api</span><span class="w"> </span><span class="kn">import</span> <span class="n">Page</span>
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
@@ -385,7 +385,11 @@
 <div class="viewcode-block" id="click_with_fallbacks_async">
 <a class="viewcode-back" href="../../../api/interaction.html#scitex_browser.interaction.click_with_fallbacks_async">[docs]</a>
 <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">click_with_fallbacks_async</span><span class="p">(</span>
-    <span class="n">page</span><span class="p">:</span> <span class="n">Page</span><span class="p">,</span> <span class="n">selector</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;auto&quot;</span><span class="p">,</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">page</span><span class="p">:</span> <span class="n">Page</span><span class="p">,</span>
+    <span class="n">selector</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;auto&quot;</span><span class="p">,</span>
+    <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">capture_debug</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Click element using multiple fallback methods.</span>
 
@@ -394,11 +398,15 @@
 <span class="sd">        selector: CSS selector for the element</span>
 <span class="sd">        method: Click method (&quot;auto&quot;, &quot;playwright&quot;, &quot;force&quot;, &quot;js&quot;)</span>
 <span class="sd">        verbose: Enable visual feedback via popup system (default False)</span>
+<span class="sd">        capture_debug: Save screenshot+HTML before/after the click</span>
+<span class="sd">            (default True). Disabled in tight loops or hot paths</span>
+<span class="sd">            where artifact volume hurts.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        bool: True if click successful, False otherwise</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">..debugging</span><span class="w"> </span><span class="kn">import</span> <span class="n">browser_logger</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">..debugging._capture_debug</span><span class="w"> </span><span class="kn">import</span> <span class="n">capture_debug_artifacts_async</span>
 
     <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;auto&quot;</span><span class="p">:</span>
         <span class="n">methods_order</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;playwright&quot;</span><span class="p">,</span> <span class="s2">&quot;force&quot;</span><span class="p">,</span> <span class="s2">&quot;js&quot;</span><span class="p">]</span>
@@ -416,6 +424,10 @@
             <span class="n">page</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Attempting click: </span><span class="si">{</span><span class="n">selector</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span>
         <span class="p">)</span>
 
+    <span class="n">label_base</span> <span class="o">=</span> <span class="n">_safe_label_from_selector</span><span class="p">(</span><span class="n">selector</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">capture_debug</span><span class="p">:</span>
+        <span class="k">await</span> <span class="n">capture_debug_artifacts_async</span><span class="p">(</span><span class="n">page</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;click_before_</span><span class="si">{</span><span class="n">label_base</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
     <span class="k">for</span> <span class="n">method_name</span> <span class="ow">in</span> <span class="n">methods_order</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">method_name</span> <span class="ow">in</span> <span class="n">methods</span><span class="p">:</span>
             <span class="n">success</span> <span class="o">=</span> <span class="k">await</span> <span class="n">methods</span><span class="p">[</span><span class="n">method_name</span><span class="p">](</span><span class="n">page</span><span class="p">,</span> <span class="n">selector</span><span class="p">)</span>
@@ -427,6 +439,10 @@
                         <span class="sa">f</span><span class="s2">&quot;✓ Click successful (</span><span class="si">{</span><span class="n">method_name</span><span class="si">}</span><span class="s2">): </span><span class="si">{</span><span class="n">selector</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
                         <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span>
                     <span class="p">)</span>
+                <span class="k">if</span> <span class="n">capture_debug</span><span class="p">:</span>
+                    <span class="k">await</span> <span class="n">capture_debug_artifacts_async</span><span class="p">(</span>
+                        <span class="n">page</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;click_after_</span><span class="si">{</span><span class="n">label_base</span><span class="si">}</span><span class="s2">&quot;</span>
+                    <span class="p">)</span>
                 <span class="k">return</span> <span class="kc">True</span>
 
     <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;All click methods failed for </span><span class="si">{</span><span class="n">selector</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -434,8 +450,19 @@
         <span class="k">await</span> <span class="n">browser_logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
             <span class="n">page</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;✗ All click methods failed: </span><span class="si">{</span><span class="n">selector</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span>
         <span class="p">)</span>
+    <span class="k">if</span> <span class="n">capture_debug</span><span class="p">:</span>
+        <span class="k">await</span> <span class="n">capture_debug_artifacts_async</span><span class="p">(</span><span class="n">page</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;click_failed_</span><span class="si">{</span><span class="n">label_base</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="k">return</span> <span class="kc">False</span></div>
 
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_safe_label_from_selector</span><span class="p">(</span><span class="n">selector</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">max_len</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">40</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Selector → filename-safe short label.&quot;&quot;&quot;</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">c</span> <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">isalnum</span><span class="p">()</span> <span class="k">else</span> <span class="s2">&quot;_&quot;</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">selector</span><span class="p">)</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)</span>
+    <span class="k">while</span> <span class="s2">&quot;__&quot;</span> <span class="ow">in</span> <span class="n">out</span><span class="p">:</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;__&quot;</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">out</span><span class="p">[:</span><span class="n">max_len</span><span class="p">]</span> <span class="ow">or</span> <span class="s2">&quot;unnamed&quot;</span>
 
 
 <span class="c1"># 2. Helper functions</span>
@@ -535,7 +562,6 @@
     <span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
 
     <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
-
     <span class="kn">import</span><span class="w"> </span><span class="nn">scitex</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">stx</span>
 
     <span class="n">args</span> <span class="o">=</span> <span class="n">parse_args</span><span class="p">()</span>

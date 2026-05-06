@@ -142,6 +142,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.format_logs_devtools_style"><code class="docutils literal notranslate"><span class="pre">format_logs_devtools_style()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.save_failure_artifacts"><code class="docutils literal notranslate"><span class="pre">save_failure_artifacts()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.create_failure_capture_fixture"><code class="docutils literal notranslate"><span class="pre">create_failure_capture_fixture()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.capture_debug_artifacts_async"><code class="docutils literal notranslate"><span class="pre">capture_debug_artifacts_async()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.TestMonitor"><code class="docutils literal notranslate"><span class="pre">TestMonitor</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.TestMonitor.__init__"><code class="docutils literal notranslate"><span class="pre">TestMonitor.__init__()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../api/debugging.html#scitex_browser.debugging.TestMonitor.start"><code class="docutils literal notranslate"><span class="pre">TestMonitor.start()</span></code></a></li>
@@ -452,7 +453,7 @@
 <span class="sd">            Session ID for this capture session</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="kn">from</span><span class="w"> </span><span class="nn">scitex.capture</span><span class="w"> </span><span class="kn">import</span> <span class="n">CaptureManager</span>
+            <span class="kn">from</span><span class="w"> </span><span class="nn">scitex_capture</span><span class="w"> </span><span class="kn">import</span> <span class="n">CaptureManager</span>
         <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[TestMonitor] scitex.capture not available&quot;</span><span class="p">)</span>
@@ -532,7 +533,7 @@
 <span class="sd">            Path to saved screenshot</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="kn">from</span><span class="w"> </span><span class="nn">scitex.capture</span><span class="w"> </span><span class="kn">import</span> <span class="n">snap</span>
+            <span class="kn">from</span><span class="w"> </span><span class="nn">scitex_capture</span><span class="w"> </span><span class="kn">import</span> <span class="n">snap</span>
 
             <span class="k">return</span> <span class="n">snap</span><span class="p">(</span><span class="n">message</span><span class="o">=</span><span class="n">message</span><span class="p">,</span> <span class="n">output_dir</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">output_dir</span><span class="p">))</span>
         <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
@@ -558,7 +559,7 @@
             <span class="k">return</span> <span class="kc">None</span>
 
         <span class="k">try</span><span class="p">:</span>
-            <span class="kn">from</span><span class="w"> </span><span class="nn">scitex.capture</span><span class="w"> </span><span class="kn">import</span> <span class="n">create_gif_from_session</span>
+            <span class="kn">from</span><span class="w"> </span><span class="nn">scitex_capture</span><span class="w"> </span><span class="kn">import</span> <span class="n">create_gif_from_session</span>
 
             <span class="n">session_dir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_dir</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">session_id</span>
             <span class="k">if</span> <span class="n">output_path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>

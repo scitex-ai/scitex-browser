@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>scitex_browser.debugging._sync_session &mdash; SciTeX Browser v0.1.14</title>
+  <title>scitex_browser.debugging._capture_debug &mdash; SciTeX Browser v0.1.14</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
@@ -351,7 +351,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
-      <li class="breadcrumb-item active">scitex_browser.debugging._sync_session</li>
+      <li class="breadcrumb-item active">scitex_browser.debugging._capture_debug</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -360,294 +360,108 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <h1>Source code for scitex_browser.debugging._sync_session</h1><div class="highlight"><pre>
-<span></span><span class="ch">#!/usr/bin/env python3</span>
-<span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="c1"># Timestamp: 2025-12-08</span>
-<span class="c1"># File: /home/ywatanabe/proj/scitex-code/src/scitex/browser/debugging/_sync_session.py</span>
+  <h1>Source code for scitex_browser.debugging._capture_debug</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Async debug-artifact capture for live browser pages.</span>
 
-<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">Sync browser session context manager for pytest-playwright E2E tests.</span>
+<span class="sd">Browser automation is fundamentally unreliable: selectors drift,</span>
+<span class="sd">SSO flows change, MFA pages mutate. Always-on screenshot + HTML</span>
+<span class="sd">capture turns &quot;the script hung&quot; into a forensic trail.</span>
 
-<span class="sd">Ensures proper cleanup of browser processes to prevent zombies.</span>
+<span class="sd">This module exposes one async helper:</span>
 
-<span class="sd">Usage in conftest.py:</span>
-<span class="sd">    from scitex_browser import SyncBrowserSession</span>
+<span class="sd">    await capture_debug_artifacts_async(page, label, base_dir=None)</span>
 
-<span class="sd">    @pytest.fixture</span>
-<span class="sd">    def browser_session(page: Page):</span>
-<span class="sd">        with SyncBrowserSession(page) as session:</span>
-<span class="sd">            yield session</span>
-<span class="sd">        # Cleanup happens automatically even on exceptions</span>
+<span class="sd">It writes:</span>
+<span class="sd">    &lt;base_dir&gt;/&lt;label&gt;_&lt;ts&gt;.png    full-page screenshot</span>
+<span class="sd">    &lt;base_dir&gt;/&lt;label&gt;_&lt;ts&gt;.html   page.content() snapshot</span>
 
-<span class="sd">Or use the fixture factory:</span>
-<span class="sd">    from scitex_browser import create_browser_session_fixture</span>
-<span class="sd">    browser_session = create_browser_session_fixture()</span>
+<span class="sd">`base_dir` defaults to `~/.scitex/browser/cache/debug/`. Failures</span>
+<span class="sd">are swallowed and logged at debug level — a broken capture must</span>
+<span class="sd">never break the caller&#39;s flow. Returns the (png_path, html_path)</span>
+<span class="sd">tuple, or (None, None) on total failure.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span><span class="w"> </span><span class="nn">atexit</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">signal</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">subprocess</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">contextlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">contextmanager</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Optional</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
-<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
-    <span class="kn">from</span><span class="w"> </span><span class="nn">playwright.sync_api</span><span class="w"> </span><span class="kn">import</span> <span class="n">Page</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Tuple</span>
 
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">playwright.async_api</span><span class="w"> </span><span class="kn">import</span> <span class="n">Page</span>
 
-<div class="viewcode-block" id="SyncBrowserSession">
-<a class="viewcode-back" href="../../../api/debugging.html#scitex_browser.debugging.SyncBrowserSession">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">SyncBrowserSession</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Sync context manager for playwright browser sessions.</span>
-
-<span class="sd">    Ensures zombie process cleanup on test failures, timeouts, or crashes.</span>
-<span class="sd">    Tracks browser PIDs and kills orphaned processes on exit.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="c1"># Class-level tracking of active sessions for emergency cleanup</span>
-    <span class="n">_active_sessions</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="s2">&quot;SyncBrowserSession&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="n">_cleanup_registered</span> <span class="o">=</span> <span class="kc">False</span>
-
-<div class="viewcode-block" id="SyncBrowserSession.__init__">
-<a class="viewcode-back" href="../../../api/debugging.html#scitex_browser.debugging.SyncBrowserSession.__init__">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span>
-        <span class="n">page</span><span class="p">:</span> <span class="s2">&quot;Page&quot;</span><span class="p">,</span>
-        <span class="n">timeout</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">60</span><span class="p">,</span>
-        <span class="n">on_enter</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="s2">&quot;Page&quot;</span><span class="p">],</span> <span class="kc">None</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-        <span class="n">on_exit</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="s2">&quot;Page&quot;</span><span class="p">,</span> <span class="nb">bool</span><span class="p">],</span> <span class="kc">None</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Initialize sync browser session.</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            page: Playwright page instance from pytest-playwright</span>
-<span class="sd">            timeout: Default timeout for operations in seconds</span>
-<span class="sd">            on_enter: Callback when entering context</span>
-<span class="sd">            on_exit: Callback when exiting context (receives page and success flag)</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">page</span> <span class="o">=</span> <span class="n">page</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">timeout</span> <span class="o">=</span> <span class="n">timeout</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">on_enter</span> <span class="o">=</span> <span class="n">on_enter</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">on_exit</span> <span class="o">=</span> <span class="n">on_exit</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_browser_pid</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_context_pid</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_success</span> <span class="o">=</span> <span class="kc">True</span>
-
-        <span class="c1"># Register class-level emergency cleanup</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">SyncBrowserSession</span><span class="o">.</span><span class="n">_cleanup_registered</span><span class="p">:</span>
-            <span class="n">atexit</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">SyncBrowserSession</span><span class="o">.</span><span class="n">_emergency_cleanup</span><span class="p">)</span>
-            <span class="n">SyncBrowserSession</span><span class="o">.</span><span class="n">_cleanup_registered</span> <span class="o">=</span> <span class="kc">True</span></div>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="SyncBrowserSession.__enter__">
-<a class="viewcode-back" href="../../../api/debugging.html#scitex_browser.debugging.SyncBrowserSession.__enter__">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;SyncBrowserSession&quot;</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Enter context - track browser PIDs and run setup callback.&quot;&quot;&quot;</span>
-        <span class="c1"># Track this session</span>
-        <span class="n">SyncBrowserSession</span><span class="o">.</span><span class="n">_active_sessions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
-
-        <span class="c1"># Try to get browser PID for tracking</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">page</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">browser</span><span class="p">:</span>
-                <span class="c1"># Get the browser process</span>
-                <span class="n">browser</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">page</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">browser</span>
-                <span class="c1"># Browser PID is available via internal _impl</span>
-                <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">browser</span><span class="p">,</span> <span class="s2">&quot;_impl&quot;</span><span class="p">):</span>
-                    <span class="n">impl</span> <span class="o">=</span> <span class="n">browser</span><span class="o">.</span><span class="n">_impl</span>
-                    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">impl</span><span class="p">,</span> <span class="s2">&quot;_process&quot;</span><span class="p">):</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">_browser_pid</span> <span class="o">=</span> <span class="n">impl</span><span class="o">.</span><span class="n">_process</span><span class="o">.</span><span class="n">pid</span>
-        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
-            <span class="k">pass</span>  <span class="c1"># PID tracking is best-effort</span>
-
-        <span class="c1"># Run setup callback</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">on_enter</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">on_enter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">page</span><span class="p">)</span>
-
-        <span class="k">return</span> <span class="bp">self</span></div>
+<span class="k">def</span><span class="w"> </span><span class="nf">_default_base_dir</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">Path</span><span class="o">.</span><span class="n">home</span><span class="p">()</span> <span class="o">/</span> <span class="s2">&quot;.scitex&quot;</span> <span class="o">/</span> <span class="s2">&quot;browser&quot;</span> <span class="o">/</span> <span class="s2">&quot;cache&quot;</span> <span class="o">/</span> <span class="s2">&quot;debug&quot;</span>
 
 
-<div class="viewcode-block" id="SyncBrowserSession.__exit__">
-<a class="viewcode-back" href="../../../api/debugging.html#scitex_browser.debugging.SyncBrowserSession.__exit__">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_val</span><span class="p">,</span> <span class="n">exc_tb</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Exit context - ensure cleanup happens.&quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_success</span> <span class="o">=</span> <span class="n">exc_type</span> <span class="ow">is</span> <span class="kc">None</span>
-
-        <span class="c1"># Remove from active sessions</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">SyncBrowserSession</span><span class="o">.</span><span class="n">_active_sessions</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
-        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
-            <span class="k">pass</span>
-
-        <span class="c1"># Run exit callback</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">on_exit</span><span class="p">:</span>
-            <span class="k">try</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">on_exit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">page</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_success</span><span class="p">)</span>
-            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
-                <span class="k">pass</span>  <span class="c1"># Don&#39;t fail on callback errors</span>
-
-        <span class="c1"># If there was an exception, try to close gracefully</span>
-        <span class="k">if</span> <span class="n">exc_type</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">try</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">page</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
-                <span class="k">pass</span>
-
-            <span class="k">try</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">page</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
-                <span class="k">pass</span>
-
-        <span class="c1"># Kill orphaned browser process if we have the PID</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_browser_pid</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_success</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_kill_process_tree</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_browser_pid</span><span class="p">)</span>
-
-        <span class="c1"># Don&#39;t suppress the exception</span>
-        <span class="k">return</span> <span class="kc">False</span></div>
-
-
-<div class="viewcode-block" id="SyncBrowserSession._kill_process_tree">
-<a class="viewcode-back" href="../../../api/debugging.html#scitex_browser.debugging.SyncBrowserSession._kill_process_tree">[docs]</a>
-    <span class="nd">@staticmethod</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">_kill_process_tree</span><span class="p">(</span><span class="n">pid</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Kill a process and all its children (zombies).&quot;&quot;&quot;</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="c1"># Try SIGTERM first</span>
-            <span class="n">os</span><span class="o">.</span><span class="n">kill</span><span class="p">(</span><span class="n">pid</span><span class="p">,</span> <span class="n">signal</span><span class="o">.</span><span class="n">SIGTERM</span><span class="p">)</span>
-        <span class="k">except</span> <span class="ne">ProcessLookupError</span><span class="p">:</span>
-            <span class="k">return</span>  <span class="c1"># Already dead</span>
-        <span class="k">except</span> <span class="ne">PermissionError</span><span class="p">:</span>
-            <span class="k">return</span>  <span class="c1"># Can&#39;t kill</span>
-
-        <span class="c1"># Give it a moment</span>
-        <span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
-
-        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
-
-        <span class="c1"># Force kill if still running</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">os</span><span class="o">.</span><span class="n">kill</span><span class="p">(</span><span class="n">pid</span><span class="p">,</span> <span class="n">signal</span><span class="o">.</span><span class="n">SIGKILL</span><span class="p">)</span>
-        <span class="k">except</span> <span class="p">(</span><span class="ne">ProcessLookupError</span><span class="p">,</span> <span class="ne">PermissionError</span><span class="p">):</span>
-            <span class="k">pass</span></div>
-
-
-<div class="viewcode-block" id="SyncBrowserSession._emergency_cleanup">
-<a class="viewcode-back" href="../../../api/debugging.html#scitex_browser.debugging.SyncBrowserSession._emergency_cleanup">[docs]</a>
-    <span class="nd">@classmethod</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">_emergency_cleanup</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Emergency cleanup of all active sessions on process exit.&quot;&quot;&quot;</span>
-        <span class="k">for</span> <span class="n">session</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_active_sessions</span><span class="p">[:]:</span>  <span class="c1"># Copy list to avoid mutation</span>
-            <span class="k">if</span> <span class="n">session</span><span class="o">.</span><span class="n">_browser_pid</span><span class="p">:</span>
-                <span class="bp">cls</span><span class="o">.</span><span class="n">_kill_process_tree</span><span class="p">(</span><span class="n">session</span><span class="o">.</span><span class="n">_browser_pid</span><span class="p">)</span>
-        <span class="bp">cls</span><span class="o">.</span><span class="n">_active_sessions</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span></div>
-
-
-<div class="viewcode-block" id="SyncBrowserSession.kill_zombie_browsers">
-<a class="viewcode-back" href="../../../api/debugging.html#scitex_browser.debugging.SyncBrowserSession.kill_zombie_browsers">[docs]</a>
-    <span class="nd">@staticmethod</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">kill_zombie_browsers</span><span class="p">():</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Kill all zombie chromium/chrome processes from failed tests.</span>
-
-<span class="sd">        Call this at the start of test sessions to clean up from previous runs.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="c1"># Find orphaned chromium processes</span>
-            <span class="n">result</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
-                <span class="p">[</span><span class="s2">&quot;pgrep&quot;</span><span class="p">,</span> <span class="s2">&quot;-f&quot;</span><span class="p">,</span> <span class="s2">&quot;chromium|chrome&quot;</span><span class="p">],</span>
-                <span class="n">capture_output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                <span class="n">text</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-            <span class="p">)</span>
-            <span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">returncode</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="n">pids</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
-                <span class="k">for</span> <span class="n">pid</span> <span class="ow">in</span> <span class="n">pids</span><span class="p">:</span>
-                    <span class="k">if</span> <span class="n">pid</span><span class="p">:</span>
-                        <span class="k">try</span><span class="p">:</span>
-                            <span class="n">os</span><span class="o">.</span><span class="n">kill</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">pid</span><span class="p">),</span> <span class="n">signal</span><span class="o">.</span><span class="n">SIGKILL</span><span class="p">)</span>
-                        <span class="k">except</span> <span class="p">(</span><span class="ne">ProcessLookupError</span><span class="p">,</span> <span class="ne">PermissionError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">):</span>
-                            <span class="k">pass</span>
-        <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
-            <span class="k">pass</span>  <span class="c1"># pgrep not available</span></div>
-</div>
-
-
-
-<div class="viewcode-block" id="sync_browser_session">
-<a class="viewcode-back" href="../../../api/debugging.html#scitex_browser.debugging.sync_browser_session">[docs]</a>
-<span class="nd">@contextmanager</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">sync_browser_session</span><span class="p">(</span>
+<div class="viewcode-block" id="capture_debug_artifacts_async">
+<a class="viewcode-back" href="../../../api/debugging.html#scitex_browser.debugging.capture_debug_artifacts_async">[docs]</a>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">capture_debug_artifacts_async</span><span class="p">(</span>
     <span class="n">page</span><span class="p">:</span> <span class="s2">&quot;Page&quot;</span><span class="p">,</span>
-    <span class="n">timeout</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">60</span><span class="p">,</span>
-    <span class="n">on_enter</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="s2">&quot;Page&quot;</span><span class="p">],</span> <span class="kc">None</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">on_exit</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="s2">&quot;Page&quot;</span><span class="p">,</span> <span class="nb">bool</span><span class="p">],</span> <span class="kc">None</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-<span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Context manager for sync playwright sessions.</span>
+    <span class="n">label</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">base_dir</span><span class="p">:</span> <span class="n">Path</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">full_page</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">include_html</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Path</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span> <span class="n">Path</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Save a screenshot and (optionally) the page HTML.</span>
 
-<span class="sd">    Usage:</span>
-<span class="sd">        with sync_browser_session(page) as session:</span>
-<span class="sd">            session.page.goto(url)</span>
-<span class="sd">            # ... test code</span>
-<span class="sd">        # Cleanup happens automatically</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    page : playwright.async_api.Page</span>
+<span class="sd">        Live page object.</span>
+<span class="sd">    label : str</span>
+<span class="sd">        Short tag used as the filename prefix (e.g. &quot;mfa_picker_before&quot;).</span>
+<span class="sd">        Sanitized: non-alphanum chars become &quot;_&quot;.</span>
+<span class="sd">    base_dir : path-like or None</span>
+<span class="sd">        Where to write. Defaults to ``~/.scitex/browser/cache/debug/``.</span>
+<span class="sd">    full_page : bool</span>
+<span class="sd">        Capture the full scrollable page (default True). Pass False for</span>
+<span class="sd">        viewport-only.</span>
+<span class="sd">    include_html : bool</span>
+<span class="sd">        Save ``page.content()`` alongside the screenshot (default True).</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    (png_path, html_path)</span>
+<span class="sd">        Paths actually written, or None on failure.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">session</span> <span class="o">=</span> <span class="n">SyncBrowserSession</span><span class="p">(</span><span class="n">page</span><span class="p">,</span> <span class="n">timeout</span><span class="p">,</span> <span class="n">on_enter</span><span class="p">,</span> <span class="n">on_exit</span><span class="p">)</span>
-    <span class="k">with</span> <span class="n">session</span><span class="p">:</span>
-        <span class="k">yield</span> <span class="n">session</span></div>
+    <span class="n">safe_label</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">c</span> <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">isalnum</span><span class="p">()</span> <span class="ow">or</span> <span class="n">c</span> <span class="ow">in</span> <span class="s2">&quot;._-&quot;</span> <span class="k">else</span> <span class="s2">&quot;_&quot;</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">label</span><span class="p">)</span>
+    <span class="n">ts</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">_%H%M%S_</span><span class="si">%f</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">out_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">base_dir</span><span class="p">)</span> <span class="k">if</span> <span class="n">base_dir</span> <span class="k">else</span> <span class="n">_default_base_dir</span><span class="p">()</span>
 
+    <span class="n">png_path</span><span class="p">:</span> <span class="n">Path</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">html_path</span><span class="p">:</span> <span class="n">Path</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">out_dir</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;capture_debug_artifacts_async: mkdir failed: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
+    <span class="n">png_target</span> <span class="o">=</span> <span class="n">out_dir</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">safe_label</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">ts</span><span class="si">}</span><span class="s2">.png&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">await</span> <span class="n">page</span><span class="o">.</span><span class="n">screenshot</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">png_target</span><span class="p">),</span> <span class="n">full_page</span><span class="o">=</span><span class="n">full_page</span><span class="p">)</span>
+        <span class="n">png_path</span> <span class="o">=</span> <span class="n">png_target</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Debug screenshot: </span><span class="si">{</span><span class="n">png_target</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;capture_debug_artifacts_async: screenshot failed: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
-<div class="viewcode-block" id="create_browser_session_fixture">
-<a class="viewcode-back" href="../../../api/debugging.html#scitex_browser.debugging.create_browser_session_fixture">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">create_browser_session_fixture</span><span class="p">(</span>
-    <span class="n">timeout</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">60</span><span class="p">,</span>
-    <span class="n">setup</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="s2">&quot;Page&quot;</span><span class="p">],</span> <span class="kc">None</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">teardown</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="s2">&quot;Page&quot;</span><span class="p">,</span> <span class="nb">bool</span><span class="p">],</span> <span class="kc">None</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">kill_zombies_on_start</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
-<span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Create a pytest fixture for browser session with cleanup.</span>
+    <span class="k">if</span> <span class="n">include_html</span><span class="p">:</span>
+        <span class="n">html_target</span> <span class="o">=</span> <span class="n">out_dir</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">safe_label</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">ts</span><span class="si">}</span><span class="s2">.html&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">content</span> <span class="o">=</span> <span class="k">await</span> <span class="n">page</span><span class="o">.</span><span class="n">content</span><span class="p">()</span>
+            <span class="n">html_target</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">content</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
+            <span class="n">html_path</span> <span class="o">=</span> <span class="n">html_target</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Debug HTML: </span><span class="si">{</span><span class="n">html_target</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;capture_debug_artifacts_async: html save failed: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
-<span class="sd">    Usage in conftest.py:</span>
-<span class="sd">        from scitex_browser import create_browser_session_fixture</span>
+    <span class="k">return</span> <span class="n">png_path</span><span class="p">,</span> <span class="n">html_path</span></div>
 
-<span class="sd">        browser_session = create_browser_session_fixture(</span>
-<span class="sd">            timeout=60,</span>
-<span class="sd">            setup=lambda page: print(f&quot;Starting test&quot;),</span>
-<span class="sd">            teardown=lambda page, success: print(f&quot;Test {&#39;passed&#39; if success else &#39;failed&#39;}&quot;),</span>
-<span class="sd">            kill_zombies_on_start=True,</span>
-<span class="sd">        )</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        timeout: Default timeout for operations</span>
-<span class="sd">        setup: Callback when entering session</span>
-<span class="sd">        teardown: Callback when exiting (receives page and success flag)</span>
-<span class="sd">        kill_zombies_on_start: Kill orphaned browsers before first test</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        A pytest fixture function</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="kn">import</span><span class="w"> </span><span class="nn">pytest</span>
-
-    <span class="n">_zombies_cleaned</span> <span class="o">=</span> <span class="kc">False</span>
-
-    <span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">browser_session</span><span class="p">(</span><span class="n">page</span><span class="p">:</span> <span class="s2">&quot;Page&quot;</span><span class="p">):</span>
-        <span class="k">nonlocal</span> <span class="n">_zombies_cleaned</span>
-
-        <span class="c1"># Clean up zombies from previous runs (once per session)</span>
-        <span class="k">if</span> <span class="n">kill_zombies_on_start</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">_zombies_cleaned</span><span class="p">:</span>
-            <span class="n">SyncBrowserSession</span><span class="o">.</span><span class="n">kill_zombie_browsers</span><span class="p">()</span>
-            <span class="n">_zombies_cleaned</span> <span class="o">=</span> <span class="kc">True</span>
-
-        <span class="k">with</span> <span class="n">SyncBrowserSession</span><span class="p">(</span><span class="n">page</span><span class="p">,</span> <span class="n">timeout</span><span class="p">,</span> <span class="n">setup</span><span class="p">,</span> <span class="n">teardown</span><span class="p">)</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
-            <span class="k">yield</span> <span class="n">session</span>
-
-    <span class="k">return</span> <span class="n">browser_session</span></div>
-
-
-
-<span class="c1"># EOF</span>
 </pre></div>
 
            </div>
