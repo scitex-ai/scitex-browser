@@ -11,9 +11,8 @@ __FILE__ = "./src/scitex/browser/interaction/click_with_fallbacks.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
 
-from playwright.async_api import Page
-
 import scitex_logging as logging
+from playwright.async_api import Page
 
 logger = logging.getLogger(__name__)
 
@@ -21,7 +20,11 @@ logger = logging.getLogger(__name__)
 # 1. Main entry point
 # ---------------------------------------
 async def click_with_fallbacks_async(
-    page: Page, selector: str, method: str = "auto", verbose: bool = False
+    page: Page,
+    selector: str,
+    method: str = "auto",
+    verbose: bool = False,
+    capture_debug: bool = True,
 ) -> bool:
     """Click element using multiple fallback methods.
 
@@ -30,11 +33,15 @@ async def click_with_fallbacks_async(
         selector: CSS selector for the element
         method: Click method ("auto", "playwright", "force", "js")
         verbose: Enable visual feedback via popup system (default False)
+        capture_debug: Save screenshot+HTML before/after the click
+            (default True). Disabled in tight loops or hot paths
+            where artifact volume hurts.
 
     Returns:
         bool: True if click successful, False otherwise
     """
     from ..debugging import browser_logger
+    from ..debugging._capture_debug import capture_debug_artifacts_async
 
     if method == "auto":
         methods_order = ["playwright", "force", "js"]
@@ -52,6 +59,10 @@ async def click_with_fallbacks_async(
             page, f"Attempting click: {selector}", verbose=verbose
         )
 
+    label_base = _safe_label_from_selector(selector)
+    if capture_debug:
+        await capture_debug_artifacts_async(page, label=f"click_before_{label_base}")
+
     for method_name in methods_order:
         if method_name in methods:
             success = await methods[method_name](page, selector)
@@ -63,6 +74,10 @@ async def click_with_fallbacks_async(
                         f"✓ Click successful ({method_name}): {selector}",
                         verbose=verbose,
                     )
+                if capture_debug:
+                    await capture_debug_artifacts_async(
+                        page, label=f"click_after_{label_base}"
+                    )
                 return True
 
     logger.error(f"All click methods failed for {selector}")
@@ -70,7 +85,18 @@ async def click_with_fallbacks_async(
         await browser_logger.debug(
             page, f"✗ All click methods failed: {selector}", verbose=verbose
         )
+    if capture_debug:
+        await capture_debug_artifacts_async(page, label=f"click_failed_{label_base}")
     return False
+
+
+def _safe_label_from_selector(selector: str, max_len: int = 40) -> str:
+    """Selector → filename-safe short label."""
+    out = "".join(c if c.isalnum() else "_" for c in selector)
+    out = out.strip("_")
+    while "__" in out:
+        out = out.replace("__", "_")
+    return out[:max_len] or "unnamed"
 
 
 # 2. Helper functions
@@ -170,7 +196,6 @@ def run_main() -> None:
     import sys
 
     import matplotlib.pyplot as plt
-
     import scitex as stx
 
     args = parse_args()

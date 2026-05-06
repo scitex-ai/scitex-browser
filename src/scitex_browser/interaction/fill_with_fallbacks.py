@@ -13,9 +13,8 @@ __DIR__ = os.path.dirname(__FILE__)
 
 __FILE__ = __file__
 
-from playwright.async_api import Page
-
 import scitex_logging as logging
+from playwright.async_api import Page
 
 logger = logging.getLogger(__name__)
 
@@ -23,7 +22,12 @@ logger = logging.getLogger(__name__)
 # 1. Main entry point
 # ---------------------------------------
 async def fill_with_fallbacks_async(
-    page: Page, selector: str, value: str, method: str = "auto", verbose: bool = False
+    page: Page,
+    selector: str,
+    value: str,
+    method: str = "auto",
+    verbose: bool = False,
+    capture_debug: bool = True,
 ) -> bool:
     """Fill element using multiple fallback methods.
 
@@ -33,11 +37,15 @@ async def fill_with_fallbacks_async(
         value: Value to fill
         method: Fill method ("auto", "playwright", "type", "js")
         verbose: Enable visual feedback via popup system (default False)
+        capture_debug: Save screenshot+HTML before/after the fill
+            (default True). Disabled in tight loops or hot paths.
 
     Returns:
         bool: True if fill successful, False otherwise
     """
     from ..debugging import browser_logger
+    from ..debugging._capture_debug import capture_debug_artifacts_async
+    from .click_with_fallbacks import _safe_label_from_selector
 
     if method == "auto":
         methods_order = ["playwright", "type", "js"]
@@ -55,6 +63,10 @@ async def fill_with_fallbacks_async(
             page, f"Attempting fill: {selector}", verbose=verbose
         )
 
+    label_base = _safe_label_from_selector(selector)
+    if capture_debug:
+        await capture_debug_artifacts_async(page, label=f"fill_before_{label_base}")
+
     for method_name in methods_order:
         if method_name in methods:
             success = await methods[method_name](page, selector, value)
@@ -66,6 +78,10 @@ async def fill_with_fallbacks_async(
                         f"✓ Fill successful ({method_name}): {selector}",
                         verbose=verbose,
                     )
+                if capture_debug:
+                    await capture_debug_artifacts_async(
+                        page, label=f"fill_after_{label_base}"
+                    )
                 return True
 
     logger.error(f"All fill methods failed for {selector}")
@@ -73,6 +89,8 @@ async def fill_with_fallbacks_async(
         await browser_logger.debug(
             page, f"✗ All fill methods failed: {selector}", verbose=verbose
         )
+    if capture_debug:
+        await capture_debug_artifacts_async(page, label=f"fill_failed_{label_base}")
     return False
 
 
@@ -178,7 +196,6 @@ def run_main() -> None:
     import sys
 
     import matplotlib.pyplot as plt
-
     import scitex as stx
 
     args = parse_args()
