@@ -23,7 +23,6 @@ dependencies = [
     # ChromeProfileManager, interaction/, pdf/, remote/, stealth/, etc.
     "scitex-logging>=0.1.0",
     "scitex-config>=0.3.0",
-    "scitex",
 ]
 
 [project.optional-dependencies]
