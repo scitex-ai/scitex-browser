@@ -24,7 +24,7 @@ class _PathResolver:
 def get_paths() -> _PathResolver:
     """Return scitex path resolver, falling back to local impl."""
     try:
-        from scitex.config import get_paths as _get_paths
+        from scitex_config import get_paths as _get_paths
 
         return _get_paths()
     except ImportError:

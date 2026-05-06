@@ -83,7 +83,7 @@ class TestMonitor:
             Session ID for this capture session
         """
         try:
-            from scitex.capture import CaptureManager
+            from scitex_capture import CaptureManager
         except ImportError:
             if self.verbose:
                 print("[TestMonitor] scitex.capture not available")
@@ -154,7 +154,7 @@ class TestMonitor:
             Path to saved screenshot
         """
         try:
-            from scitex.capture import snap
+            from scitex_capture import snap
 
             return snap(message=message, output_dir=str(self.output_dir))
         except ImportError:
@@ -177,7 +177,7 @@ class TestMonitor:
             return None
 
         try:
-            from scitex.capture import create_gif_from_session
+            from scitex_capture import create_gif_from_session
 
             session_dir = self.output_dir / self.session_id
             if output_path is None:
