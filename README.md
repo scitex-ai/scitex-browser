@@ -78,8 +78,17 @@ from scitex_browser import (
     inject_visual_effects, browser_logger,
 )
 from scitex_browser.stealth import StealthManager
-from scitex_browser.debugging import TestMonitor, create_failure_capture_fixture
+from scitex_browser.debugging import (
+    TestMonitor, create_failure_capture_fixture,
+    capture_debug_artifacts_async,        # screenshot + HTML in one call
+)
 ```
+
+`click_with_fallbacks_async` and `fill_with_fallbacks_async` capture
+screenshot + HTML before/after every call by default
+(`capture_debug=True`). Drop `capture_debug=False` only in tight
+loops. See `_skills/scitex-browser/11_debugging-visuals.md` for the
+full pattern.
 
 </details>
 
