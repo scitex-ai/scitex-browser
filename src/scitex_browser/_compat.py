@@ -38,7 +38,7 @@ class ScholarError(Exception):
 
 
 try:
-    from scitex.logging import ScholarError as _SE
+    from scitex_logging import ScholarError as _SE
 
     ScholarError = _SE  # type: ignore[misc]
 except ImportError:
