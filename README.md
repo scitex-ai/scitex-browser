@@ -49,6 +49,22 @@
 pip install scitex-browser
 ```
 
+## Architecture
+
+```
+scitex-browser/
+├── src/scitex_browser/
+│   ├── __init__.py              # save_as_pdf, click_with_fallbacks_async, ...
+│   ├── debugging/               # TestMonitor, capture_debug_artifacts_async
+│   │   ├── _capture.py          # screenshot + HTML + console artifacts
+│   │   └── _monitor.py          # pytest-playwright failure hook
+│   ├── stealth/                 # StealthManager + playwright-stealth glue
+│   ├── remote/                  # ZenRows API + CAPTCHA handling
+│   ├── auth/                    # Google + shared-session helpers
+│   └── pdf/                     # Chrome-PDF-viewer detection, save_as_pdf
+└── tests/                       # pytest-playwright suite
+```
+
 ### Optional extras
 
 ```bash
@@ -91,6 +107,22 @@ loops. See `_skills/scitex-browser/11_debugging-visuals.md` for the
 full pattern.
 
 </details>
+
+## Demo
+
+```mermaid
+sequenceDiagram
+    participant T as pytest test
+    participant H as click_with_fallbacks_async
+    participant P as Playwright Page
+    participant C as capture_debug_artifacts_async
+    T->>H: click(["#accept", ".cookie-ok"])
+    H->>P: try selector 1
+    P-->>H: not found
+    H->>P: try selector 2 -> click
+    H->>C: snapshot before/after
+    C-->>T: screenshot.png + page.html + console.log
+```
 
 ## Part of SciTeX
 
