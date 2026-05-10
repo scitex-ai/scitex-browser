@@ -9,7 +9,7 @@
 <p align="center"><b>Playwright wrappers for scholarly paper access — popup handling, PDF capture, failure-replay screenshots, stealth browsing.</b></p>
 
 <p align="center">
-  <a href="https://scitex-browser.readthedocs.io/">Full Documentation</a> · <code>pip install scitex-browser</code>
+  <a href="https://scitex-browser.readthedocs.io/">Full Documentation</a> · <code>uv pip install scitex-browser[all]</code>
 </p>
 
 <!-- scitex-badges:start -->
