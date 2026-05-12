@@ -17,4 +17,11 @@ venv/
 *_out/
 GITIGNORED/
 
+# Local state directory: gitignored except for tracked config files.
+# See 01_ecosystem_06_local-state-directories.md §4a / "tracked, not gitignored".
+.scitex/*
+!.scitex/dev/
+.scitex/dev/*
+!.scitex/dev/config.yaml
+
 docs/sphinx/_build/

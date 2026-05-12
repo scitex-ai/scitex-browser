@@ -1,0 +1,11 @@
+# scitex-dev audit configuration for scitex-browser.
+#
+# Tracked in git so CI applies the same whitelist as local runs.
+# See 01_ecosystem_06_local-state-directories.md §4a, §1 (PS-103).
+
+audit:
+  root-whitelist:
+    files:
+      # Codecov config is consumed by Codecov GitHub Action; canonical
+      # location is the repo root.
+      - codecov.yml
