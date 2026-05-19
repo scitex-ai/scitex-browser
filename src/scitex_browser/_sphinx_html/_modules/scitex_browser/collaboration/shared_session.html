@@ -379,7 +379,6 @@
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">asyncio</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
@@ -387,6 +386,8 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">playwright.async_api</span><span class="w"> </span><span class="kn">import</span> <span class="n">Browser</span><span class="p">,</span> <span class="n">BrowserContext</span><span class="p">,</span> <span class="n">Page</span><span class="p">,</span> <span class="n">async_playwright</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">scitex_browser._state</span><span class="w"> </span><span class="kn">import</span> <span class="n">capture_dir</span><span class="p">,</span> <span class="n">sessions_dir</span>
 
 
 <div class="viewcode-block" id="SessionConfig">
@@ -451,9 +452,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">screenshots</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
 
-        <span class="c1"># Get screenshot directory from SCITEX_DIR</span>
-        <span class="n">scitex_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;SCITEX_DIR&quot;</span><span class="p">,</span> <span class="n">Path</span><span class="o">.</span><span class="n">home</span><span class="p">()</span> <span class="o">/</span> <span class="s2">&quot;.scitex&quot;</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">screenshot_dir</span> <span class="o">=</span> <span class="n">scitex_dir</span> <span class="o">/</span> <span class="s2">&quot;capture&quot;</span>
+        <span class="c1"># Screenshot directory under the package&#39;s own runtime tree.</span>
+        <span class="c1"># Resolves to $SCITEX_DIR/browser/runtime/capture/ by default.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">screenshot_dir</span> <span class="o">=</span> <span class="n">capture_dir</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">screenshot_dir</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
 
 
@@ -468,14 +469,12 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">running</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Session already running&quot;</span><span class="p">)</span>
 
-        <span class="c1"># Get user data directory</span>
+        <span class="c1"># Get user data directory.</span>
+        <span class="c1"># Defaults to $SCITEX_DIR/browser/runtime/sessions/&lt;session_id&gt;/.</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">user_data_dir</span><span class="p">:</span>
             <span class="n">user_data_dir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">user_data_dir</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">scitex_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;SCITEX_DIR&quot;</span><span class="p">,</span> <span class="n">Path</span><span class="o">.</span><span class="n">home</span><span class="p">()</span> <span class="o">/</span> <span class="s2">&quot;.scitex&quot;</span><span class="p">))</span>
-            <span class="n">user_data_dir</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
-                <span class="n">scitex_dir</span> <span class="o">/</span> <span class="s2">&quot;browser&quot;</span> <span class="o">/</span> <span class="s2">&quot;sessions&quot;</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">session_id</span>
-            <span class="p">)</span>
+            <span class="n">user_data_dir</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">sessions_dir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">session_id</span><span class="p">))</span>
 
         <span class="c1"># Start playwright</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">playwright</span> <span class="o">=</span> <span class="k">await</span> <span class="n">async_playwright</span><span class="p">()</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>

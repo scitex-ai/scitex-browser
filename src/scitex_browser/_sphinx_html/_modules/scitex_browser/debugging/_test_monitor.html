@@ -394,7 +394,7 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Optional</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">scitex_browser._compat</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_paths</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scitex_browser._state</span><span class="w"> </span><span class="kn">import</span> <span class="n">test_monitor_dir</span>
 
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">playwright.sync_api</span><span class="w"> </span><span class="kn">import</span> <span class="n">Page</span>
@@ -424,13 +424,13 @@
 <span class="sd">        Initialize test monitor.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            output_dir: Directory for screenshots (default: $SCITEX_DIR/test_monitor)</span>
+<span class="sd">            output_dir: Directory for screenshots (default: $SCITEX_DIR/browser/runtime/test_monitor)</span>
 <span class="sd">            interval: Seconds between screenshots (default: 2.0)</span>
 <span class="sd">            quality: JPEG quality 1-100 (default: 70)</span>
 <span class="sd">            verbose: Print capture messages</span>
 <span class="sd">            test_name: Optional test name for session identification</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">output_dir</span> <span class="o">=</span> <span class="n">get_paths</span><span class="p">()</span><span class="o">.</span><span class="n">resolve</span><span class="p">(</span><span class="s2">&quot;test_monitor&quot;</span><span class="p">,</span> <span class="n">output_dir</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">output_dir</span> <span class="o">=</span> <span class="n">test_monitor_dir</span><span class="p">(</span><span class="n">output_dir</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">interval</span> <span class="o">=</span> <span class="n">interval</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">quality</span> <span class="o">=</span> <span class="n">quality</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">verbose</span> <span class="o">=</span> <span class="n">verbose</span>
