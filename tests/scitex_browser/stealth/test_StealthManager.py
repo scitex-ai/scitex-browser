@@ -1,7 +1,11 @@
-def test_module_importable():
-    """Smoke test: parent module imports without error."""
+def test_stealth_module_imports_without_error():
+    # Arrange
     import importlib
+
+    # Act
     mod = importlib.import_module("scitex_browser.stealth")
+
+    # Assert
     assert mod is not None
 
 
