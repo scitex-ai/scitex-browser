@@ -1,10 +1,13 @@
 def test_stealth_module_imports_without_error():
     # Arrange
+    # Arrange
     import importlib
 
     # Act
+    # Act
     mod = importlib.import_module("scitex_browser.stealth")
 
+    # Assert
     # Assert
     assert mod is not None
 

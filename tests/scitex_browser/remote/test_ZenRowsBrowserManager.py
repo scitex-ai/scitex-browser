@@ -1,7 +1,10 @@
-def test_module_importable():
+def test_module_importable_mod_is_not_none():
     """Smoke test: parent module imports without error."""
+    # Arrange
     import importlib
+    # Act
     mod = importlib.import_module("scitex_browser.remote")
+    # Assert
     assert mod is not None
 
 

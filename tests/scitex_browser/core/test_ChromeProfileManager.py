@@ -14,42 +14,175 @@ from scitex_browser.core.ChromeProfileManager import ChromeProfileManager
 class TestChromeProfileManagerConstants:
     """Tests for class constants."""
 
-    def test_extensions_dict_exists(self):
-        """Should have EXTENSIONS dictionary."""
+    def test_extensions_dict_exists_hasattr_chromeprofilemanager_extensions(self):
+        # Arrange
+        # Act
+        # Assert
+        # Arrange
+        # Act
+        # Assert
+        # Arrange
+        # Act
+        # Assert
+        # Arrange
+        # Act
+        # Assert
         assert hasattr(ChromeProfileManager, "EXTENSIONS")
+
+    def test_extensions_dict_exists_chromeprofilemanager_extensions_is_dict(self):
+        # Arrange
+        # Act
+        # Assert
+        # Arrange
+        # Act
+        # Assert
+        # Arrange
+        # Act
+        # Assert
+        # Arrange
+        # Act
+        # Assert
         assert isinstance(ChromeProfileManager.EXTENSIONS, dict)
 
-    def test_extensions_contains_zotero(self):
-        """EXTENSIONS should contain Zotero Connector."""
+
+    def test_extensions_contains_zotero_zotero_connector_in_chromeprofilemanager_extensions(self):
+        # Arrange
+        # Act
+        # Assert
+        # Arrange
+        # Act
+        # Assert
+        # Arrange
+        # Act
+        # Assert
+        # Arrange
+        # Act
+        # Assert
         assert "zotero_connector" in ChromeProfileManager.EXTENSIONS
+
+    def test_extensions_contains_zotero_chromeprofilemanager_extensions_zotero_connector_id_ekhagklc(self):
+        # Arrange
+        # Act
+        # Assert
+        # Arrange
+        # Act
+        # Assert
+        # Arrange
+        # Act
+        # Assert
+        # Arrange
+        # Act
+        # Assert
         assert (
             ChromeProfileManager.EXTENSIONS["zotero_connector"]["id"]
             == "ekhagklcjbdpajgpjgmbionohlpdbjgc"
         )
 
-    def test_extensions_contains_lean_library(self):
-        """EXTENSIONS should contain Lean Library."""
+
+    def test_extensions_contains_lean_library_lean_library_in_chromeprofilemanager_extensions(self):
+        # Arrange
+        # Act
+        # Assert
+        # Arrange
+        # Act
+        # Assert
+        # Arrange
+        # Act
+        # Assert
+        # Arrange
+        # Act
+        # Assert
         assert "lean_library" in ChromeProfileManager.EXTENSIONS
+
+    def test_extensions_contains_lean_library_chromeprofilemanager_extensions_lean_library_name_lean_libra(self):
+        # Arrange
+        # Act
+        # Assert
+        # Arrange
+        # Act
+        # Assert
+        # Arrange
+        # Act
+        # Assert
+        # Arrange
+        # Act
+        # Assert
         assert ChromeProfileManager.EXTENSIONS["lean_library"]["name"] == "Lean Library"
+
 
     def test_extensions_contains_popup_blocker(self):
         """EXTENSIONS should contain Pop-up Blocker."""
+        # Arrange
+        # Act
+        # Assert
         assert "popup_blocker" in ChromeProfileManager.EXTENSIONS
 
     def test_extensions_contains_accept_cookies(self):
         """EXTENSIONS should contain Accept all cookies."""
+        # Arrange
+        # Act
+        # Assert
         assert "accept_cookies" in ChromeProfileManager.EXTENSIONS
 
-    def test_extensions_contains_captcha_solvers(self):
-        """EXTENSIONS should contain captcha solvers."""
+    def test_extensions_contains_captcha_solvers_n_2captcha_solver_in_chromeprofilemanager_extensions(self):
+        # Arrange
+        # Act
+        # Assert
+        # Arrange
+        # Act
+        # Assert
+        # Arrange
+        # Act
+        # Assert
+        # Arrange
+        # Act
+        # Assert
         assert "2captcha_solver" in ChromeProfileManager.EXTENSIONS
+
+    def test_extensions_contains_captcha_solvers_captcha_solver_in_chromeprofilemanager_extensions(self):
+        # Arrange
+        # Act
+        # Assert
+        # Arrange
+        # Act
+        # Assert
+        # Arrange
+        # Act
+        # Assert
+        # Arrange
+        # Act
+        # Assert
         assert "captcha_solver" in ChromeProfileManager.EXTENSIONS
 
-    def test_available_profile_names(self):
-        """Should have AVAILABLE_PROFILE_NAMES list."""
+
+    def test_available_profile_names_hasattr_chromeprofilemanager_available_profile_names(self):
+        # Arrange
+        # Act
+        # Assert
+        # Arrange
+        # Act
+        # Assert
+        # Arrange
+        # Act
+        # Assert
+        # Arrange
+        # Act
+        # Assert
         assert hasattr(ChromeProfileManager, "AVAILABLE_PROFILE_NAMES")
+
+    def test_available_profile_names_chromeprofilemanager_available_profile_names_equals_expected(self):
+        # Arrange
+        # Act
+        # Arrange
+        # Act
+        # Arrange
+        # Act
         expected = ["system", "extension", "auth", "stealth"]
+        # Act
+        # Assert
+        # Assert
         assert ChromeProfileManager.AVAILABLE_PROFILE_NAMES == expected
+
 
 
 class TestChromeProfileManagerInit:
@@ -57,14 +190,19 @@ class TestChromeProfileManagerInit:
 
     def test_init_creates_instance(self):
         """Should create instance with profile name."""
+        # Arrange
+        # Act
+        # Assert
         with tempfile.TemporaryDirectory() as tmpdir:
             with patch.dict(os.environ, {"SCITEX_DIR": tmpdir}):
                 manager = ChromeProfileManager("system")
-                assert manager is not None
-                assert manager.name == "ChromeProfileManager"
+                assert (manager is not None) and (manager.name == 'ChromeProfileManager')
 
     def test_init_stores_profile_name(self):
         """Should store profile name."""
+        # Arrange
+        # Act
+        # Assert
         with tempfile.TemporaryDirectory() as tmpdir:
             with patch.dict(os.environ, {"SCITEX_DIR": tmpdir}):
                 manager = ChromeProfileManager("extension")
@@ -72,6 +210,9 @@ class TestChromeProfileManagerInit:
 
     def test_init_accepts_custom_profile_names(self):
         """Should accept custom profile names (for parallel workers)."""
+        # Arrange
+        # Act
+        # Assert
         with tempfile.TemporaryDirectory() as tmpdir:
             with patch.dict(os.environ, {"SCITEX_DIR": tmpdir}):
                 # Worker profiles for parallel downloads
@@ -80,34 +221,59 @@ class TestChromeProfileManagerInit:
 
     def test_init_sets_profile_dir(self):
         """Should set profile directory from config."""
+        # Arrange
+        # Act
+        # Assert
         with tempfile.TemporaryDirectory() as tmpdir:
             with patch.dict(os.environ, {"SCITEX_DIR": tmpdir}):
                 manager = ChromeProfileManager("system")
-                assert manager.profile_dir is not None
-                assert isinstance(manager.profile_dir, Path)
+                assert (manager.profile_dir is not None) and (isinstance(manager.profile_dir, Path))
 
     def test_init_with_chrome_cache_dir(self):
         """Should accept explicit chrome_cache_dir without depending on scholar."""
+        # Arrange
+        # Act
+        # Assert
         with tempfile.TemporaryDirectory() as tmpdir:
             manager = ChromeProfileManager("system", chrome_cache_dir=tmpdir)
-            assert manager.profile_dir == Path(tmpdir) / "system"
-            assert manager.profile_dir.exists()
+            assert (manager.profile_dir == Path(tmpdir) / 'system') and (manager.profile_dir.exists())
 
-    def test_no_scholar_dependency(self):
-        """ChromeProfileManager source must not import scitex_scholar."""
+    def test_no_scholar_dependency_scitex_scholar_not_in_src(self):
+        # Arrange
+        # Arrange
         import importlib
-
         mod = importlib.import_module("scitex_browser.core.ChromeProfileManager")
+        # Act
+        # Act
         src = Path(mod.__file__).read_text()
+        # Act
+        # Assert
+        # Assert
         assert "scitex_scholar" not in src
+
+    def test_no_scholar_dependency_scitex_scholar_not_in_src(self):
+        # Arrange
+        # Arrange
+        import importlib
+        mod = importlib.import_module("scitex_browser.core.ChromeProfileManager")
+        # Act
+        # Act
+        src = Path(mod.__file__).read_text()
+        # Act
+        # Assert
+        # Assert
         assert "scitex.scholar" not in src
+
 
 
 class TestChromeProfileManagerExtensionStatuses:
     """Tests for _get_extension_statuses method."""
 
-    def test_returns_dict(self):
+    def test_returns_dict_smoke_case(self):
         """Should return a dictionary."""
+        # Arrange
+        # Act
+        # Assert
         with tempfile.TemporaryDirectory() as tmpdir:
             with patch.dict(os.environ, {"SCITEX_DIR": tmpdir}):
                 manager = ChromeProfileManager("system")
@@ -116,6 +282,9 @@ class TestChromeProfileManagerExtensionStatuses:
 
     def test_returns_false_for_missing_extensions_dir(self):
         """Should return False for all when Extensions dir missing."""
+        # Arrange
+        # Act
+        # Assert
         with tempfile.TemporaryDirectory() as tmpdir:
             with patch.dict(os.environ, {"SCITEX_DIR": tmpdir}):
                 manager = ChromeProfileManager("system")
@@ -126,6 +295,9 @@ class TestChromeProfileManagerExtensionStatuses:
 
     def test_detects_installed_extension(self):
         """Should detect installed extension with manifest."""
+        # Arrange
+        # Act
+        # Assert
         with tempfile.TemporaryDirectory() as tmpdir:
             with patch.dict(os.environ, {"SCITEX_DIR": tmpdir}):
                 manager = ChromeProfileManager("system")
@@ -141,6 +313,9 @@ class TestChromeProfileManagerExtensionStatuses:
 
     def test_returns_false_for_empty_version_dir(self):
         """Should return False when extension dir exists but no versions."""
+        # Arrange
+        # Act
+        # Assert
         with tempfile.TemporaryDirectory() as tmpdir:
             with patch.dict(os.environ, {"SCITEX_DIR": tmpdir}):
                 manager = ChromeProfileManager("system")
@@ -155,6 +330,9 @@ class TestChromeProfileManagerExtensionStatuses:
 
     def test_returns_false_for_missing_manifest(self):
         """Should return False when manifest.json is missing."""
+        # Arrange
+        # Act
+        # Assert
         with tempfile.TemporaryDirectory() as tmpdir:
             with patch.dict(os.environ, {"SCITEX_DIR": tmpdir}):
                 manager = ChromeProfileManager("system")
@@ -171,8 +349,11 @@ class TestChromeProfileManagerExtensionStatuses:
 class TestChromeProfileManagerCheckExtensions:
     """Tests for check_extensions_installed method."""
 
-    def test_returns_bool(self):
+    def test_returns_bool_smoke_case(self):
         """Should return a boolean."""
+        # Arrange
+        # Act
+        # Assert
         with tempfile.TemporaryDirectory() as tmpdir:
             with patch.dict(os.environ, {"SCITEX_DIR": tmpdir}):
                 manager = ChromeProfileManager("system")
@@ -181,6 +362,9 @@ class TestChromeProfileManagerCheckExtensions:
 
     def test_returns_false_when_no_extensions(self):
         """Should return False when no extensions installed."""
+        # Arrange
+        # Act
+        # Assert
         with tempfile.TemporaryDirectory() as tmpdir:
             with patch.dict(os.environ, {"SCITEX_DIR": tmpdir}):
                 manager = ChromeProfileManager("system")
@@ -189,6 +373,9 @@ class TestChromeProfileManagerCheckExtensions:
 
     def test_returns_true_when_all_installed(self):
         """Should return True when all extensions installed."""
+        # Arrange
+        # Act
+        # Assert
         with tempfile.TemporaryDirectory() as tmpdir:
             with patch.dict(os.environ, {"SCITEX_DIR": tmpdir}):
                 manager = ChromeProfileManager("system")
@@ -210,6 +397,9 @@ class TestChromeProfileManagerCheckExtensions:
 
     def test_uses_default_profile_dir(self):
         """Should use profile_dir when none provided."""
+        # Arrange
+        # Act
+        # Assert
         with tempfile.TemporaryDirectory() as tmpdir:
             with patch.dict(os.environ, {"SCITEX_DIR": tmpdir}):
                 manager = ChromeProfileManager("system")
@@ -217,9 +407,13 @@ class TestChromeProfileManagerCheckExtensions:
                     mock.return_value = {}
                     manager.check_extensions_installed(verbose=False)
                     mock.assert_called_once_with(manager.profile_dir)
+                    assert mock.called
 
     def test_accepts_custom_profile_dir(self):
         """Should use custom profile_dir when provided."""
+        # Arrange
+        # Act
+        # Assert
         with tempfile.TemporaryDirectory() as tmpdir:
             with patch.dict(os.environ, {"SCITEX_DIR": tmpdir}):
                 manager = ChromeProfileManager("system")
@@ -230,13 +424,17 @@ class TestChromeProfileManagerCheckExtensions:
                         profile_dir=custom_dir, verbose=False
                     )
                     mock.assert_called_once_with(custom_dir)
+                    assert mock.called
 
 
 class TestChromeProfileManagerExtensionPaths:
     """Tests for _get_installed_extension_paths method."""
 
-    def test_returns_list(self):
+    def test_returns_list_smoke_case_2(self):
         """Should return a list."""
+        # Arrange
+        # Act
+        # Assert
         with tempfile.TemporaryDirectory() as tmpdir:
             with patch.dict(os.environ, {"SCITEX_DIR": tmpdir}):
                 manager = ChromeProfileManager("system")
@@ -245,6 +443,9 @@ class TestChromeProfileManagerExtensionPaths:
 
     def test_returns_empty_for_missing_dir(self):
         """Should return empty list when Extensions dir missing."""
+        # Arrange
+        # Act
+        # Assert
         with tempfile.TemporaryDirectory() as tmpdir:
             with patch.dict(os.environ, {"SCITEX_DIR": tmpdir}):
                 manager = ChromeProfileManager("system")
@@ -253,6 +454,9 @@ class TestChromeProfileManagerExtensionPaths:
 
     def test_returns_paths_for_installed_extensions(self):
         """Should return paths for installed extensions."""
+        # Arrange
+        # Act
+        # Assert
         with tempfile.TemporaryDirectory() as tmpdir:
             with patch.dict(os.environ, {"SCITEX_DIR": tmpdir}):
                 manager = ChromeProfileManager("system")
@@ -264,11 +468,13 @@ class TestChromeProfileManagerExtensionPaths:
                 (ext_path / "manifest.json").write_text("{}")
 
                 result = manager._get_installed_extension_paths(Path(tmpdir))
-                assert len(result) == 1
-                assert str(ext_path) in result
+                assert (len(result) == 1) and (str(ext_path) in result)
 
     def test_selects_latest_version(self):
         """Should select latest version when multiple exist."""
+        # Arrange
+        # Act
+        # Assert
         with tempfile.TemporaryDirectory() as tmpdir:
             with patch.dict(os.environ, {"SCITEX_DIR": tmpdir}):
                 manager = ChromeProfileManager("system")
@@ -283,15 +489,17 @@ class TestChromeProfileManagerExtensionPaths:
                     (ext_path / "manifest.json").write_text("{}")
 
                 result = manager._get_installed_extension_paths(Path(tmpdir))
-                assert len(result) == 1
-                assert "2.0.0" in result[0]
+                assert (len(result) == 1) and ('2.0.0' in result[0])
 
 
 class TestChromeProfileManagerExtensionArgs:
     """Tests for get_extension_args method."""
 
-    def test_returns_list(self):
+    def test_returns_list_smoke_case_2(self):
         """Should return a list."""
+        # Arrange
+        # Act
+        # Assert
         with tempfile.TemporaryDirectory() as tmpdir:
             with patch.dict(os.environ, {"SCITEX_DIR": tmpdir}):
                 manager = ChromeProfileManager("system")
@@ -300,6 +508,9 @@ class TestChromeProfileManagerExtensionArgs:
 
     def test_returns_empty_when_no_extensions(self):
         """Should return empty list when no extensions."""
+        # Arrange
+        # Act
+        # Assert
         with tempfile.TemporaryDirectory() as tmpdir:
             manager = ChromeProfileManager(
                 "system", chrome_cache_dir=Path(tmpdir) / "chrome"
@@ -309,6 +520,9 @@ class TestChromeProfileManagerExtensionArgs:
 
     def test_returns_extension_args_when_installed(self):
         """Should return proper args when extensions installed."""
+        # Arrange
+        # Act
+        # Assert
         with tempfile.TemporaryDirectory() as tmpdir:
             manager = ChromeProfileManager(
                 "system", chrome_cache_dir=Path(tmpdir) / "chrome"
@@ -320,9 +534,7 @@ class TestChromeProfileManagerExtensionArgs:
             (ext_path / "manifest.json").write_text("{}")
 
             result = manager.get_extension_args()
-            assert len(result) > 0
-            assert any("--load-extension=" in arg for arg in result)
-            assert any("--enable-extensions" in arg for arg in result)
+            assert (len(result) > 0) and (any(('--load-extension=' in arg for arg in result))) and (any(('--enable-extensions' in arg for arg in result)))
 
 
 class TestChromeProfileManagerSyncFromProfile:
@@ -330,6 +542,9 @@ class TestChromeProfileManagerSyncFromProfile:
 
     def test_returns_false_for_missing_source(self):
         """Should return False when source profile doesn't exist."""
+        # Arrange
+        # Act
+        # Assert
         with tempfile.TemporaryDirectory() as tmpdir:
             manager = ChromeProfileManager(
                 "test_profile",
@@ -341,6 +556,9 @@ class TestChromeProfileManagerSyncFromProfile:
 
     def test_creates_target_directory(self):
         """Should create target directory if needed."""
+        # Arrange
+        # Act
+        # Assert
         with tempfile.TemporaryDirectory() as tmpdir:
             with patch.dict(os.environ, {"SCITEX_DIR": tmpdir}):
                 source_dir = Path(tmpdir) / "chrome" / "system"
@@ -361,6 +579,9 @@ class TestChromeProfileManagerSyncFromProfile:
 
     def test_uses_rsync_command(self):
         """Should use rsync with correct arguments."""
+        # Arrange
+        # Act
+        # Assert
         with tempfile.TemporaryDirectory() as tmpdir:
             with patch.dict(os.environ, {"SCITEX_DIR": tmpdir}):
                 source_dir = Path(tmpdir) / "chrome" / "system"
@@ -378,11 +599,13 @@ class TestChromeProfileManagerSyncFromProfile:
 
                     # Check rsync was called
                     call_args = mock_run.call_args
-                    assert "rsync" in call_args[0][0]
-                    assert "-auv" in call_args[0][0]
+                    assert ('rsync' in call_args[0][0]) and ('-auv' in call_args[0][0])
 
     def test_returns_true_on_success(self):
         """Should return True on successful sync."""
+        # Arrange
+        # Act
+        # Assert
         with tempfile.TemporaryDirectory() as tmpdir:
             with patch.dict(os.environ, {"SCITEX_DIR": tmpdir}):
                 source_dir = Path(tmpdir) / "chrome" / "system"
@@ -402,6 +625,9 @@ class TestChromeProfileManagerSyncFromProfile:
 
     def test_handles_timestamp_errors(self):
         """Should handle 'failed to set times' errors gracefully."""
+        # Arrange
+        # Act
+        # Assert
         with tempfile.TemporaryDirectory() as tmpdir:
             with patch.dict(os.environ, {"SCITEX_DIR": tmpdir}):
                 import subprocess
@@ -428,6 +654,9 @@ class TestChromeProfileManagerAsync:
     @pytest.mark.asyncio
     async def test_install_extensions_returns_true_when_installed(self):
         """Should return True when extensions already installed."""
+        # Arrange
+        # Act
+        # Assert
         with tempfile.TemporaryDirectory() as tmpdir:
             with patch.dict(os.environ, {"SCITEX_DIR": tmpdir}):
                 manager = ChromeProfileManager("system")
@@ -443,6 +672,9 @@ class TestChromeProfileManagerAsync:
     @pytest.mark.asyncio
     async def test_handle_runtime_dialogs_returns_false_on_error(self):
         """Should return False when page operations fail."""
+        # Arrange
+        # Act
+        # Assert
         with tempfile.TemporaryDirectory() as tmpdir:
             with patch.dict(os.environ, {"SCITEX_DIR": tmpdir}):
                 manager = ChromeProfileManager("system")
@@ -457,6 +689,9 @@ class TestChromeProfileManagerAsync:
     @pytest.mark.asyncio
     async def test_handle_runtime_dialogs_clicks_consent_button(self):
         """Should click consent buttons when found."""
+        # Arrange
+        # Act
+        # Assert
         with tempfile.TemporaryDirectory() as tmpdir:
             with patch.dict(os.environ, {"SCITEX_DIR": tmpdir}):
                 manager = ChromeProfileManager("system")
@@ -475,16 +710,16 @@ class TestChromeProfileManagerAsync:
 class TestChromeProfileManagerIntegration:
     """Integration tests for ChromeProfileManager."""
 
-    def test_full_workflow(self):
+    def test_full_workflow_smoke_case(self):
         """Test complete workflow of creating and checking profile."""
+        # Arrange
+        # Act
+        # Assert
         with tempfile.TemporaryDirectory() as tmpdir:
             with patch.dict(os.environ, {"SCITEX_DIR": tmpdir}):
                 # Create manager
                 manager = ChromeProfileManager("test_profile")
-                assert manager.profile_name == "test_profile"
-
-                # Initially no extensions
-                assert manager.check_extensions_installed(verbose=False) is False
+                assert (manager.profile_name == 'test_profile') and (manager.check_extensions_installed(verbose=False) is False)
 
                 # Get extension args (should be empty)
                 args = manager.get_extension_args()
@@ -504,15 +739,16 @@ class TestChromeProfileManagerIntegration:
 
     def test_multiple_profiles_independent(self):
         """Multiple profiles should be independent."""
+        # Arrange
+        # Act
+        # Assert
         with tempfile.TemporaryDirectory() as tmpdir:
             with patch.dict(os.environ, {"SCITEX_DIR": tmpdir}):
                 manager1 = ChromeProfileManager("profile1")
                 manager2 = ChromeProfileManager("profile2")
 
                 # Different profile dirs
-                assert manager1.profile_dir != manager2.profile_dir
-                assert "profile1" in str(manager1.profile_dir)
-                assert "profile2" in str(manager2.profile_dir)
+                assert (manager1.profile_dir != manager2.profile_dir) and ('profile1' in str(manager1.profile_dir)) and ('profile2' in str(manager2.profile_dir))
 
 
 if __name__ == "__main__":
