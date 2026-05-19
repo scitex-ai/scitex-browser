@@ -638,7 +638,7 @@
 <li><p><strong>page</strong> (<em>playwright.async_api.Page</em>) – Live page object.</p></li>
 <li><p><strong>label</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Short tag used as the filename prefix (e.g. “mfa_picker_before”).
 Sanitized: non-alphanum chars become “_”.</p></li>
-<li><p><strong>base_dir</strong> (<em>path-like</em><em> or </em><em>None</em>) – Where to write. Defaults to <code class="docutils literal notranslate"><span class="pre">~/.scitex/browser/cache/debug/</span></code>.</p></li>
+<li><p><strong>base_dir</strong> (<em>path-like</em><em> or </em><em>None</em>) – Where to write. Defaults to <code class="docutils literal notranslate"><span class="pre">$SCITEX_DIR/browser/runtime/cache/debug/</span></code> (<code class="docutils literal notranslate"><span class="pre">~/.scitex/browser/runtime/cache/debug/</span></code> by default).</p></li>
 <li><p><strong>full_page</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a>) – Capture the full scrollable page (default True). Pass False for
 viewport-only.</p></li>
 <li><p><strong>include_html</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><em>bool</em></a>) – Save <code class="docutils literal notranslate"><span class="pre">page.content()</span></code> alongside the screenshot (default True).</p></li>

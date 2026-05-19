@@ -23,7 +23,7 @@ from scitex_browser.debugging import capture_debug_artifacts_async
 png, html = await capture_debug_artifacts_async(
     page,
     label="mfa_picker_before",        # short, filename-safe descriptor
-    base_dir=None,                     # default: ~/.scitex/browser/cache/debug/
+    base_dir=None,                     # default: $SCITEX_DIR/browser/runtime/cache/debug/
     full_page=True,
     include_html=True,
 )

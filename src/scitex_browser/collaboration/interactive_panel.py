@@ -21,11 +21,12 @@ AI can:
 """
 
 import json
-import os
 from pathlib import Path
 from typing import Any, Dict, Optional
 
 from playwright.async_api import Page
+
+from scitex_browser._state import memory_dir
 
 
 class InteractivePanel:
@@ -59,11 +60,14 @@ class InteractivePanel:
             self._load_persistent_memory()
 
     def _get_memory_file(self) -> Path:
-        """Get path to persistent memory file."""
-        scitex_dir = Path(os.getenv("SCITEX_DIR", Path.home() / ".scitex"))
-        memory_dir = scitex_dir / "browser" / "memory"
-        memory_dir.mkdir(parents=True, exist_ok=True)
-        return memory_dir / f"{self.session_id}_memory.json"
+        """Get path to persistent memory file.
+
+        Resolves to ``$SCITEX_DIR/browser/runtime/memory/<session_id>_memory.json``
+        (``~/.scitex/browser/runtime/memory/...`` by default).
+        """
+        mdir = memory_dir()
+        mdir.mkdir(parents=True, exist_ok=True)
+        return mdir / f"{self.session_id}_memory.json"
 
     def _load_persistent_memory(self):
         """Load persistent memory from disk."""

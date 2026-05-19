@@ -21,12 +21,12 @@ Usage:
 """
 
 import asyncio
-import os
 import signal
-from pathlib import Path
 from typing import Optional
 
 from playwright.async_api import Browser, BrowserContext, Page, async_playwright
+
+from scitex_browser._state import persistent_dir
 
 
 class PersistentBrowserServer:
@@ -47,12 +47,12 @@ class PersistentBrowserServer:
         self.browser_type = browser_type
         self.headless = headless
 
-        # Get session directory from SCITEX_DIR
+        # Session directory under the package's own runtime tree.
+        # Defaults to $SCITEX_DIR/browser/runtime/persistent/.
         if session_dir:
             self.session_dir = session_dir
         else:
-            scitex_dir = Path(os.getenv("SCITEX_DIR", Path.home() / ".scitex"))
-            self.session_dir = str(scitex_dir / "browser" / "persistent")
+            self.session_dir = str(persistent_dir())
 
         self.playwright = None
         self.context = None

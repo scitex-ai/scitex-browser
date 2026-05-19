@@ -12,10 +12,11 @@ It writes:
     <base_dir>/<label>_<ts>.png    full-page screenshot
     <base_dir>/<label>_<ts>.html   page.content() snapshot
 
-`base_dir` defaults to `~/.scitex/browser/cache/debug/`. Failures
-are swallowed and logged at debug level — a broken capture must
-never break the caller's flow. Returns the (png_path, html_path)
-tuple, or (None, None) on total failure.
+`base_dir` defaults to ``$SCITEX_DIR/browser/runtime/cache/debug/``
+(``~/.scitex/browser/runtime/cache/debug/`` when ``SCITEX_DIR`` is
+unset). Failures are swallowed and logged at debug level — a broken
+capture must never break the caller's flow. Returns the
+(png_path, html_path) tuple, or (None, None) on total failure.
 """
 
 from __future__ import annotations
@@ -25,6 +26,8 @@ from datetime import datetime
 from pathlib import Path
 from typing import TYPE_CHECKING, Tuple
 
+from scitex_browser._state import cache_dir
+
 if TYPE_CHECKING:  # pragma: no cover
     from playwright.async_api import Page
 
@@ -32,7 +35,7 @@ logger = logging.getLogger(__name__)
 
 
 def _default_base_dir() -> Path:
-    return Path.home() / ".scitex" / "browser" / "cache" / "debug"
+    return cache_dir() / "debug"
 
 
 async def capture_debug_artifacts_async(
@@ -53,7 +56,8 @@ async def capture_debug_artifacts_async(
         Short tag used as the filename prefix (e.g. "mfa_picker_before").
         Sanitized: non-alphanum chars become "_".
     base_dir : path-like or None
-        Where to write. Defaults to ``~/.scitex/browser/cache/debug/``.
+        Where to write. Defaults to ``$SCITEX_DIR/browser/runtime/cache/debug/``
+        (``~/.scitex/browser/runtime/cache/debug/`` by default).
     full_page : bool
         Capture the full scrollable page (default True). Pass False for
         viewport-only.

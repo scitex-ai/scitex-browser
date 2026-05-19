@@ -375,10 +375,11 @@
 <span class="sd">    &lt;base_dir&gt;/&lt;label&gt;_&lt;ts&gt;.png    full-page screenshot</span>
 <span class="sd">    &lt;base_dir&gt;/&lt;label&gt;_&lt;ts&gt;.html   page.content() snapshot</span>
 
-<span class="sd">`base_dir` defaults to `~/.scitex/browser/cache/debug/`. Failures</span>
-<span class="sd">are swallowed and logged at debug level — a broken capture must</span>
-<span class="sd">never break the caller&#39;s flow. Returns the (png_path, html_path)</span>
-<span class="sd">tuple, or (None, None) on total failure.</span>
+<span class="sd">`base_dir` defaults to ``$SCITEX_DIR/browser/runtime/cache/debug/``</span>
+<span class="sd">(``~/.scitex/browser/runtime/cache/debug/`` when ``SCITEX_DIR`` is</span>
+<span class="sd">unset). Failures are swallowed and logged at debug level — a broken</span>
+<span class="sd">capture must never break the caller&#39;s flow. Returns the</span>
+<span class="sd">(png_path, html_path) tuple, or (None, None) on total failure.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
@@ -395,7 +396,7 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_default_base_dir</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
-    <span class="k">return</span> <span class="n">Path</span><span class="o">.</span><span class="n">home</span><span class="p">()</span> <span class="o">/</span> <span class="s2">&quot;.scitex&quot;</span> <span class="o">/</span> <span class="s2">&quot;browser&quot;</span> <span class="o">/</span> <span class="s2">&quot;cache&quot;</span> <span class="o">/</span> <span class="s2">&quot;debug&quot;</span>
+    <span class="k">return</span> <span class="n">cache_dir</span><span class="p">()</span> <span class="o">/</span> <span class="s2">&quot;debug&quot;</span>
 
 
 <div class="viewcode-block" id="capture_debug_artifacts_async">
@@ -418,7 +419,8 @@
 <span class="sd">        Short tag used as the filename prefix (e.g. &quot;mfa_picker_before&quot;).</span>
 <span class="sd">        Sanitized: non-alphanum chars become &quot;_&quot;.</span>
 <span class="sd">    base_dir : path-like or None</span>
-<span class="sd">        Where to write. Defaults to ``~/.scitex/browser/cache/debug/``.</span>
+<span class="sd">        Where to write. Defaults to ``$SCITEX_DIR/browser/runtime/cache/debug/``</span>
+<span class="sd">        (``~/.scitex/browser/runtime/cache/debug/`` by default).</span>
 <span class="sd">    full_page : bool</span>
 <span class="sd">        Capture the full scrollable page (default True). Pass False for</span>
 <span class="sd">        viewport-only.</span>

@@ -9,7 +9,7 @@ tags: [scitex-browser-env-vars]
 
 | Variable | Purpose | Default | Type |
 |---|---|---|---|
-| `SCITEX_BROWSER_CHROME_CACHE_DIR` | Override for the Chromium user-data dir used by Playwright sessions. | `~/.scitex/browser/chrome-cache` | path |
+| `SCITEX_BROWSER_CHROME_CACHE_DIR` | Override for the Chromium user-data dir used by Playwright sessions. | `$SCITEX_DIR/browser/runtime/chrome` | path |
 
 ## Cross-package vars (read by scitex-browser but owned elsewhere)
 

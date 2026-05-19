@@ -31,7 +31,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import TYPE_CHECKING, Optional
 
-from scitex_browser._compat import get_paths
+from scitex_browser._state import test_monitor_dir
 
 if TYPE_CHECKING:
     from playwright.sync_api import Page
@@ -57,13 +57,13 @@ class TestMonitor:
         Initialize test monitor.
 
         Args:
-            output_dir: Directory for screenshots (default: $SCITEX_DIR/test_monitor)
+            output_dir: Directory for screenshots (default: $SCITEX_DIR/browser/runtime/test_monitor)
             interval: Seconds between screenshots (default: 2.0)
             quality: JPEG quality 1-100 (default: 70)
             verbose: Print capture messages
             test_name: Optional test name for session identification
         """
-        self.output_dir = get_paths().resolve("test_monitor", output_dir)
+        self.output_dir = test_monitor_dir(output_dir)
         self.interval = interval
         self.quality = quality
         self.verbose = verbose

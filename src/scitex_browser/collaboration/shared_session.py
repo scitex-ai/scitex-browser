@@ -16,7 +16,6 @@ Key features:
 """
 
 import asyncio
-import os
 import time
 from dataclasses import dataclass, field
 from datetime import datetime
@@ -24,6 +23,8 @@ from pathlib import Path
 from typing import Callable, List, Optional
 
 from playwright.async_api import Browser, BrowserContext, Page, async_playwright
+
+from scitex_browser._state import capture_dir, sessions_dir
 
 
 @dataclass
@@ -81,9 +82,9 @@ class SharedBrowserSession:
         self.events: List[dict] = []
         self.screenshots: List[str] = []
 
-        # Get screenshot directory from SCITEX_DIR
-        scitex_dir = Path(os.getenv("SCITEX_DIR", Path.home() / ".scitex"))
-        self.screenshot_dir = scitex_dir / "capture"
+        # Screenshot directory under the package's own runtime tree.
+        # Resolves to $SCITEX_DIR/browser/runtime/capture/ by default.
+        self.screenshot_dir = capture_dir()
         self.screenshot_dir.mkdir(parents=True, exist_ok=True)
 
     async def start(self):
@@ -95,14 +96,12 @@ class SharedBrowserSession:
         if self.running:
             raise RuntimeError("Session already running")
 
-        # Get user data directory
+        # Get user data directory.
+        # Defaults to $SCITEX_DIR/browser/runtime/sessions/<session_id>/.
         if self.config.user_data_dir:
             user_data_dir = self.config.user_data_dir
         else:
-            scitex_dir = Path(os.getenv("SCITEX_DIR", Path.home() / ".scitex"))
-            user_data_dir = str(
-                scitex_dir / "browser" / "sessions" / self.config.session_id
-            )
+            user_data_dir = str(sessions_dir(self.config.session_id))
 
         # Start playwright
         self.playwright = await async_playwright().start()

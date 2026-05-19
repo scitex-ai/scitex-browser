@@ -25,7 +25,7 @@ IO:
   - input-files:
     - None
   - output-files:
-    - $SCITEX_DIR/browser/screenshots/{category}/{timestamp}_{message}.png
+    - $SCITEX_DIR/browser/runtime/screenshots/{category}/{timestamp}_{message}.png
 """
 
 """Imports"""
@@ -34,7 +34,8 @@ from datetime import datetime
 from pathlib import Path
 
 import scitex_logging as logging
-from scitex_browser._compat import get_paths
+
+from scitex_browser._state import screenshots_dir
 
 logger = logging.getLogger(__name__)
 
@@ -83,7 +84,7 @@ async def log_page_async(
         message: Message text to display in popup
         duration_ms: How long message stays visible (default 60 seconds)
         take_screenshot: Whether to capture screenshot (default True)
-        screenshot_dir: Custom screenshot directory (default None = ~/.scitex/browser/screenshots)
+        screenshot_dir: Custom screenshot directory (default None = $SCITEX_DIR/browser/runtime/screenshots)
         verbose: Enable/disable visual popups and screenshots (default True)
         level: Log level - one of: debug, info, success, warning, error, fail (default "info")
 
@@ -340,9 +341,7 @@ async def log_page_async(
 
                 await page.wait_for_timeout(100)
 
-                screenshot_path = get_paths().resolve(
-                    "browser_screenshots", screenshot_dir
-                )
+                screenshot_path = screenshots_dir(screenshot_dir)
 
                 screenshot_path.mkdir(parents=True, exist_ok=True)
 
