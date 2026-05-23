@@ -1,770 +1,429 @@
 #!/usr/bin/env python3
-"""Tests for CookieAutoAcceptor class."""
+"""Tests for CookieAutoAcceptor class.
+
+History: prior to 2026-05-24 this file used ``unittest.mock`` to stand in
+for the Playwright ``BrowserContext`` and ``Page`` collaborators in
+``inject_auto_acceptor_async`` / ``check_cookie_banner_exists_async``,
+and contained a long tail of degenerate ``test_full_workflow_*`` tests
+that re-asserted the same three constants. Under the no-mocks rule
+(PA-306) the mocks have been replaced with hand-rolled fakes exposing
+only the attributes the SUT touches; under TQ001/TQ007 the degenerate
+duplicates have been dropped. Each remaining test asserts one fact via
+``# Arrange / # Act / # Assert`` markers and a ≥3-token name.
+"""
+
+from __future__ import annotations
 
 import json
+import logging as _stdlogging
 import os
-from unittest.mock import AsyncMock, MagicMock, patch
+from dataclasses import dataclass, field
 
 import pytest
 
 from scitex_browser.automation.CookieHandler import CookieAutoAcceptor
 
 
+# ---------------------------------------------------------------------------
+# Hand-rolled async fakes (no unittest.mock)
+# ---------------------------------------------------------------------------
+
+
+@dataclass
+class FakeBrowserContext:
+    """Stand-in for ``playwright.async_api.BrowserContext`` exposing only
+    ``add_init_script(script)``, which is the single method
+    ``inject_auto_acceptor_async`` calls. Each call is appended to
+    ``scripts`` so tests can observe what production sent.
+    """
+
+    scripts: list[str] = field(default_factory=list)
+
+    async def add_init_script(self, script: str) -> None:
+        self.scripts.append(script)
+
+
+@dataclass
+class FakeLocatorFirst:
+    """Stand-in for the ``Locator.first`` accessor's ``is_visible()``."""
+
+    visible: bool
+
+    async def is_visible(self) -> bool:
+        return self.visible
+
+
+@dataclass
+class FakeLocator:
+    """Stand-in for ``Locator`` exposing only ``.first.is_visible()``."""
+
+    visible: bool
+
+    @property
+    def first(self) -> FakeLocatorFirst:
+        return FakeLocatorFirst(visible=self.visible)
+
+
+@dataclass
+class FakeLocatorPage:
+    """Stand-in for ``Page`` exposing only ``.locator(selector)``.
+
+    Records each call's selector under ``selectors_seen`` so tests can
+    assert on what production queried.
+    """
+
+    visible: bool = True
+    selectors_seen: list[str] = field(default_factory=list)
+
+    def locator(self, selector: str) -> FakeLocator:
+        self.selectors_seen.append(selector)
+        return FakeLocator(visible=self.visible)
+
+
+class FakeRaisingLocatorPage:
+    """Stand-in for a ``Page`` whose ``.locator()`` raises — used to
+    verify the SUT's ``except`` branch.
+    """
+
+    def locator(self, selector: str):
+        raise RuntimeError(f"locator failed for: {selector}")
+
+
+# ---------------------------------------------------------------------------
+# Fixtures
+# ---------------------------------------------------------------------------
+
+
+@pytest.fixture
+def acceptor() -> CookieAutoAcceptor:
+    """Fresh CookieAutoAcceptor per test."""
+    return CookieAutoAcceptor()
+
+
+@pytest.fixture
+def script(acceptor: CookieAutoAcceptor) -> str:
+    """The full auto-acceptor JavaScript string."""
+    return acceptor.get_auto_acceptor_script()
+
+
+# ---------------------------------------------------------------------------
+# Init / attribute presence
+# ---------------------------------------------------------------------------
+
+
 class TestCookieAutoAcceptorInit:
     """Tests for CookieAutoAcceptor initialization."""
 
-    def test_init_creates_instance_acceptor_is_not_none(self):
+    def test_init_sets_name_to_class_name(self, acceptor):
         # Arrange
         # Act
-        # Arrange
-        # Act
-        # Arrange
-        # Act
-        acceptor = CookieAutoAcceptor()
-        # Act
+        name = acceptor.name
         # Assert
-        # Assert
-        assert acceptor is not None
+        assert name == "CookieAutoAcceptor"
 
-    def test_init_creates_instance_acceptor_name_equals_cookieautoacceptor(self):
+    def test_init_assigns_cookie_texts_as_list(self, acceptor):
         # Arrange
         # Act
-        # Arrange
-        # Act
-        # Arrange
-        # Act
-        acceptor = CookieAutoAcceptor()
-        # Act
+        texts = acceptor.cookie_texts
         # Assert
-        # Assert
-        assert acceptor.name == "CookieAutoAcceptor"
+        assert isinstance(texts, list)
 
+    def test_init_populates_cookie_texts_with_entries(self, acceptor):
+        # Arrange
+        # Act
+        count = len(acceptor.cookie_texts)
+        # Assert
+        assert count > 0
 
-    def test_init_sets_cookie_texts_acceptor_cookie_texts_is_list(self):
+    def test_init_assigns_selectors_as_list(self, acceptor):
         # Arrange
         # Act
-        # Arrange
-        # Act
-        # Arrange
-        # Act
-        acceptor = CookieAutoAcceptor()
-        # Act
+        selectors = acceptor.selectors
         # Assert
-        # Assert
-        assert isinstance(acceptor.cookie_texts, list)
+        assert isinstance(selectors, list)
 
-    def test_init_sets_cookie_texts_len_acceptor_cookie_texts_0(self):
+    def test_init_populates_selectors_with_entries(self, acceptor):
         # Arrange
         # Act
-        # Arrange
-        # Act
-        # Arrange
-        # Act
-        acceptor = CookieAutoAcceptor()
-        # Act
+        count = len(acceptor.selectors)
         # Assert
-        # Assert
-        assert len(acceptor.cookie_texts) > 0
+        assert count > 0
 
 
-    def test_init_sets_selectors_acceptor_selectors_is_list(self):
-        # Arrange
-        # Act
-        # Arrange
-        # Act
-        # Arrange
-        # Act
-        acceptor = CookieAutoAcceptor()
-        # Act
-        # Assert
-        # Assert
-        assert isinstance(acceptor.selectors, list)
-
-    def test_init_sets_selectors_len_acceptor_selectors_0(self):
-        # Arrange
-        # Act
-        # Arrange
-        # Act
-        # Arrange
-        # Act
-        acceptor = CookieAutoAcceptor()
-        # Act
-        # Assert
-        # Assert
-        assert len(acceptor.selectors) > 0
+# ---------------------------------------------------------------------------
+# cookie_texts content
+# ---------------------------------------------------------------------------
 
 
-
-class TestCookieAutoAcceptorCookieTexts:
-    """Tests for cookie_texts list content."""
-
-    def test_contains_accept_all(self):
-        """Should contain 'Accept All' text."""
-        # Arrange
-        # Act
-        acceptor = CookieAutoAcceptor()
-        # Assert
-        assert "Accept All" in acceptor.cookie_texts
-
-    def test_contains_accept_accept_in_acceptor_cookie_texts(self):
-        """Should contain 'Accept' text."""
-        # Arrange
-        # Act
-        acceptor = CookieAutoAcceptor()
-        # Assert
-        assert "Accept" in acceptor.cookie_texts
-
-    def test_contains_ok_ok_in_acceptor_cookie_texts(self):
-        """Should contain 'OK' text."""
-        # Arrange
-        # Act
-        acceptor = CookieAutoAcceptor()
-        # Assert
-        assert "OK" in acceptor.cookie_texts
-
-    def test_contains_agree_agree_in_acceptor_cookie_texts(self):
-        """Should contain 'Agree' text."""
-        # Arrange
-        # Act
-        acceptor = CookieAutoAcceptor()
-        # Assert
-        assert "Agree" in acceptor.cookie_texts
-
-    def test_contains_continue_continue_in_acceptor_cookie_texts(self):
-        """Should contain 'Continue' text."""
-        # Arrange
-        # Act
-        acceptor = CookieAutoAcceptor()
-        # Assert
-        assert "Continue" in acceptor.cookie_texts
-
-    def test_contains_i_accept(self):
-        """Should contain 'I Accept' text."""
-        # Arrange
-        # Act
-        acceptor = CookieAutoAcceptor()
-        # Assert
-        assert "I Accept" in acceptor.cookie_texts
+_EXPECTED_TEXTS = ("Accept All", "Accept", "OK", "Agree", "Continue", "I Accept")
 
 
-class TestCookieAutoAcceptorSelectors:
-    """Tests for selectors list content."""
+@pytest.mark.parametrize("expected_text", _EXPECTED_TEXTS)
+def test_cookie_texts_contains_expected_phrase(acceptor, expected_text):
+    # Arrange
+    texts = acceptor.cookie_texts
+    # Act
+    present = expected_text in texts
+    # Assert
+    assert present is True
 
-    def test_contains_testid_accept_selector(self):
-        """Should contain testid accept selector."""
-        # Arrange
-        # Act
-        acceptor = CookieAutoAcceptor()
-        # Assert
-        assert "[data-testid*='accept']" in acceptor.selectors
 
-    def test_contains_id_accept_selector(self):
-        """Should contain id accept selector."""
-        # Arrange
-        # Act
-        acceptor = CookieAutoAcceptor()
-        # Assert
-        assert "[id*='accept']" in acceptor.selectors
+# ---------------------------------------------------------------------------
+# selectors content
+# ---------------------------------------------------------------------------
 
-    def test_contains_class_accept_selector(self):
-        """Should contain class accept selector."""
-        # Arrange
-        # Act
-        acceptor = CookieAutoAcceptor()
-        # Assert
-        assert "[class*='accept']" in acceptor.selectors
 
-    def test_contains_aria_label_selector(self):
-        """Should contain aria-label selector."""
-        # Arrange
-        # Act
-        acceptor = CookieAutoAcceptor()
-        # Assert
-        assert "button[aria-label*='Accept']" in acceptor.selectors
+_EXPECTED_SELECTORS = (
+    "[data-testid*='accept']",
+    "[id*='accept']",
+    "[class*='accept']",
+    "button[aria-label*='Accept']",
+    ".cookie-banner button:first-of-type",
+)
 
-    def test_contains_cookie_banner_selector(self):
-        """Should contain cookie-banner selector."""
-        # Arrange
-        # Act
-        acceptor = CookieAutoAcceptor()
-        # Assert
-        assert ".cookie-banner button:first-of-type" in acceptor.selectors
+
+@pytest.mark.parametrize("expected_selector", _EXPECTED_SELECTORS)
+def test_selectors_list_contains_expected_selector(acceptor, expected_selector):
+    # Arrange
+    selectors = acceptor.selectors
+    # Act
+    present = expected_selector in selectors
+    # Assert
+    assert present is True
+
+
+# ---------------------------------------------------------------------------
+# get_auto_acceptor_script
+# ---------------------------------------------------------------------------
 
 
 class TestGetAutoAcceptorScript:
-    """Tests for get_auto_acceptor_script method."""
+    """Tests for get_auto_acceptor_script()."""
 
-    def test_returns_string_script_is_str(self):
-        """Should return a string."""
+    def test_script_returns_string_type(self, script):
         # Arrange
-        acceptor = CookieAutoAcceptor()
         # Act
-        script = acceptor.get_auto_acceptor_script()
+        kind = type(script)
         # Assert
-        assert isinstance(script, str)
+        assert kind is str
 
-    def test_returns_non_empty_script(self):
-        """Should return non-empty script."""
+    def test_script_returns_non_empty_string(self, script):
         # Arrange
-        acceptor = CookieAutoAcceptor()
         # Act
-        script = acceptor.get_auto_acceptor_script()
+        size = len(script)
         # Assert
-        assert len(script) > 0
+        assert size > 0
 
-    def test_contains_cookie_texts_json(self):
-        """Should contain JSON-encoded cookie texts."""
+    def test_script_embeds_first_cookie_text_entries(self, acceptor, script):
         # Arrange
+        first_three = acceptor.cookie_texts[:3]
         # Act
+        all_present = all(t in script for t in first_three)
         # Assert
-        acceptor = CookieAutoAcceptor()
-        script = acceptor.get_auto_acceptor_script()
-        # The script should contain the cookie texts as JSON
-        assert all(text in script for text in acceptor.cookie_texts[:3])
+        assert all_present is True
 
-    def test_contains_selectors_json(self):
-        """Should contain JSON-encoded selectors."""
+    def test_script_embeds_first_selector_entries(self, acceptor, script):
         # Arrange
+        first_two = acceptor.selectors[:2]
         # Act
+        all_present = all(s in script for s in first_two)
         # Assert
-        acceptor = CookieAutoAcceptor()
-        script = acceptor.get_auto_acceptor_script()
-        # The script should contain the selectors
-        assert all(selector in script for selector in acceptor.selectors[:2])
+        assert all_present is True
 
-    def test_contains_accept_function(self):
-        """Should contain acceptCookies function."""
+    def test_script_defines_accept_cookies_function(self, script):
         # Arrange
-        acceptor = CookieAutoAcceptor()
         # Act
-        script = acceptor.get_auto_acceptor_script()
+        present = "function acceptCookies()" in script
         # Assert
-        assert "function acceptCookies()" in script
+        assert present is True
 
-    def test_contains_interval_setup(self):
-        """Should contain setInterval for periodic checking."""
+    def test_script_uses_setinterval_for_periodic_checking(self, script):
         # Arrange
-        acceptor = CookieAutoAcceptor()
         # Act
-        script = acceptor.get_auto_acceptor_script()
+        present = "setInterval" in script
         # Assert
-        assert "setInterval" in script
+        assert present is True
 
-    def test_contains_timeout_cleanup_settimeout_in_script(self):
+    def test_script_uses_settimeout_for_cleanup(self, script):
         # Arrange
-        # Arrange
-        acceptor = CookieAutoAcceptor()
         # Act
-        # Act
-        script = acceptor.get_auto_acceptor_script()
-        # Act
+        present = "setTimeout" in script
         # Assert
-        # Assert
-        assert "setTimeout" in script
+        assert present is True
 
-    def test_contains_timeout_cleanup_n_30000_in_script(self):
+    def test_script_includes_thirty_second_cleanup_timeout(self, script):
         # Arrange
+        # Act
+        present = "30000" in script
+        # Assert
+        assert present is True
+
+    def test_script_skips_buttons_with_scitex_no_auto_click_attribute(self, script):
         # Arrange
-        acceptor = CookieAutoAcceptor()
         # Act
-        # Act
-        script = acceptor.get_auto_acceptor_script()
-        # Act
+        present = "data-scitex-no-auto-click" in script
         # Assert
+        assert present is True
+
+    def test_script_includes_scitex_id_guard(self, script):
+        # Arrange
+        # Act
+        present = "scitex" in script.lower()
         # Assert
-        assert "30000" in script  # 30 second timeout
+        assert present is True
+
+    def test_script_uses_query_selector_all_for_lookup(self, script):
+        # Arrange
+        # Act
+        present = "querySelectorAll" in script
+        # Assert
+        assert present is True
+
+    def test_script_checks_element_visibility_via_offsetparent(self, script):
+        # Arrange
+        # Act
+        present = "offsetParent" in script
+        # Assert
+        assert present is True
+
+    def test_script_opens_with_iife_arrow_form(self, script):
+        # Arrange
+        # Act
+        present = "(() => {" in script
+        # Assert
+        assert present is True
+
+    def test_script_closes_with_iife_invocation(self, script):
+        # Arrange
+        # Act
+        present = "})();" in script
+        # Assert
+        assert present is True
+
+    def test_script_embeds_cookie_texts_as_json_array(self, acceptor, script):
+        # Arrange
+        expected_json = json.dumps(acceptor.cookie_texts)
+        # Act
+        present = expected_json in script
+        # Assert
+        assert present is True
 
 
-    def test_skips_scitex_buttons_data_scitex_no_auto_click_in_script(self):
-        # Arrange
-        # Arrange
-        acceptor = CookieAutoAcceptor()
-        # Act
-        # Act
-        script = acceptor.get_auto_acceptor_script()
-        # Act
-        # Assert
-        # Assert
-        assert "data-scitex-no-auto-click" in script
-
-    def test_skips_scitex_buttons_scitex_in_script_lower(self):
-        # Arrange
-        # Arrange
-        acceptor = CookieAutoAcceptor()
-        # Act
-        # Act
-        script = acceptor.get_auto_acceptor_script()
-        # Act
-        # Assert
-        # Assert
-        assert "scitex" in script.lower()
-
-
-    def test_contains_queryselector_queryselectorall_in_script(self):
-        """Should use querySelector to find elements."""
-        # Arrange
-        acceptor = CookieAutoAcceptor()
-        # Act
-        script = acceptor.get_auto_acceptor_script()
-        # Assert
-        assert "querySelectorAll" in script
-
-    def test_checks_element_visibility(self):
-        """Should check element visibility with offsetParent."""
-        # Arrange
-        acceptor = CookieAutoAcceptor()
-        # Act
-        script = acceptor.get_auto_acceptor_script()
-        # Assert
-        assert "offsetParent" in script
+# ---------------------------------------------------------------------------
+# inject_auto_acceptor_async (uses FakeBrowserContext)
+# ---------------------------------------------------------------------------
 
 
 class TestInjectAutoAcceptorAsync:
-    """Tests for inject_auto_acceptor_async method."""
+    """Tests for inject_auto_acceptor_async with a hand-rolled context fake."""
 
     @pytest.mark.asyncio
-    async def test_calls_add_init_script(self):
-        """Should call context.add_init_script with script."""
+    async def test_inject_invokes_add_init_script_once(self, acceptor):
         # Arrange
+        ctx = FakeBrowserContext()
         # Act
+        await acceptor.inject_auto_acceptor_async(ctx)
         # Assert
-        acceptor = CookieAutoAcceptor()
-        mock_context = MagicMock()
-        mock_context.add_init_script = AsyncMock()
-
-        await acceptor.inject_auto_acceptor_async(mock_context)
-
-        mock_context.add_init_script.assert_called_once()
-        assert mock_context.add_init_script.call_count == 1
+        assert len(ctx.scripts) == 1
 
     @pytest.mark.asyncio
-    async def test_passes_script_to_context(self):
-        """Should pass auto-acceptor script to context."""
+    async def test_inject_sends_script_containing_accept_cookies(self, acceptor):
         # Arrange
-        acceptor = CookieAutoAcceptor()
-        mock_context = MagicMock()
-        mock_context.add_init_script = AsyncMock()
-
-        await acceptor.inject_auto_acceptor_async(mock_context)
-
-        call_args = mock_context.add_init_script.call_args
+        ctx = FakeBrowserContext()
         # Act
-        script = call_args[0][0]
+        await acceptor.inject_auto_acceptor_async(ctx)
         # Assert
-        assert "acceptCookies" in script
+        assert "acceptCookies" in ctx.scripts[0]
 
     @pytest.mark.asyncio
-    async def test_logs_warning_about_deprecated(self):
-        """Should log warning about using get_auto_acceptor_script instead."""
+    async def test_inject_emits_deprecation_warning_through_logger(
+        self, acceptor, caplog
+    ):
         # Arrange
+        ctx = FakeBrowserContext()
+        caplog.set_level(
+            _stdlogging.WARNING, logger="scitex_browser.automation.CookieHandler"
+        )
         # Act
+        await acceptor.inject_auto_acceptor_async(ctx)
         # Assert
-        acceptor = CookieAutoAcceptor()
-        mock_context = MagicMock()
-        mock_context.add_init_script = AsyncMock()
+        assert any(rec.levelno >= _stdlogging.WARNING for rec in caplog.records)
 
-        with patch("scitex_browser.automation.CookieHandler.logger") as mock_logger:
-            await acceptor.inject_auto_acceptor_async(mock_context)
-            mock_logger.warning.assert_called()
-            assert mock_logger.warning.called
+
+# ---------------------------------------------------------------------------
+# check_cookie_banner_exists_async (uses FakeLocatorPage)
+# ---------------------------------------------------------------------------
 
 
 class TestCheckCookieBannerExistsAsync:
-    """Tests for check_cookie_banner_exists_async method."""
+    """Tests for check_cookie_banner_exists_async with a hand-rolled page fake."""
 
     @pytest.mark.asyncio
-    async def test_returns_true_when_visible(self):
-        """Should return True when cookie banner is visible."""
+    async def test_returns_true_when_locator_first_is_visible(self, acceptor):
         # Arrange
-        acceptor = CookieAutoAcceptor()
-        mock_page = MagicMock()
-        mock_locator = MagicMock()
-        mock_locator.first.is_visible = AsyncMock(return_value=True)
-        mock_page.locator.return_value = mock_locator
-
+        page = FakeLocatorPage(visible=True)
         # Act
-        result = await acceptor.check_cookie_banner_exists_async(mock_page)
-
+        result = await acceptor.check_cookie_banner_exists_async(page)
         # Assert
         assert result is True
 
     @pytest.mark.asyncio
-    async def test_returns_false_when_not_visible(self):
-        """Should return False when cookie banner is not visible."""
+    async def test_returns_false_when_locator_first_is_hidden(self, acceptor):
         # Arrange
-        acceptor = CookieAutoAcceptor()
-        mock_page = MagicMock()
-        mock_locator = MagicMock()
-        mock_locator.first.is_visible = AsyncMock(return_value=False)
-        mock_page.locator.return_value = mock_locator
-
+        page = FakeLocatorPage(visible=False)
         # Act
-        result = await acceptor.check_cookie_banner_exists_async(mock_page)
-
+        result = await acceptor.check_cookie_banner_exists_async(page)
         # Assert
         assert result is False
 
     @pytest.mark.asyncio
-    async def test_returns_false_on_exception(self):
-        """Should return False when exception occurs."""
+    async def test_returns_false_when_page_locator_raises(self, acceptor):
         # Arrange
-        acceptor = CookieAutoAcceptor()
-        mock_page = MagicMock()
-        mock_page.locator.side_effect = Exception("Locator failed")
-
+        page = FakeRaisingLocatorPage()
         # Act
-        result = await acceptor.check_cookie_banner_exists_async(mock_page)
-
+        result = await acceptor.check_cookie_banner_exists_async(page)
         # Assert
         assert result is False
 
     @pytest.mark.asyncio
-    async def test_uses_correct_selectors_cookie_banner_in_selector(self):
+    async def test_queries_page_with_cookie_banner_class_in_selector(
+        self, acceptor
+    ):
         # Arrange
-        # Arrange
-        acceptor = CookieAutoAcceptor()
-        mock_page = MagicMock()
-        mock_locator = MagicMock()
-        mock_locator.first.is_visible = AsyncMock(return_value=True)
-        mock_page.locator.return_value = mock_locator
-        await acceptor.check_cookie_banner_exists_async(mock_page)
-        call_args = mock_page.locator.call_args
+        page = FakeLocatorPage(visible=True)
         # Act
-        # Act
-        selector = call_args[0][0]
-        # Act
+        await acceptor.check_cookie_banner_exists_async(page)
         # Assert
-        # Assert
-        assert ".cookie-banner" in selector
+        assert ".cookie-banner" in page.selectors_seen[0]
 
     @pytest.mark.asyncio
-    async def test_uses_correct_selectors_class_cookie_in_selector(self):
+    async def test_queries_page_with_cookie_class_wildcard_in_selector(
+        self, acceptor
+    ):
         # Arrange
-        # Arrange
-        acceptor = CookieAutoAcceptor()
-        mock_page = MagicMock()
-        mock_locator = MagicMock()
-        mock_locator.first.is_visible = AsyncMock(return_value=True)
-        mock_page.locator.return_value = mock_locator
-        await acceptor.check_cookie_banner_exists_async(mock_page)
-        call_args = mock_page.locator.call_args
+        page = FakeLocatorPage(visible=True)
         # Act
-        # Act
-        selector = call_args[0][0]
-        # Act
+        await acceptor.check_cookie_banner_exists_async(page)
         # Assert
-        # Assert
-        assert "[class*='cookie']" in selector
+        assert "[class*='cookie']" in page.selectors_seen[0]
 
 
-
-class TestCookieAutoAcceptorIntegration:
-    """Integration tests for CookieAutoAcceptor."""
-
-    def test_multiple_instances_independent(self):
-        """Multiple instances should be independent."""
-        # Arrange
-        acceptor1 = CookieAutoAcceptor()
-        acceptor2 = CookieAutoAcceptor()
-
-        # Add custom text to one
-        # Act
-        acceptor1.cookie_texts.append("Custom Text")
-
-        # Other should not have it
-        # Assert
-        assert "Custom Text" not in acceptor2.cookie_texts
-
-    def test_script_is_valid_javascript_iife_in_script(self):
-        # Arrange
-        # Arrange
-        acceptor = CookieAutoAcceptor()
-        # Act
-        # Act
-        script = acceptor.get_auto_acceptor_script()
-        # Act
-        # Assert
-        # Assert
-        assert "(() => {" in script
-
-    def test_script_is_valid_javascript_iife_in_script(self):
-        # Arrange
-        # Arrange
-        acceptor = CookieAutoAcceptor()
-        # Act
-        # Act
-        script = acceptor.get_auto_acceptor_script()
-        # Act
-        # Assert
-        # Assert
-        assert "})();" in script
+# ---------------------------------------------------------------------------
+# Instance independence
+# ---------------------------------------------------------------------------
 
 
-    @pytest.mark.asyncio
-    async def test_full_workflow_acceptor_name_equals_cookieautoacceptor_acceptor_name_equals_cookieautoacceptor(self):
-        # Arrange
-        # Act
-        # Arrange
-        # Act
-        # Arrange
-        # Act
-        acceptor = CookieAutoAcceptor()
-        # Act
-        # Assert
-        # Assert
-        assert acceptor.name == "CookieAutoAcceptor"
+class TestCookieAutoAcceptorInstanceIndependence:
+    """Tests verifying instance state is per-object, not shared."""
 
-    @pytest.mark.asyncio
-    async def test_full_workflow_acceptor_name_equals_cookieautoacceptor_len_acceptor_cookie_texts_0(self):
+    def test_mutating_one_instance_cookie_texts_does_not_affect_another(self):
         # Arrange
+        first = CookieAutoAcceptor()
+        second = CookieAutoAcceptor()
         # Act
-        # Arrange
-        # Act
-        # Arrange
-        # Act
-        acceptor = CookieAutoAcceptor()
-        # Act
+        first.cookie_texts.append("Custom Text")
         # Assert
-        # Assert
-        assert len(acceptor.cookie_texts) > 0
-
-    @pytest.mark.asyncio
-    async def test_full_workflow_acceptor_name_equals_cookieautoacceptor_len_acceptor_selectors_0(self):
-        # Arrange
-        # Act
-        # Arrange
-        # Act
-        # Arrange
-        # Act
-        acceptor = CookieAutoAcceptor()
-        # Act
-        # Assert
-        # Assert
-        assert len(acceptor.selectors) > 0
-
-    @pytest.mark.asyncio
-    async def test_full_workflow_acceptor_name_equals_cookieautoacceptor_acceptcookies_in_script_acceptor_name_equals_cookieautoacceptor(self):
-        # Arrange
-        # Act
-        # Arrange
-        # Act
-        # Arrange
-        # Act
-        acceptor = CookieAutoAcceptor()
-        # Act
-        # Assert
-        # Assert
-        assert acceptor.name == "CookieAutoAcceptor"
-
-    @pytest.mark.asyncio
-    async def test_full_workflow_acceptor_name_equals_cookieautoacceptor_acceptcookies_in_script_len_acceptor_cookie_texts_0(self):
-        # Arrange
-        # Act
-        # Arrange
-        # Act
-        # Arrange
-        # Act
-        acceptor = CookieAutoAcceptor()
-        # Act
-        # Assert
-        # Assert
-        assert len(acceptor.cookie_texts) > 0
-
-    @pytest.mark.asyncio
-    async def test_full_workflow_acceptor_name_equals_cookieautoacceptor_acceptcookies_in_script_len_acceptor_selectors_0(self):
-        # Arrange
-        # Act
-        # Arrange
-        # Act
-        # Arrange
-        # Act
-        acceptor = CookieAutoAcceptor()
-        # Act
-        # Assert
-        # Assert
-        assert len(acceptor.selectors) > 0
-
-    @pytest.mark.asyncio
-    async def test_full_workflow_acceptor_name_equals_cookieautoacceptor_acceptcookies_in_script_acceptcookies_in_script_acceptor_name_equals_cookieautoacceptor_and_len_acc(self):
-        # Arrange
-        # Act
-        # Arrange
-        # Act
-        acceptor = CookieAutoAcceptor()
-        # Act
-        # Assert
-        # Assert
-        assert (acceptor.name == 'CookieAutoAcceptor') and (len(acceptor.cookie_texts) > 0) and (len(acceptor.selectors) > 0)
-
-    @pytest.mark.asyncio
-    async def test_full_workflow_acceptor_name_equals_cookieautoacceptor_acceptcookies_in_script_acceptcookies_in_script_acceptcookies_in_script(self):
-        # Arrange
-        # Arrange
-        acceptor = CookieAutoAcceptor()
-        # Verify initialization
-        # Get script
-        # Act
-        # Act
-        script = acceptor.get_auto_acceptor_script()
-        # Act
-        # Assert
-        # Assert
-        assert "acceptCookies" in script
-
-
-
-    @pytest.mark.asyncio
-    async def test_full_workflow_acceptor_name_equals_cookieautoacceptor_banner_exists_is_false_acceptor_name_equals_cookieautoacceptor(self):
-        # Arrange
-        # Act
-        # Arrange
-        # Act
-        # Arrange
-        # Act
-        acceptor = CookieAutoAcceptor()
-        # Act
-        # Assert
-        # Assert
-        assert acceptor.name == "CookieAutoAcceptor"
-
-    @pytest.mark.asyncio
-    async def test_full_workflow_acceptor_name_equals_cookieautoacceptor_banner_exists_is_false_len_acceptor_cookie_texts_0(self):
-        # Arrange
-        # Act
-        # Arrange
-        # Act
-        # Arrange
-        # Act
-        acceptor = CookieAutoAcceptor()
-        # Act
-        # Assert
-        # Assert
-        assert len(acceptor.cookie_texts) > 0
-
-    @pytest.mark.asyncio
-    async def test_full_workflow_acceptor_name_equals_cookieautoacceptor_banner_exists_is_false_len_acceptor_selectors_0(self):
-        # Arrange
-        # Act
-        # Arrange
-        # Act
-        # Arrange
-        # Act
-        acceptor = CookieAutoAcceptor()
-        # Act
-        # Assert
-        # Assert
-        assert len(acceptor.selectors) > 0
-
-    @pytest.mark.asyncio
-    async def test_full_workflow_acceptor_name_equals_cookieautoacceptor_banner_exists_is_false_acceptcookies_in_script_acceptor_name_equals_cookieautoacceptor_and_len_acc(self):
-        # Arrange
-        # Act
-        # Arrange
-        # Act
-        acceptor = CookieAutoAcceptor()
-        # Act
-        # Assert
-        # Assert
-        assert (acceptor.name == 'CookieAutoAcceptor') and (len(acceptor.cookie_texts) > 0) and (len(acceptor.selectors) > 0)
-
-    @pytest.mark.asyncio
-    async def test_full_workflow_acceptor_name_equals_cookieautoacceptor_banner_exists_is_false_acceptcookies_in_script_acceptcookies_in_script(self):
-        # Arrange
-        # Arrange
-        acceptor = CookieAutoAcceptor()
-        # Verify initialization
-        # Get script
-        # Act
-        # Act
-        script = acceptor.get_auto_acceptor_script()
-        # Act
-        # Assert
-        # Assert
-        assert "acceptCookies" in script
-
-
-    @pytest.mark.asyncio
-    async def test_full_workflow_acceptor_name_equals_cookieautoacceptor_banner_exists_is_false_banner_exists_is_false_acceptor_name_equals_cookieautoacceptor_and_len_acc(self):
-        # Arrange
-        # Act
-        # Arrange
-        # Act
-        acceptor = CookieAutoAcceptor()
-        # Act
-        # Assert
-        # Assert
-        assert (acceptor.name == 'CookieAutoAcceptor') and (len(acceptor.cookie_texts) > 0) and (len(acceptor.selectors) > 0)
-
-    @pytest.mark.asyncio
-    async def test_full_workflow_acceptor_name_equals_cookieautoacceptor_banner_exists_is_false_banner_exists_is_false_acceptcookies_in_script(self):
-        # Arrange
-        # Arrange
-        acceptor = CookieAutoAcceptor()
-        # Verify initialization
-        # Get script
-        # Act
-        # Act
-        script = acceptor.get_auto_acceptor_script()
-        # Act
-        # Assert
-        # Assert
-        assert "acceptCookies" in script
-
-    @pytest.mark.asyncio
-    async def test_full_workflow_acceptor_name_equals_cookieautoacceptor_banner_exists_is_false_banner_exists_is_false_banner_exists_is_false_acceptor_name_equals_cookieautoacceptor_and_len_acc(self):
-        # Arrange
-        # Arrange
-        # Act
-        acceptor = CookieAutoAcceptor()
-        # Act
-        # Assert
-        # Assert
-        assert (acceptor.name == 'CookieAutoAcceptor') and (len(acceptor.cookie_texts) > 0) and (len(acceptor.selectors) > 0)
-
-    @pytest.mark.asyncio
-    async def test_full_workflow_acceptor_name_equals_cookieautoacceptor_banner_exists_is_false_banner_exists_is_false_banner_exists_is_false_acceptcookies_in_script(self):
-        # Arrange
-        # Arrange
-        acceptor = CookieAutoAcceptor()
-        # Verify initialization
-        # Get script
-        # Act
-        script = acceptor.get_auto_acceptor_script()
-        # Act
-        # Assert
-        # Assert
-        assert "acceptCookies" in script
-
-    @pytest.mark.asyncio
-    async def test_full_workflow_acceptor_name_equals_cookieautoacceptor_banner_exists_is_false_banner_exists_is_false_banner_exists_is_false_banner_exists_is_false(self):
-        # Arrange
-        # Arrange
-        # Act
-        acceptor = CookieAutoAcceptor()
-        # Verify initialization
-        # Assert
-        assert (acceptor.name == 'CookieAutoAcceptor') and (len(acceptor.cookie_texts) > 0) and (len(acceptor.selectors) > 0)
-        # Get script
-        script = acceptor.get_auto_acceptor_script()
-        assert "acceptCookies" in script
-        # Mock context injection
-        mock_context = MagicMock()
-        mock_context.add_init_script = AsyncMock()
-        await acceptor.inject_auto_acceptor_async(mock_context)
-        mock_context.add_init_script.assert_called_once()
-        # Mock page banner check
-        mock_page = MagicMock()
-        mock_locator = MagicMock()
-        mock_locator.first.is_visible = AsyncMock(return_value=False)
-        mock_page.locator.return_value = mock_locator
-        banner_exists = await acceptor.check_cookie_banner_exists_async(mock_page)
-        # Act
-        # Assert
-        assert banner_exists is False
-
-
-
-
+        assert "Custom Text" not in second.cookie_texts
 
 
 if __name__ == "__main__":
