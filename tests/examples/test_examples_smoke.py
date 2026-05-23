@@ -6,7 +6,12 @@ from pathlib import Path
 
 import pytest
 
-EXAMPLES = sorted(Path(__file__).parent.parent.joinpath("examples").glob("*.py"))
+# Root-level repo examples directory ( <repo>/examples/*.py ), not
+# tests/examples/. ``parents[2]`` walks up from
+# ``tests/examples/test_examples_smoke.py`` → ``<repo>/``.
+EXAMPLES = sorted(
+    Path(__file__).resolve().parents[2].joinpath("examples").glob("*.py")
+)
 
 
 def test_examples_directory_is_not_empty():
