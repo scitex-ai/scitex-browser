@@ -29,9 +29,11 @@ CROSS_PACKAGE_IMPORTS = [
 
 
 @pytest.mark.parametrize("module_name", CROSS_PACKAGE_IMPORTS)
-def test_cross_package_import(module_name):
+def test_cross_package_import_resolves_to_real_module(module_name):
     """Importing scitex-browser's declared cross-package dependency must succeed."""
     # Arrange
+    expected_name = module_name
     # Act
+    module = pytest.importorskip(module_name)
     # Assert
-    pytest.importorskip(module_name)
+    assert module.__name__ == expected_name

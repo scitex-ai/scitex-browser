@@ -4,29 +4,36 @@ import subprocess
 import sys
 from pathlib import Path
 
-EXAMPLES = sorted(Path(__file__).parent.parent.joinpath("examples").glob("*.py"))
+import pytest
+
+# Root-level repo examples directory ( <repo>/examples/*.py ), not
+# tests/examples/. ``parents[2]`` walks up from
+# ``tests/examples/test_examples_smoke.py`` → ``<repo>/``.
+EXAMPLES = sorted(
+    Path(__file__).resolve().parents[2].joinpath("examples").glob("*.py")
+)
 
 
-def test_examples_smoke_examples(tmp_path):
+def test_examples_directory_is_not_empty():
     # Arrange
+    discovered = EXAMPLES
     # Act
+    count = len(discovered)
     # Assert
+    assert count > 0, "no example scripts found"
+
+
+@pytest.mark.parametrize("example_path", EXAMPLES, ids=lambda p: p.name)
+def test_example_script_runs_with_exit_code_zero(example_path, tmp_path):
     # Arrange
+    cmd = [sys.executable, str(example_path)]
     # Act
+    result = subprocess.run(
+        cmd,
+        cwd=tmp_path,
+        capture_output=True,
+        text=True,
+        timeout=120,
+    )
     # Assert
-    # Arrange
-    # Act
-    # Assert
-    # Arrange
-    # Act
-    # Assert
-    assert EXAMPLES, "no example scripts found"
-    for ex in EXAMPLES:
-        r = subprocess.run(
-            [sys.executable, str(ex)],
-            cwd=tmp_path,
-            capture_output=True,
-            text=True,
-            timeout=120,
-        )
-        assert r.returncode == 0, f"{ex.name} failed: {r.stderr}"
+    assert result.returncode == 0, f"{example_path.name} failed: {result.stderr}"

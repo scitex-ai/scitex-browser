@@ -1,764 +1,387 @@
 #!/usr/bin/env python3
-"""Tests for GoogleAuthHelper class."""
+"""Tests for GoogleAuthHelper class.
+
+History: prior to 2026-05-24 this file used ``unittest.mock`` to stand in
+for the Playwright ``Page`` object across the OAuth-popup methods. Those
+tests were pure mock theater — they asserted on ``mock.assert_called_*``
+rather than on production state — and so were deleted under the SciTeX
+no-mocks rule (PA-306). The remaining tests exercise the parts of
+``GoogleAuthHelper`` that do NOT need a real browser: instance
+construction, env-var fallbacks, debug logging, and the URL-only
+``is_logged_in`` heuristic. The popup-flow methods should be covered by
+real-browser integration tests under ``tests/integration/``.
+"""
+
+from __future__ import annotations
 
 import os
-from unittest.mock import AsyncMock, MagicMock, patch
+from dataclasses import dataclass
 
 import pytest
 
-from scitex_browser.auth.google import GoogleAuthHelper, google_login
+from scitex_browser.auth.google import GoogleAuthHelper
+
+
+# ---------------------------------------------------------------------------
+# Hand-rolled fakes (no unittest.mock)
+# ---------------------------------------------------------------------------
+
+
+@dataclass
+class FakeUrlPage:
+    """Minimal stand-in for ``playwright.async_api.Page`` exposing just the
+    ``url`` attribute that ``GoogleAuthHelper.is_logged_in`` reads.
+
+    The real ``Page`` has ~40 methods; this fake has 1. Renames on the
+    production side (e.g. ``page.url`` → ``page.current_url``) will turn
+    these tests red — which is exactly the contract we want.
+    """
+
+    url: str
+
+
+# ---------------------------------------------------------------------------
+# Env-var fixtures (yield-based, no monkeypatch)
+# ---------------------------------------------------------------------------
+
+
+_GOOGLE_AUTH_ENV_KEYS = ("GOOGLE_EMAIL", "GOOGLE_PASSWORD", "GOOGLE_AUTH_DEBUG")
+
+
+@pytest.fixture
+def google_auth_env_restore():
+    """Snapshot and restore the Google-auth env vars across the test.
+
+    Replaces the ``monkeypatch.setenv(...)`` / ``patch.dict(os.environ, ...)``
+    pattern.
+    """
+    saved = {k: os.environ.get(k) for k in _GOOGLE_AUTH_ENV_KEYS}
+    for k in _GOOGLE_AUTH_ENV_KEYS:
+        os.environ.pop(k, None)
+    try:
+        yield
+    finally:
+        for k, v in saved.items():
+            if v is None:
+                os.environ.pop(k, None)
+            else:
+                os.environ[k] = v
+
+
+# ---------------------------------------------------------------------------
+# Init tests
+# ---------------------------------------------------------------------------
 
 
 class TestGoogleAuthHelperInit:
     """Tests for GoogleAuthHelper initialization."""
 
-    def test_init_creates_instance(self):
-        """GoogleAuthHelper should initialize without errors."""
+    def test_init_creates_instance_when_no_args(self, google_auth_env_restore):
         # Arrange
+        # (env cleared by fixture)
         # Act
         auth = GoogleAuthHelper()
         # Assert
         assert auth is not None
 
-    def test_init_stores_email(self):
-        """Should store provided email."""
+    def test_init_stores_email_supplied_as_param(self, google_auth_env_restore):
         # Arrange
+        param_email = "test@gmail.com"
         # Act
-        auth = GoogleAuthHelper(email="test@gmail.com")
+        auth = GoogleAuthHelper(email=param_email)
         # Assert
-        assert auth.email == "test@gmail.com"
+        assert auth.email == param_email
 
-    def test_init_stores_password(self):
-        """Should store provided password."""
+    def test_init_stores_password_supplied_as_param(self, google_auth_env_restore):
         # Arrange
+        param_password = "secret123"
         # Act
-        auth = GoogleAuthHelper(password="secret123")
+        auth = GoogleAuthHelper(password=param_password)
         # Assert
-        assert auth.password == "secret123"
+        assert auth.password == param_password
 
-    def test_init_stores_debug_flag(self):
-        """Should store debug flag."""
+    def test_init_stores_debug_true_when_supplied(self, google_auth_env_restore):
         # Arrange
         # Act
         auth = GoogleAuthHelper(debug=True)
         # Assert
         assert auth.debug is True
 
-    def test_init_uses_env_email_when_not_provided(self):
-        """Should use GOOGLE_EMAIL env var when email not provided."""
+    def test_init_reads_email_from_google_email_env_var(
+        self, google_auth_env_restore
+    ):
         # Arrange
+        os.environ["GOOGLE_EMAIL"] = "env@gmail.com"
         # Act
+        auth = GoogleAuthHelper()
         # Assert
-        with patch.dict(os.environ, {"GOOGLE_EMAIL": "env@gmail.com"}):
-            auth = GoogleAuthHelper()
-            assert auth.email == "env@gmail.com"
+        assert auth.email == "env@gmail.com"
 
-    def test_init_uses_env_password_when_not_provided(self):
-        """Should use GOOGLE_PASSWORD env var when password not provided."""
+    def test_init_reads_password_from_google_password_env_var(
+        self, google_auth_env_restore
+    ):
         # Arrange
+        os.environ["GOOGLE_PASSWORD"] = "envpass"
         # Act
+        auth = GoogleAuthHelper()
         # Assert
-        with patch.dict(os.environ, {"GOOGLE_PASSWORD": "envpass"}):
-            auth = GoogleAuthHelper()
-            assert auth.password == "envpass"
+        assert auth.password == "envpass"
 
-    def test_init_uses_env_debug_when_not_provided(self):
-        """Should use GOOGLE_AUTH_DEBUG env var when debug not provided."""
+    def test_init_reads_debug_from_google_auth_debug_env_var(
+        self, google_auth_env_restore
+    ):
         # Arrange
+        os.environ["GOOGLE_AUTH_DEBUG"] = "1"
         # Act
+        auth = GoogleAuthHelper()
         # Assert
-        with patch.dict(os.environ, {"GOOGLE_AUTH_DEBUG": "1"}):
-            auth = GoogleAuthHelper()
-            assert auth.debug is True
+        assert auth.debug is True
 
-    def test_init_prefers_param_over_env(self):
-        """Provided params should override env vars."""
+    def test_init_prefers_param_email_over_env(self, google_auth_env_restore):
         # Arrange
+        os.environ["GOOGLE_EMAIL"] = "env@gmail.com"
         # Act
+        auth = GoogleAuthHelper(email="param@gmail.com")
         # Assert
-        with patch.dict(
-            os.environ, {"GOOGLE_EMAIL": "env@gmail.com", "GOOGLE_PASSWORD": "envpass"}
-        ):
-            auth = GoogleAuthHelper(email="param@gmail.com", password="parampass")
-            assert (auth.email == 'param@gmail.com') and (auth.password == 'parampass')
+        assert auth.email == "param@gmail.com"
 
-    def test_init_defaults_to_empty_strings(self):
-        """Should default to empty strings when nothing provided."""
+    def test_init_prefers_param_password_over_env(self, google_auth_env_restore):
         # Arrange
+        os.environ["GOOGLE_PASSWORD"] = "envpass"
         # Act
+        auth = GoogleAuthHelper(password="parampass")
         # Assert
-        with patch.dict(os.environ, {}, clear=True):
-            os.environ.pop("GOOGLE_EMAIL", None)
-            os.environ.pop("GOOGLE_PASSWORD", None)
-            os.environ.pop("GOOGLE_AUTH_DEBUG", None)
-            auth = GoogleAuthHelper()
-            assert (auth.email == '') and (auth.password == '') and (auth.debug is False)
+        assert auth.password == "parampass"
+
+    def test_init_defaults_email_to_empty_string_when_unset(
+        self, google_auth_env_restore
+    ):
+        # Arrange
+        # (env cleared by fixture)
+        # Act
+        auth = GoogleAuthHelper()
+        # Assert
+        assert auth.email == ""
+
+    def test_init_defaults_password_to_empty_string_when_unset(
+        self, google_auth_env_restore
+    ):
+        # Arrange
+        # (env cleared by fixture)
+        # Act
+        auth = GoogleAuthHelper()
+        # Assert
+        assert auth.password == ""
+
+    def test_init_defaults_debug_to_false_when_unset(self, google_auth_env_restore):
+        # Arrange
+        # (env cleared by fixture)
+        # Act
+        auth = GoogleAuthHelper()
+        # Assert
+        assert auth.debug is False
+
+
+# ---------------------------------------------------------------------------
+# _log tests
+# ---------------------------------------------------------------------------
 
 
 class TestGoogleAuthHelperLog:
-    """Tests for _log method."""
+    """Tests for the _log method."""
 
-    def test_log_prints_when_debug_enabled_test_message_in_captured_err(self, capsys):
-        # Arrange
-        # Arrange
-        auth = GoogleAuthHelper(debug=True)
-        auth._log("Test message")
-        # Act
-        # Act
-        captured = capsys.readouterr()
-        # Act
-        # Assert
-        # Assert
-        assert "Test message" in captured.err
-
-    def test_log_prints_when_debug_enabled_googleauth_in_captured_err(self, capsys):
-        # Arrange
+    def test_log_writes_message_text_to_stderr_when_debug_enabled(
+        self, capsys, google_auth_env_restore
+    ):
         # Arrange
         auth = GoogleAuthHelper(debug=True)
+        # Act
         auth._log("Test message")
-        # Act
-        # Act
-        captured = capsys.readouterr()
-        # Act
         # Assert
+        assert "Test message" in capsys.readouterr().err
+
+    def test_log_writes_googleauth_tag_to_stderr_when_debug_enabled(
+        self, capsys, google_auth_env_restore
+    ):
+        # Arrange
+        auth = GoogleAuthHelper(debug=True)
+        # Act
+        auth._log("Test message")
         # Assert
-        assert "[GoogleAuth]" in captured.err
+        assert "[GoogleAuth]" in capsys.readouterr().err
 
-
-    def test_log_silent_when_debug_disabled(self, capsys):
-        """_log should not print when debug is False."""
+    def test_log_writes_nothing_to_stderr_when_debug_disabled(
+        self, capsys, google_auth_env_restore
+    ):
         # Arrange
         auth = GoogleAuthHelper(debug=False)
+        # Act
         auth._log("Test message")
-        # Act
-        captured = capsys.readouterr()
         # Assert
-        assert captured.err == ""
+        assert capsys.readouterr().err == ""
 
 
-class TestLoginViaGoogleButton:
-    """Tests for login_via_google_button method."""
+# ---------------------------------------------------------------------------
+# is_logged_in tests (URL-only — exercised with a real hand-rolled page fake)
+# ---------------------------------------------------------------------------
+
+
+class TestGoogleAuthHelperIsLoggedIn:
+    """Tests for the is_logged_in heuristic."""
 
     @pytest.mark.asyncio
-    async def test_returns_false_when_button_not_found(self):
-        """Should return False when Google button not found."""
+    async def test_is_logged_in_returns_false_for_login_in_url(
+        self, google_auth_env_restore
+    ):
         # Arrange
         auth = GoogleAuthHelper()
-        mock_page = MagicMock()
-        mock_page.query_selector = AsyncMock(return_value=None)
-
+        page = FakeUrlPage(url="https://example.com/login")
         # Act
-        result = await auth.login_via_google_button(mock_page)
-
+        result = await auth.is_logged_in(page)
         # Assert
         assert result is False
 
     @pytest.mark.asyncio
-    async def test_tries_alternative_selectors(self):
-        """Should try alternative selectors when primary fails."""
+    async def test_is_logged_in_returns_false_for_signin_in_url(
+        self, google_auth_env_restore
+    ):
         # Arrange
         auth = GoogleAuthHelper()
-        mock_page = MagicMock()
-        # First call fails, second succeeds
-        call_count = 0
-
-        async def mock_query_selector(selector):
-            nonlocal call_count
-            call_count += 1
-            if call_count >= 2:
-                return MagicMock()
-            return None
-
-        mock_page.query_selector = mock_query_selector
-        mock_page.context.expect_page = MagicMock()
-
-        # This will fail due to other issues but tests selector logic
+        page = FakeUrlPage(url="https://example.com/signin")
         # Act
-        result = await auth.login_via_google_button(mock_page)
-
-        # Assert
-        assert call_count >= 2
-
-    @pytest.mark.asyncio
-    async def test_handles_exception_gracefully(self):
-        """Should return False on exception."""
-        # Arrange
-        auth = GoogleAuthHelper()
-        mock_page = MagicMock()
-        mock_page.query_selector = AsyncMock(side_effect=Exception("Test error"))
-
-        # Act
-        result = await auth.login_via_google_button(mock_page)
-
+        result = await auth.is_logged_in(page)
         # Assert
         assert result is False
 
     @pytest.mark.asyncio
-    async def test_clicks_google_button(self):
-        """Should click the Google button when found."""
-        # Arrange
-        # Act
-        # Assert
-        auth = GoogleAuthHelper()
-        mock_page = MagicMock()
-        mock_button = MagicMock()
-        mock_button.click = AsyncMock()
-        mock_page.query_selector = AsyncMock(return_value=mock_button)
-
-        # Setup popup context manager
-        mock_popup = MagicMock()
-        mock_popup.url = "https://accounts.google.com"
-        mock_popup_info = MagicMock()
-        mock_popup_info.value = mock_popup
-
-        mock_cm = MagicMock()
-        mock_cm.__aenter__ = AsyncMock(return_value=mock_popup_info)
-        mock_cm.__aexit__ = AsyncMock(return_value=None)
-        mock_page.context.expect_page = MagicMock(return_value=mock_cm)
-
-        # Mock popup handler
-        with patch.object(auth, "_handle_google_popup", AsyncMock(return_value=False)):
-            await auth.login_via_google_button(mock_page)
-            mock_button.click.assert_called_once()
-            assert mock_button.click.call_count == 1
-
-
-class TestHandleGooglePopup:
-    """Tests for _handle_google_popup method."""
-
-    @pytest.mark.asyncio
-    async def test_returns_false_on_email_failure(self):
-        """Should return False when email fill fails."""
-        # Arrange
-        # Act
-        # Assert
-        auth = GoogleAuthHelper()
-        mock_popup = MagicMock()
-        mock_popup.wait_for_load_state = AsyncMock()
-        mock_popup.wait_for_timeout = AsyncMock()
-
-        with patch.object(auth, "_fill_email", AsyncMock(return_value=False)):
-            result = await auth._handle_google_popup(mock_popup)
-            assert result is False
-
-    @pytest.mark.asyncio
-    async def test_returns_false_on_password_failure(self):
-        """Should return False when password fill fails."""
-        # Arrange
-        # Act
-        # Assert
-        auth = GoogleAuthHelper()
-        mock_popup = MagicMock()
-        mock_popup.wait_for_load_state = AsyncMock()
-        mock_popup.wait_for_timeout = AsyncMock()
-
-        with patch.object(auth, "_fill_email", AsyncMock(return_value=True)):
-            with patch.object(auth, "_fill_password", AsyncMock(return_value=False)):
-                result = await auth._handle_google_popup(mock_popup)
-                assert result is False
-
-    @pytest.mark.asyncio
-    async def test_returns_true_when_popup_closes(self):
-        """Should return True when popup closes (indicates success)."""
-        # Arrange
-        # Act
-        # Assert
-        auth = GoogleAuthHelper()
-        mock_popup = MagicMock()
-        mock_popup.wait_for_load_state = AsyncMock()
-        mock_popup.wait_for_timeout = AsyncMock()
-        mock_popup.wait_for_event = AsyncMock(return_value=None)
-
-        with patch.object(auth, "_fill_email", AsyncMock(return_value=True)):
-            with patch.object(auth, "_fill_password", AsyncMock(return_value=True)):
-                result = await auth._handle_google_popup(mock_popup)
-                assert result is True
-
-    @pytest.mark.asyncio
-    async def test_handles_exception_gracefully(self):
-        """Should return False on exception."""
+    async def test_is_logged_in_returns_false_for_oauth_in_url(
+        self, google_auth_env_restore
+    ):
         # Arrange
         auth = GoogleAuthHelper()
-        mock_popup = MagicMock()
-        mock_popup.wait_for_load_state = AsyncMock(side_effect=Exception("Load error"))
-
+        page = FakeUrlPage(url="https://example.com/oauth/authorize")
         # Act
-        result = await auth._handle_google_popup(mock_popup)
+        result = await auth.is_logged_in(page)
         # Assert
         assert result is False
 
-
-class TestFillEmail:
-    """Tests for _fill_email method."""
+    @pytest.mark.asyncio
+    async def test_is_logged_in_returns_false_for_google_accounts_url(
+        self, google_auth_env_restore
+    ):
+        # Arrange
+        auth = GoogleAuthHelper()
+        page = FakeUrlPage(url="https://accounts.google.com/signin")
+        # Act
+        result = await auth.is_logged_in(page)
+        # Assert
+        assert result is False
 
     @pytest.mark.asyncio
-    async def test_fills_email_input(self):
-        """Should fill email in input field."""
+    async def test_is_logged_in_returns_true_for_dashboard_url(
+        self, google_auth_env_restore
+    ):
         # Arrange
-        auth = GoogleAuthHelper(email="test@gmail.com")
-        mock_popup = MagicMock()
-        mock_popup.wait_for_selector = AsyncMock()
-        mock_popup.fill = AsyncMock()
-        mock_popup.wait_for_timeout = AsyncMock()
-
-        mock_next_btn = MagicMock()
-        mock_next_btn.click = AsyncMock()
-        mock_popup.query_selector = AsyncMock(return_value=mock_next_btn)
-
-        result = await auth._fill_email(mock_popup)
-
+        auth = GoogleAuthHelper()
+        page = FakeUrlPage(url="https://example.com/dashboard")
         # Act
-        mock_popup.fill.assert_called_with('input[type="email"]', "test@gmail.com")
+        result = await auth.is_logged_in(page)
         # Assert
         assert result is True
 
     @pytest.mark.asyncio
-    async def test_clicks_next_button(self):
-        """Should click Next button after filling email."""
+    async def test_is_logged_in_honours_custom_indicators_list(
+        self, google_auth_env_restore
+    ):
         # Arrange
+        auth = GoogleAuthHelper()
+        page = FakeUrlPage(url="https://example.com/auth")
         # Act
-        # Assert
-        auth = GoogleAuthHelper(email="test@gmail.com")
-        mock_popup = MagicMock()
-        mock_popup.wait_for_selector = AsyncMock()
-        mock_popup.fill = AsyncMock()
-        mock_popup.wait_for_timeout = AsyncMock()
-
-        mock_next_btn = MagicMock()
-        mock_next_btn.click = AsyncMock()
-        mock_popup.query_selector = AsyncMock(return_value=mock_next_btn)
-
-        await auth._fill_email(mock_popup)
-
-        mock_next_btn.click.assert_called_once()
-        assert mock_next_btn.click.call_count == 1
-
-    @pytest.mark.asyncio
-    async def test_returns_false_when_next_button_not_found(self):
-        """Should return False when Next button not found."""
-        # Arrange
-        auth = GoogleAuthHelper(email="test@gmail.com")
-        mock_popup = MagicMock()
-        mock_popup.wait_for_selector = AsyncMock()
-        mock_popup.fill = AsyncMock()
-        mock_popup.wait_for_timeout = AsyncMock()
-        mock_popup.query_selector = AsyncMock(return_value=None)
-
-        # Act
-        result = await auth._fill_email(mock_popup)
-
+        result = await auth.is_logged_in(page, login_indicators=["auth"])
         # Assert
         assert result is False
 
-    @pytest.mark.asyncio
-    async def test_handles_exception_gracefully(self):
-        """Should return False on exception."""
-        # Arrange
-        auth = GoogleAuthHelper(email="test@gmail.com")
-        mock_popup = MagicMock()
-        mock_popup.wait_for_selector = AsyncMock(
-            side_effect=Exception("Selector error")
+
+# ---------------------------------------------------------------------------
+# Multi-instance isolation
+# ---------------------------------------------------------------------------
+
+
+class TestGoogleAuthHelperMultipleInstancesIndependent:
+    """Tests that multiple GoogleAuthHelper instances do not share state."""
+
+    @pytest.fixture
+    def two_instances(self, google_auth_env_restore):
+        return (
+            GoogleAuthHelper(email="user1@gmail.com"),
+            GoogleAuthHelper(email="user2@gmail.com"),
         )
 
-        # Act
-        result = await auth._fill_email(mock_popup)
-
-        # Assert
-        assert result is False
-
-
-class TestFillPassword:
-    """Tests for _fill_password method."""
-
-    @pytest.mark.asyncio
-    async def test_fills_password_input(self):
-        """Should fill password in input field."""
+    def test_two_instances_have_distinct_email_attribute_values(self, two_instances):
         # Arrange
-        auth = GoogleAuthHelper(password="secret123")
-        mock_popup = MagicMock()
-        mock_popup.wait_for_selector = AsyncMock()
-        mock_popup.fill = AsyncMock()
-        mock_popup.wait_for_timeout = AsyncMock()
-
-        mock_next_btn = MagicMock()
-        mock_next_btn.click = AsyncMock()
-        mock_popup.query_selector = AsyncMock(return_value=mock_next_btn)
-
-        with patch.object(auth, "_wait_for_2fa", AsyncMock(return_value=True)):
-            with patch.object(auth, "_handle_consent_screens", AsyncMock()):
-                result = await auth._fill_password(mock_popup)
-
+        auth1, auth2 = two_instances
         # Act
-        mock_popup.fill.assert_called_with('input[type="password"]', "secret123")
+        same = auth1.email == auth2.email
         # Assert
-        assert result is True
+        assert same is False
 
-    @pytest.mark.asyncio
-    async def test_returns_false_when_next_button_not_found(self):
-        """Should return False when Next button not found."""
+    def test_first_instance_keeps_supplied_email_unchanged(self, two_instances):
         # Arrange
-        auth = GoogleAuthHelper(password="secret123")
-        mock_popup = MagicMock()
-        mock_popup.wait_for_selector = AsyncMock()
-        mock_popup.fill = AsyncMock()
-        mock_popup.wait_for_timeout = AsyncMock()
-        mock_popup.query_selector = AsyncMock(return_value=None)
-
+        auth1, _ = two_instances
         # Act
-        result = await auth._fill_password(mock_popup)
-
+        first_email = auth1.email
         # Assert
-        assert result is False
+        assert first_email == "user1@gmail.com"
 
-    @pytest.mark.asyncio
-    async def test_calls_2fa_handler(self):
-        """Should call 2FA handler after password."""
+    def test_second_instance_keeps_supplied_email_unchanged(self, two_instances):
         # Arrange
+        _, auth2 = two_instances
         # Act
+        second_email = auth2.email
         # Assert
-        auth = GoogleAuthHelper(password="secret123")
-        mock_popup = MagicMock()
-        mock_popup.wait_for_selector = AsyncMock()
-        mock_popup.fill = AsyncMock()
-        mock_popup.wait_for_timeout = AsyncMock()
+        assert second_email == "user2@gmail.com"
 
-        mock_next_btn = MagicMock()
-        mock_next_btn.click = AsyncMock()
-        mock_popup.query_selector = AsyncMock(return_value=mock_next_btn)
 
-        mock_2fa = AsyncMock(return_value=True)
-        with patch.object(auth, "_wait_for_2fa", mock_2fa):
-            with patch.object(auth, "_handle_consent_screens", AsyncMock()):
-                await auth._fill_password(mock_popup)
+# ---------------------------------------------------------------------------
+# Full env-driven configuration
+# ---------------------------------------------------------------------------
 
-        mock_2fa.assert_called_once()
-        assert mock_2fa.call_count == 1
 
-    @pytest.mark.asyncio
-    async def test_returns_false_when_2fa_fails(self):
-        """Should return False when 2FA fails."""
+class TestGoogleAuthHelperFullEnvConfig:
+    """Tests for end-to-end configuration via environment variables."""
+
+    @pytest.fixture
+    def env_configured_auth(self, google_auth_env_restore):
+        os.environ["GOOGLE_EMAIL"] = "env@gmail.com"
+        os.environ["GOOGLE_PASSWORD"] = "envpass"
+        os.environ["GOOGLE_AUTH_DEBUG"] = "1"
+        return GoogleAuthHelper()
+
+    def test_env_configured_helper_picks_up_email_from_env(self, env_configured_auth):
         # Arrange
-        auth = GoogleAuthHelper(password="secret123")
-        mock_popup = MagicMock()
-        mock_popup.wait_for_selector = AsyncMock()
-        mock_popup.fill = AsyncMock()
-        mock_popup.wait_for_timeout = AsyncMock()
-
-        mock_next_btn = MagicMock()
-        mock_next_btn.click = AsyncMock()
-        mock_popup.query_selector = AsyncMock(return_value=mock_next_btn)
-
+        auth = env_configured_auth
         # Act
-        with patch.object(auth, "_wait_for_2fa", AsyncMock(return_value=False)):
-            result = await auth._fill_password(mock_popup)
-
+        email = auth.email
         # Assert
-        assert result is False
+        assert email == "env@gmail.com"
 
-
-class TestHandleConsentScreens:
-    """Tests for _handle_consent_screens method."""
-
-    @pytest.mark.asyncio
-    async def test_clicks_continue_button(self):
-        """Should click Continue button when found."""
+    def test_env_configured_helper_picks_up_password_from_env(
+        self, env_configured_auth
+    ):
         # Arrange
+        auth = env_configured_auth
         # Act
+        password = auth.password
         # Assert
-        auth = GoogleAuthHelper()
-        mock_popup = MagicMock()
+        assert password == "envpass"
 
-        mock_btn = MagicMock()
-        mock_btn.is_visible = AsyncMock(return_value=True)
-        mock_btn.click = AsyncMock()
-        mock_popup.query_selector = AsyncMock(return_value=mock_btn)
-        mock_popup.wait_for_timeout = AsyncMock()
-
-        await auth._handle_consent_screens(mock_popup)
-
-        mock_btn.click.assert_called_once()
-        assert mock_btn.click.call_count == 1
-
-    @pytest.mark.asyncio
-    async def test_handles_no_consent_screen(self):
-        """Should handle case when no consent screen present."""
+    def test_env_configured_helper_picks_up_debug_from_env(self, env_configured_auth):
         # Arrange
+        auth = env_configured_auth
         # Act
+        debug = auth.debug
         # Assert
-        auth = GoogleAuthHelper()
-        mock_popup = MagicMock()
-        mock_popup.query_selector = AsyncMock(return_value=None)
-
-        # Should not raise
-        await auth._handle_consent_screens(mock_popup)
-
-    @pytest.mark.asyncio
-    async def test_handles_exception_gracefully(self):
-        """Should handle exceptions gracefully."""
-        # Arrange
-        # Act
-        # Assert
-        auth = GoogleAuthHelper()
-        mock_popup = MagicMock()
-        mock_popup.query_selector = AsyncMock(side_effect=Exception("Error"))
-
-        # Should not raise
-        await auth._handle_consent_screens(mock_popup)
-
-
-class TestWaitFor2FA:
-    """Tests for _wait_for_2fa method."""
-
-    @pytest.mark.asyncio
-    async def test_returns_true_when_not_2fa_page(self):
-        """Should return True when not on 2FA page."""
-        # Arrange
-        auth = GoogleAuthHelper()
-        mock_popup = MagicMock()
-        mock_popup.inner_text = AsyncMock(return_value="Welcome to Google")
-
-        # Act
-        result = await auth._wait_for_2fa(mock_popup)
-
-        # Assert
-        assert result is True
-
-    @pytest.mark.asyncio
-    async def test_detects_2fa_indicators(self):
-        """Should detect 2FA indicators in page text."""
-        # Arrange
-        auth = GoogleAuthHelper()
-        mock_popup = MagicMock()
-        mock_popup.inner_text = AsyncMock(return_value="2-Step Verification required")
-        mock_popup.url = "https://accounts.google.com/2fa"
-        mock_popup.wait_for_timeout = AsyncMock()
-
-        # Simulate popup closing
-        call_count = 0
-
-        @property
-        def url_getter():
-            nonlocal call_count
-            call_count += 1
-            if call_count > 2:
-                raise Exception("Popup closed")
-            return "https://accounts.google.com/2fa"
-
-        type(mock_popup).url = url_getter
-
-        # Act
-        result = await auth._wait_for_2fa(mock_popup, timeout=5000)
-
-        # Should have detected 2FA
-        # Assert
-        assert mock_popup.inner_text.called
-
-    @pytest.mark.asyncio
-    async def test_handles_exception_gracefully(self):
-        """Should return False on exception."""
-        # Arrange
-        auth = GoogleAuthHelper()
-        mock_popup = MagicMock()
-        mock_popup.inner_text = AsyncMock(side_effect=Exception("Error"))
-
-        # Act
-        result = await auth._wait_for_2fa(mock_popup)
-
-        # Assert
-        assert result is False
-
-
-class TestIsLoggedIn:
-    """Tests for is_logged_in method."""
-
-    @pytest.mark.asyncio
-    async def test_returns_false_for_login_url(self):
-        """Should return False when URL contains login."""
-        # Arrange
-        auth = GoogleAuthHelper()
-        mock_page = MagicMock()
-        mock_page.url = "https://example.com/login"
-
-        # Act
-        result = await auth.is_logged_in(mock_page)
-
-        # Assert
-        assert result is False
-
-    @pytest.mark.asyncio
-    async def test_returns_false_for_signin_url(self):
-        """Should return False when URL contains signin."""
-        # Arrange
-        auth = GoogleAuthHelper()
-        mock_page = MagicMock()
-        mock_page.url = "https://example.com/signin"
-
-        # Act
-        result = await auth.is_logged_in(mock_page)
-
-        # Assert
-        assert result is False
-
-    @pytest.mark.asyncio
-    async def test_returns_false_for_oauth_url(self):
-        """Should return False when URL contains oauth."""
-        # Arrange
-        auth = GoogleAuthHelper()
-        mock_page = MagicMock()
-        mock_page.url = "https://example.com/oauth/authorize"
-
-        # Act
-        result = await auth.is_logged_in(mock_page)
-
-        # Assert
-        assert result is False
-
-    @pytest.mark.asyncio
-    async def test_returns_false_for_google_accounts_url(self):
-        """Should return False when URL is Google accounts."""
-        # Arrange
-        auth = GoogleAuthHelper()
-        mock_page = MagicMock()
-        mock_page.url = "https://accounts.google.com/signin"
-
-        # Act
-        result = await auth.is_logged_in(mock_page)
-
-        # Assert
-        assert result is False
-
-    @pytest.mark.asyncio
-    async def test_returns_true_for_dashboard_url(self):
-        """Should return True when URL suggests logged in."""
-        # Arrange
-        auth = GoogleAuthHelper()
-        mock_page = MagicMock()
-        mock_page.url = "https://example.com/dashboard"
-
-        # Act
-        result = await auth.is_logged_in(mock_page)
-
-        # Assert
-        assert result is True
-
-    @pytest.mark.asyncio
-    async def test_accepts_custom_indicators(self):
-        """Should use custom login indicators."""
-        # Arrange
-        auth = GoogleAuthHelper()
-        mock_page = MagicMock()
-        mock_page.url = "https://example.com/auth"
-
-        # Act
-        result = await auth.is_logged_in(mock_page, login_indicators=["auth"])
-
-        # Assert
-        assert result is False
-
-
-class TestGoogleLoginConvenienceFunction:
-    """Tests for google_login convenience function."""
-
-    @pytest.mark.asyncio
-    async def test_creates_auth_helper(self):
-        """Should create GoogleAuthHelper with correct params."""
-        # Arrange
-        # Act
-        # Assert
-        mock_page = MagicMock()
-        mock_page.query_selector = AsyncMock(return_value=None)
-
-        with patch("scitex_browser.auth.google.GoogleAuthHelper") as mock_class:
-            mock_instance = MagicMock()
-            mock_instance.login_via_google_button = AsyncMock(return_value=True)
-            mock_class.return_value = mock_instance
-
-            await google_login(mock_page, "test@gmail.com", "password", debug=True)
-
-            mock_class.assert_called_with(
-                email="test@gmail.com", password="password", debug=True
-            )
-            assert mock_class.called
-
-    @pytest.mark.asyncio
-    async def test_calls_login_method(self):
-        """Should call login_via_google_button method."""
-        # Arrange
-        # Act
-        # Assert
-        mock_page = MagicMock()
-        mock_page.query_selector = AsyncMock(return_value=None)
-
-        with patch("scitex_browser.auth.google.GoogleAuthHelper") as mock_class:
-            mock_instance = MagicMock()
-            mock_instance.login_via_google_button = AsyncMock(return_value=True)
-            mock_class.return_value = mock_instance
-
-            result = await google_login(
-                mock_page, "test@gmail.com", "password", button_selector="custom"
-            )
-
-            mock_instance.login_via_google_button.assert_called_with(
-                mock_page, "custom"
-            )
-            assert result is True
-
-
-class TestGoogleAuthHelperIntegration:
-    """Integration tests for GoogleAuthHelper."""
-
-    def test_multiple_instances_independent_auth1_email_auth2_email(self):
-        # Arrange
-        # Arrange
-        auth1 = GoogleAuthHelper(email="user1@gmail.com")
-        # Act
-        # Act
-        auth2 = GoogleAuthHelper(email="user2@gmail.com")
-        # Act
-        # Assert
-        # Assert
-        assert auth1.email != auth2.email
-
-    def test_multiple_instances_independent_auth1_email_equals_user1_gmail_com(self):
-        # Arrange
-        # Arrange
-        auth1 = GoogleAuthHelper(email="user1@gmail.com")
-        # Act
-        # Act
-        auth2 = GoogleAuthHelper(email="user2@gmail.com")
-        # Act
-        # Assert
-        # Assert
-        assert auth1.email == "user1@gmail.com"
-
-    def test_multiple_instances_independent_auth2_email_equals_user2_gmail_com(self):
-        # Arrange
-        # Arrange
-        auth1 = GoogleAuthHelper(email="user1@gmail.com")
-        # Act
-        # Act
-        auth2 = GoogleAuthHelper(email="user2@gmail.com")
-        # Act
-        # Assert
-        # Assert
-        assert auth2.email == "user2@gmail.com"
-
-
-    def test_full_config_from_env(self):
-        """Should configure fully from environment."""
-        # Arrange
-        # Act
-        # Assert
-        with patch.dict(
-            os.environ,
-            {
-                "GOOGLE_EMAIL": "env@gmail.com",
-                "GOOGLE_PASSWORD": "envpass",
-                "GOOGLE_AUTH_DEBUG": "1",
-            },
-        ):
-            auth = GoogleAuthHelper()
-            assert (auth.email == 'env@gmail.com') and (auth.password == 'envpass') and (auth.debug is True)
+        assert debug is True
 
 
 if __name__ == "__main__":
