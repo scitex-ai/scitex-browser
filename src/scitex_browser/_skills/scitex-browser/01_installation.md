@@ -19,11 +19,11 @@ the first time. Use `playwright install` (no arg) to fetch all three engines.
 
 ## Optional extras
 
-| Extra      | Install                                       | Adds                              |
-|------------|-----------------------------------------------|-----------------------------------|
-| stealth    | `pip install scitex-browser[stealth]`         | playwright-stealth (anti-bot)     |
-| zenrows    | `pip install scitex-browser[zenrows]` + key   | ZenRows residential proxy         |
-| auth       | `pip install scitex-browser[auth]`            | OAuth + cookie-store helpers      |
+| Extra | Install | Adds |
+|-------|---------|------|
+| dev   | `pip install scitex-browser[dev]` | pytest, scitex-dev |
+| docs  | `pip install scitex-browser[docs]` | Sphinx, RTD theme |
+| all   | `pip install scitex-browser[all]` | dev + docs |
 
 ## Verify
 

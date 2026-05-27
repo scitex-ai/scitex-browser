@@ -62,12 +62,13 @@ for sel in many_selectors:
 Pass `base_dir` to keep package artifacts in one folder:
 
 ```python
-from pathlib import Path
+from scitex_browser._state import cache_dir
 
+# Use the canonical path resolver so SCITEX_DIR redirects are honoured.
 await capture_debug_artifacts_async(
     page,
     label="sso_after_password",
-    base_dir=Path.home() / ".scitex" / "scholar" / "cache" / "engine" / "screenshots",
+    base_dir=cache_dir() / "engine" / "screenshots",
 )
 ```
 

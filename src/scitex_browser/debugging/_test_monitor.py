@@ -257,7 +257,8 @@ def monitor_test(
     """
     Decorator for monitoring tests with periodic screenshots.
 
-    Usage:
+    Usage::
+
         @monitor_test(interval=1.0, auto_gif=True)
         def test_my_feature(page):
             # test code...
