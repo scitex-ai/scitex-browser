@@ -199,7 +199,8 @@ def sync_browser_session(
     """
     Context manager for sync playwright sessions.
 
-    Usage:
+    Usage::
+
         with sync_browser_session(page) as session:
             session.page.goto(url)
             # ... test code
@@ -219,7 +220,8 @@ def create_browser_session_fixture(
     """
     Create a pytest fixture for browser session with cleanup.
 
-    Usage in conftest.py:
+    Usage in conftest.py::
+
         from scitex_browser import create_browser_session_fixture
 
         browser_session = create_browser_session_fixture(
