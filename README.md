@@ -54,22 +54,26 @@ pip install scitex-browser
 scitex-browser/
 ├── src/scitex_browser/
 │   ├── __init__.py              # save_as_pdf, click_with_fallbacks_async, ...
-│   ├── debugging/               # TestMonitor, capture_debug_artifacts_async
-│   │   ├── _capture.py          # screenshot + HTML + console artifacts
-│   │   └── _monitor.py          # pytest-playwright failure hook
-│   ├── stealth/                 # StealthManager + playwright-stealth glue
+│   ├── _compat.py               # Standalone fallback when scitex_config absent
+│   ├── _state.py                # Local-state path helpers (runtime/ layout)
+│   ├── auth/                    # Google OAuth helpers
+│   ├── automation/              # CookieAutoAcceptor
+│   ├── collaboration/           # SharedBrowserSession, CredentialManager
+│   ├── core/                    # BrowserMixin, ChromeProfileManager
+│   ├── debugging/               # TestMonitor, capture_debug, visual overlays
+│   ├── interaction/             # Click/fill with fallbacks, popup handling
+│   ├── pdf/                     # Chrome-PDF-viewer detection, save_as_pdf
 │   ├── remote/                  # ZenRows API + CAPTCHA handling
-│   ├── auth/                    # Google + shared-session helpers
-│   └── pdf/                     # Chrome-PDF-viewer detection, save_as_pdf
+│   └── stealth/                 # StealthManager + HumanBehavior
 └── tests/                       # pytest-playwright suite
 ```
 
 ### Optional extras
 
 ```bash
-pip install scitex-browser[stealth]   # playwright-stealth
-pip install scitex-browser[remote]    # ZenRows integration
-pip install scitex-browser[scitex]    # Full SciTeX integration
+pip install scitex-browser[dev]   # pytest + scitex-dev for local development
+pip install scitex-browser[docs]  # Sphinx + RTD theme for doc building
+pip install scitex-browser[all]   # dev + docs
 ```
 
 ## Quick start
@@ -95,7 +99,7 @@ from scitex_browser import (
 from scitex_browser.stealth import StealthManager
 from scitex_browser.debugging import (
     TestMonitor, create_failure_capture_fixture,
-    capture_debug_artifacts_async,        # screenshot + HTML in one call
+    capture_debug_artifacts_async,        # screenshot + HTML (via .debugging)
 )
 ```
 

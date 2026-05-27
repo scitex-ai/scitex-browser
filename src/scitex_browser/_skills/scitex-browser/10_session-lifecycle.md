@@ -49,11 +49,25 @@ persists cookies/profile between runs. Module is marked
 
 ## TestMonitor
 
-Takes periodic screenshots of a running browser test (default 1 Hz).
+Takes periodic screenshots of a running browser test (default 2 s interval).
+
+```python
+from scitex_browser import TestMonitor
+
+monitor = TestMonitor(interval=2.0)
+monitor.start("my_feature_test")
+try:
+    ...   # your test body
+finally:
+    monitor.stop()
+```
+
+A decorator form is also available via `monitor_test`:
 
 ```python
 from scitex_browser import monitor_test
 
-async with monitor_test(page, out_dir="screens/") as m:
-    ...   # your test body
+@monitor_test(interval=1.0, auto_gif=True)
+def test_my_feature(page):
+    ...
 ```

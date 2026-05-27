@@ -49,6 +49,6 @@ from scitex_browser import ensure_no_popups_async, close_popups_async
 await ensure_no_popups_async(page)
 ```
 
-See [02_python-api.md](02_python-api.md) for the complete public API and
-[07_auth-stealth-remote.md](07_auth-stealth-remote.md) for Google login
+See [03_python-api.md](03_python-api.md) for the complete public API and
+[14_auth-stealth-remote.md](14_auth-stealth-remote.md) for Google login
 and ZenRows helpers.
