@@ -87,22 +87,7 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../../api/auth.html">scitex_browser.auth</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../api/auth.html#scitex_browser.auth.GoogleAuthHelper"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../api/auth.html#scitex_browser.auth.GoogleAuthHelper.__init__"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper.__init__()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../api/auth.html#scitex_browser.auth.GoogleAuthHelper._log"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper._log()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../api/auth.html#scitex_browser.auth.GoogleAuthHelper.login_via_google_button"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper.login_via_google_button()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../api/auth.html#scitex_browser.auth.GoogleAuthHelper._handle_google_popup"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper._handle_google_popup()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../api/auth.html#scitex_browser.auth.GoogleAuthHelper._fill_email"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper._fill_email()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../api/auth.html#scitex_browser.auth.GoogleAuthHelper._fill_password"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper._fill_password()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../api/auth.html#scitex_browser.auth.GoogleAuthHelper._handle_consent_screens"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper._handle_consent_screens()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../api/auth.html#scitex_browser.auth.GoogleAuthHelper._wait_for_2fa"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper._wait_for_2fa()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../api/auth.html#scitex_browser.auth.GoogleAuthHelper.is_logged_in"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper.is_logged_in()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="../../../api/auth.html#scitex_browser.auth.google_login"><code class="docutils literal notranslate"><span class="pre">google_login()</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/auth.html">scitex_browser.auth</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../api/interaction.html">scitex_browser.interaction</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/interaction.html#scitex_browser.interaction.click_center_async"><code class="docutils literal notranslate"><span class="pre">click_center_async()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/interaction.html#scitex_browser.interaction.click_with_fallbacks_async"><code class="docutils literal notranslate"><span class="pre">click_with_fallbacks_async()</span></code></a></li>
@@ -721,7 +706,8 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">create_failure_capture_fixture</span><span class="p">(</span><span class="n">artifacts_dir</span><span class="p">:</span> <span class="n">Path</span> <span class="o">|</span> <span class="nb">str</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Create a pytest fixture for automatic failure capture.</span>
 
-<span class="sd">    Usage in conftest.py:</span>
+<span class="sd">    Usage in conftest.py::</span>
+
 <span class="sd">        from scitex_browser.debugging import create_failure_capture_fixture</span>
 
 <span class="sd">        capture_on_failure = create_failure_capture_fixture(</span>

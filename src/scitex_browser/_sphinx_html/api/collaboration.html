@@ -90,22 +90,7 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="auth.html">scitex_browser.auth</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="auth.html#scitex_browser.auth.GoogleAuthHelper"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="auth.html#scitex_browser.auth.GoogleAuthHelper.__init__"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper.__init__()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="auth.html#scitex_browser.auth.GoogleAuthHelper._log"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper._log()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="auth.html#scitex_browser.auth.GoogleAuthHelper.login_via_google_button"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper.login_via_google_button()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="auth.html#scitex_browser.auth.GoogleAuthHelper._handle_google_popup"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper._handle_google_popup()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="auth.html#scitex_browser.auth.GoogleAuthHelper._fill_email"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper._fill_email()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="auth.html#scitex_browser.auth.GoogleAuthHelper._fill_password"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper._fill_password()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="auth.html#scitex_browser.auth.GoogleAuthHelper._handle_consent_screens"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper._handle_consent_screens()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="auth.html#scitex_browser.auth.GoogleAuthHelper._wait_for_2fa"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper._wait_for_2fa()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="auth.html#scitex_browser.auth.GoogleAuthHelper.is_logged_in"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper.is_logged_in()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="auth.html#scitex_browser.auth.google_login"><code class="docutils literal notranslate"><span class="pre">google_login()</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="auth.html">scitex_browser.auth</a></li>
 <li class="toctree-l1"><a class="reference internal" href="interaction.html">scitex_browser.interaction</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="interaction.html#scitex_browser.interaction.click_center_async"><code class="docutils literal notranslate"><span class="pre">click_center_async()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="interaction.html#scitex_browser.interaction.click_with_fallbacks_async"><code class="docutils literal notranslate"><span class="pre">click_with_fallbacks_async()</span></code></a></li>
@@ -742,16 +727,14 @@ response = await session.ask(“Choose:”, [“Option A”, “Option B”])</p
 <dd class="field-odd"><p>Credential value</p>
 </dd>
 </dl>
-<div class="admonition-example admonition">
-<p class="admonition-title">Example</p>
-<dl class="simple">
-<dt>username = await creds.get_credential(</dt><dd><p>name=”username”,
-env_var=”SCITEX_CLOUD_USERNAME”,
-prompt_text=”Django username”,
-page=page,</p>
-</dd>
-</dl>
-<p>)</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">username</span> <span class="o">=</span> <span class="k">await</span> <span class="n">creds</span><span class="o">.</span><span class="n">get_credential</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;username&quot;</span><span class="p">,</span>
+    <span class="n">env_var</span><span class="o">=</span><span class="s2">&quot;SCITEX_CLOUD_USERNAME&quot;</span><span class="p">,</span>
+    <span class="n">prompt_text</span><span class="o">=</span><span class="s2">&quot;Django username&quot;</span><span class="p">,</span>
+    <span class="n">page</span><span class="o">=</span><span class="n">page</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
 </div>
 </dd></dl>
 
