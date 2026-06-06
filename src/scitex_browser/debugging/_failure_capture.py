@@ -341,7 +341,8 @@ def save_failure_artifacts(
 def create_failure_capture_fixture(artifacts_dir: Path | str):
     """Create a pytest fixture for automatic failure capture.
 
-    Usage in conftest.py:
+    Usage in conftest.py::
+
         from scitex_browser.debugging import create_failure_capture_fixture
 
         capture_on_failure = create_failure_capture_fixture(

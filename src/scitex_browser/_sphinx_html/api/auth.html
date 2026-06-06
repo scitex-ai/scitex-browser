@@ -90,22 +90,7 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">scitex_browser.auth</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#scitex_browser.auth.GoogleAuthHelper"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#scitex_browser.auth.GoogleAuthHelper.__init__"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper.__init__()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#scitex_browser.auth.GoogleAuthHelper._log"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper._log()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#scitex_browser.auth.GoogleAuthHelper.login_via_google_button"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper.login_via_google_button()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#scitex_browser.auth.GoogleAuthHelper._handle_google_popup"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper._handle_google_popup()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#scitex_browser.auth.GoogleAuthHelper._fill_email"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper._fill_email()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#scitex_browser.auth.GoogleAuthHelper._fill_password"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper._fill_password()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#scitex_browser.auth.GoogleAuthHelper._handle_consent_screens"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper._handle_consent_screens()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#scitex_browser.auth.GoogleAuthHelper._wait_for_2fa"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper._wait_for_2fa()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#scitex_browser.auth.GoogleAuthHelper.is_logged_in"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper.is_logged_in()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#scitex_browser.auth.google_login"><code class="docutils literal notranslate"><span class="pre">google_login()</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">scitex_browser.auth</a></li>
 <li class="toctree-l1"><a class="reference internal" href="interaction.html">scitex_browser.interaction</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="interaction.html#scitex_browser.interaction.click_center_async"><code class="docutils literal notranslate"><span class="pre">click_center_async()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="interaction.html#scitex_browser.interaction.click_with_fallbacks_async"><code class="docutils literal notranslate"><span class="pre">click_with_fallbacks_async()</span></code></a></li>
@@ -363,8 +348,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="module-scitex_browser.auth">
-<span id="scitex-browser-auth"></span><h1>scitex_browser.auth<a class="headerlink" href="#module-scitex_browser.auth" title="Link to this heading"></a></h1>
+  <section id="scitex-browser-auth">
+<h1>scitex_browser.auth<a class="headerlink" href="#scitex-browser-auth" title="Link to this heading"></a></h1>
 <p>scitex_browser.auth - Authentication helpers for browser automation.</p>
 <p>Provides reusable authentication handlers for various OAuth providers
 and login flows used in browser automation tasks.</p>
@@ -382,8 +367,8 @@ auth = GoogleAuthHelper(email=”<a class="reference external" href="mailto:user
 success = await auth.login_via_google_button(page)</p>
 </div>
 <dl class="py class">
-<dt class="sig sig-object py" id="scitex_browser.auth.GoogleAuthHelper">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">scitex_browser.auth.</span></span><span class="sig-name descname"><span class="pre">GoogleAuthHelper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">email</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">password</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">debug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_browser/auth/google.html#GoogleAuthHelper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_browser.auth.GoogleAuthHelper" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">scitex_browser.auth.</span></span><span class="sig-name descname"><span class="pre">GoogleAuthHelper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">email</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">password</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">debug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_browser/auth/google.html#GoogleAuthHelper"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>Google OAuth authentication helper.</p>
 <p>Handles the popup-based Google OAuth flow used by many services.</p>
@@ -393,8 +378,8 @@ GOOGLE_PASSWORD: Default password if not provided</p>
 </dd>
 </dl>
 <dl class="py method">
-<dt class="sig sig-object py" id="scitex_browser.auth.GoogleAuthHelper.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">email</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">password</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">debug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_browser/auth/google.html#GoogleAuthHelper.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_browser.auth.GoogleAuthHelper.__init__" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">email</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">password</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">debug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_browser/auth/google.html#GoogleAuthHelper.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Initialize GoogleAuthHelper.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -408,14 +393,14 @@ GOOGLE_PASSWORD: Default password if not provided</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="scitex_browser.auth.GoogleAuthHelper._log">
-<span class="sig-name descname"><span class="pre">_log</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_browser/auth/google.html#GoogleAuthHelper._log"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_browser.auth.GoogleAuthHelper._log" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">_log</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_browser/auth/google.html#GoogleAuthHelper._log"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Print debug message if debug mode is enabled.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="scitex_browser.auth.GoogleAuthHelper.login_via_google_button">
-<span class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">login_via_google_button</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">page</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">google_button_selector</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'button:has-text(&quot;Continue</span> <span class="pre">with</span> <span class="pre">Google&quot;)'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">60000</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_browser/auth/google.html#GoogleAuthHelper.login_via_google_button"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_browser.auth.GoogleAuthHelper.login_via_google_button" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py">
+<span class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">login_via_google_button</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">page</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">google_button_selector</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'button:has-text(&quot;Continue</span> <span class="pre">with</span> <span class="pre">Google&quot;)'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">60000</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_browser/auth/google.html#GoogleAuthHelper.login_via_google_button"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Perform Google OAuth login via a “Continue with Google” button.</p>
 <p>This handles the popup-based OAuth flow:
 1. Click the Google button on the main page
@@ -439,8 +424,8 @@ GOOGLE_PASSWORD: Default password if not provided</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="scitex_browser.auth.GoogleAuthHelper._handle_google_popup">
-<span class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">_handle_google_popup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">popup</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">60000</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_browser/auth/google.html#GoogleAuthHelper._handle_google_popup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_browser.auth.GoogleAuthHelper._handle_google_popup" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py">
+<span class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">_handle_google_popup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">popup</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">60000</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_browser/auth/google.html#GoogleAuthHelper._handle_google_popup"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Handle the Google OAuth popup flow.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -459,8 +444,8 @@ GOOGLE_PASSWORD: Default password if not provided</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="scitex_browser.auth.GoogleAuthHelper._fill_email">
-<span class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">_fill_email</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">popup</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_browser/auth/google.html#GoogleAuthHelper._fill_email"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_browser.auth.GoogleAuthHelper._fill_email" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py">
+<span class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">_fill_email</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">popup</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_browser/auth/google.html#GoogleAuthHelper._fill_email"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Fill email on Google login page.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
@@ -470,8 +455,8 @@ GOOGLE_PASSWORD: Default password if not provided</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="scitex_browser.auth.GoogleAuthHelper._fill_password">
-<span class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">_fill_password</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">popup</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_browser/auth/google.html#GoogleAuthHelper._fill_password"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_browser.auth.GoogleAuthHelper._fill_password" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py">
+<span class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">_fill_password</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">popup</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_browser/auth/google.html#GoogleAuthHelper._fill_password"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Fill password on Google login page.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
@@ -481,8 +466,8 @@ GOOGLE_PASSWORD: Default password if not provided</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="scitex_browser.auth.GoogleAuthHelper._handle_consent_screens">
-<span class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">_handle_consent_screens</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">popup</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_browser/auth/google.html#GoogleAuthHelper._handle_consent_screens"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_browser.auth.GoogleAuthHelper._handle_consent_screens" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py">
+<span class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">_handle_consent_screens</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">popup</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_browser/auth/google.html#GoogleAuthHelper._handle_consent_screens"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Handle OAuth consent or ‘Continue’ screens that may appear.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
@@ -492,8 +477,8 @@ GOOGLE_PASSWORD: Default password if not provided</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="scitex_browser.auth.GoogleAuthHelper._wait_for_2fa">
-<span class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">_wait_for_2fa</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">popup</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">60000</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_browser/auth/google.html#GoogleAuthHelper._wait_for_2fa"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_browser.auth.GoogleAuthHelper._wait_for_2fa" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py">
+<span class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">_wait_for_2fa</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">popup</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">60000</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_browser/auth/google.html#GoogleAuthHelper._wait_for_2fa"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Wait for 2FA verification to complete.</p>
 <p>Detects 2FA screens and waits for user to approve on their device.</p>
 <dl class="field-list simple">
@@ -513,8 +498,8 @@ GOOGLE_PASSWORD: Default password if not provided</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="scitex_browser.auth.GoogleAuthHelper.is_logged_in">
-<span class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">is_logged_in</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">page</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">login_indicators</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_browser/auth/google.html#GoogleAuthHelper.is_logged_in"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_browser.auth.GoogleAuthHelper.is_logged_in" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py">
+<span class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">is_logged_in</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">page</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">login_indicators</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_browser/auth/google.html#GoogleAuthHelper.is_logged_in"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Check if user appears to be logged in.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -536,8 +521,8 @@ GOOGLE_PASSWORD: Default password if not provided</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="scitex_browser.auth.google_login">
-<span class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">scitex_browser.auth.</span></span><span class="sig-name descname"><span class="pre">google_login</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">page</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">email</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">password</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">button_selector</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'button:has-text(&quot;Continue</span> <span class="pre">with</span> <span class="pre">Google&quot;)'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">debug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_browser/auth/google.html#google_login"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_browser.auth.google_login" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py">
+<span class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">scitex_browser.auth.</span></span><span class="sig-name descname"><span class="pre">google_login</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">page</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">email</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">password</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">button_selector</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'button:has-text(&quot;Continue</span> <span class="pre">with</span> <span class="pre">Google&quot;)'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">debug</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_browser/auth/google.html#google_login"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>Quick Google OAuth login.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>

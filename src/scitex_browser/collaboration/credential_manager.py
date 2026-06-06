@@ -55,7 +55,8 @@ class CredentialManager:
         Returns:
             Credential value
 
-        Example:
+        Example::
+
             username = await creds.get_credential(
                 name="username",
                 env_var="SCITEX_CLOUD_USERNAME",
@@ -112,7 +113,7 @@ class CredentialManager:
         prompt_text = prompt_text or name
 
         print(f"\n🔑 Credential needed: {name}")
-        print(f"   (No environment variable found)")
+        print("   (No environment variable found)")
 
         if mask:
             value = getpass.getpass(f"   Enter {prompt_text}: ")

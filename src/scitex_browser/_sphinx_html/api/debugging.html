@@ -90,22 +90,7 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="auth.html">scitex_browser.auth</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="auth.html#scitex_browser.auth.GoogleAuthHelper"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="auth.html#scitex_browser.auth.GoogleAuthHelper.__init__"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper.__init__()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="auth.html#scitex_browser.auth.GoogleAuthHelper._log"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper._log()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="auth.html#scitex_browser.auth.GoogleAuthHelper.login_via_google_button"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper.login_via_google_button()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="auth.html#scitex_browser.auth.GoogleAuthHelper._handle_google_popup"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper._handle_google_popup()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="auth.html#scitex_browser.auth.GoogleAuthHelper._fill_email"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper._fill_email()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="auth.html#scitex_browser.auth.GoogleAuthHelper._fill_password"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper._fill_password()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="auth.html#scitex_browser.auth.GoogleAuthHelper._handle_consent_screens"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper._handle_consent_screens()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="auth.html#scitex_browser.auth.GoogleAuthHelper._wait_for_2fa"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper._wait_for_2fa()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="auth.html#scitex_browser.auth.GoogleAuthHelper.is_logged_in"><code class="docutils literal notranslate"><span class="pre">GoogleAuthHelper.is_logged_in()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="auth.html#scitex_browser.auth.google_login"><code class="docutils literal notranslate"><span class="pre">google_login()</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="auth.html">scitex_browser.auth</a></li>
 <li class="toctree-l1"><a class="reference internal" href="interaction.html">scitex_browser.interaction</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="interaction.html#scitex_browser.interaction.click_center_async"><code class="docutils literal notranslate"><span class="pre">click_center_async()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="interaction.html#scitex_browser.interaction.click_with_fallbacks_async"><code class="docutils literal notranslate"><span class="pre">click_with_fallbacks_async()</span></code></a></li>
@@ -609,15 +594,14 @@
 <dt class="sig sig-object py" id="scitex_browser.debugging.create_failure_capture_fixture">
 <span class="sig-prename descclassname"><span class="pre">scitex_browser.debugging.</span></span><span class="sig-name descname"><span class="pre">create_failure_capture_fixture</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">artifacts_dir</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_browser/debugging/_failure_capture.html#create_failure_capture_fixture"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_browser.debugging.create_failure_capture_fixture" title="Link to this definition"></a></dt>
 <dd><p>Create a pytest fixture for automatic failure capture.</p>
-<dl>
-<dt>Usage in conftest.py:</dt><dd><p>from scitex_browser.debugging import create_failure_capture_fixture</p>
-<dl class="simple">
-<dt>capture_on_failure = create_failure_capture_fixture(</dt><dd><p>Path(__file__).parent / “artifacts”</p>
-</dd>
-</dl>
-<p>)</p>
-</dd>
-</dl>
+<p>Usage in conftest.py:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">scitex_browser.debugging</span><span class="w"> </span><span class="kn">import</span> <span class="n">create_failure_capture_fixture</span>
+
+<span class="n">capture_on_failure</span> <span class="o">=</span> <span class="n">create_failure_capture_fixture</span><span class="p">(</span>
+    <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s2">&quot;artifacts&quot;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>artifacts_dir</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Path</span></code></a> | <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – Directory to save failure artifacts</p>
@@ -797,14 +781,12 @@ allowing visual inspection of test progress and debugging.</p>
 <dt class="sig sig-object py" id="scitex_browser.debugging.monitor_test">
 <span class="sig-prename descclassname"><span class="pre">scitex_browser.debugging.</span></span><span class="sig-name descname"><span class="pre">monitor_test</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">test_func</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interval</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auto_gif</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_browser/debugging/_test_monitor.html#monitor_test"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_browser.debugging.monitor_test" title="Link to this definition"></a></dt>
 <dd><p>Decorator for monitoring tests with periodic screenshots.</p>
-<dl>
-<dt>Usage:</dt><dd><p>&#64;monitor_test(interval=1.0, auto_gif=True)
-def test_my_feature(page):</p>
-<blockquote>
-<div><p># test code…</p>
-</div></blockquote>
-</dd>
-</dl>
+<p>Usage:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@monitor_test</span><span class="p">(</span><span class="n">interval</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">auto_gif</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">test_my_feature</span><span class="p">(</span><span class="n">page</span><span class="p">):</span>
+    <span class="c1"># test code...</span>
+</pre></div>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -886,33 +868,30 @@ Tracks browser PIDs and kills orphaned processes on exit.</p>
 <dt class="sig sig-object py" id="scitex_browser.debugging.sync_browser_session">
 <span class="sig-prename descclassname"><span class="pre">scitex_browser.debugging.</span></span><span class="sig-name descname"><span class="pre">sync_browser_session</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">page</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">60</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on_enter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">on_exit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_browser/debugging/_sync_session.html#sync_browser_session"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_browser.debugging.sync_browser_session" title="Link to this definition"></a></dt>
 <dd><p>Context manager for sync playwright sessions.</p>
-<dl>
-<dt>Usage:</dt><dd><dl class="simple">
-<dt>with sync_browser_session(page) as session:</dt><dd><p>session.page.goto(url)
-# … test code</p>
-</dd>
-</dl>
-<p># Cleanup happens automatically</p>
-</dd>
-</dl>
+<p>Usage:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">sync_browser_session</span><span class="p">(</span><span class="n">page</span><span class="p">)</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+    <span class="n">session</span><span class="o">.</span><span class="n">page</span><span class="o">.</span><span class="n">goto</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+    <span class="c1"># ... test code</span>
+<span class="c1"># Cleanup happens automatically</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="scitex_browser.debugging.create_browser_session_fixture">
 <span class="sig-prename descclassname"><span class="pre">scitex_browser.debugging.</span></span><span class="sig-name descname"><span class="pre">create_browser_session_fixture</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">60</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">setup</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">teardown</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kill_zombies_on_start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/scitex_browser/debugging/_sync_session.html#create_browser_session_fixture"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scitex_browser.debugging.create_browser_session_fixture" title="Link to this definition"></a></dt>
 <dd><p>Create a pytest fixture for browser session with cleanup.</p>
-<dl>
-<dt>Usage in conftest.py:</dt><dd><p>from scitex_browser import create_browser_session_fixture</p>
-<dl class="simple">
-<dt>browser_session = create_browser_session_fixture(</dt><dd><p>timeout=60,
-setup=lambda page: print(f”Starting test”),
-teardown=lambda page, success: print(f”Test {‘passed’ if success else ‘failed’}”),
-kill_zombies_on_start=True,</p>
-</dd>
-</dl>
-<p>)</p>
-</dd>
-</dl>
+<p>Usage in conftest.py:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">scitex_browser</span><span class="w"> </span><span class="kn">import</span> <span class="n">create_browser_session_fixture</span>
+
+<span class="n">browser_session</span> <span class="o">=</span> <span class="n">create_browser_session_fixture</span><span class="p">(</span>
+    <span class="n">timeout</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
+    <span class="n">setup</span><span class="o">=</span><span class="k">lambda</span> <span class="n">page</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Starting test&quot;</span><span class="p">),</span>
+    <span class="n">teardown</span><span class="o">=</span><span class="k">lambda</span> <span class="n">page</span><span class="p">,</span> <span class="n">success</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Test </span><span class="si">{</span><span class="s1">&#39;passed&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">success</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;failed&#39;</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">),</span>
+    <span class="n">kill_zombies_on_start</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
