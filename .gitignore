@@ -25,3 +25,4 @@ GITIGNORED/
 !.scitex/dev/config.yaml
 
 docs/sphinx/_build/
+.worktrees/
