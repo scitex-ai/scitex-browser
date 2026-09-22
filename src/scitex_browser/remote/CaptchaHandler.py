@@ -346,7 +346,7 @@ class CaptchaHandler:
                     // Method 3: Parse from script
                     const scripts = Array.from(document.scripts);
                     for (const script of scripts) {
-                        const match = script.textContent.match(/sitekey['"]\s*:\s*['"]([^'"]+)/);
+                        const match = script.textContent.match(/sitekey['"]\\s*:\\s*['"]([^'"]+)/);
                         if (match) return match[1];
                     }
 

@@ -10,6 +10,10 @@ Safe, clear communication with user.
 Multiple input methods: env vars, terminal, browser.
 """
 
+import scitex_logging as logging
+logger = logging.getLogger(__name__)
+
+
 import getpass
 import os
 from typing import Dict, Optional
@@ -67,7 +71,7 @@ class CredentialManager:
         # Check cache first
         if name in self.cache:
             if self.verbose:
-                print(f"🔑 Using cached {name}")
+                logger.info(f"🔑 Using cached {name}")
             return self.cache[name]
 
         # Try environment variable
@@ -76,7 +80,7 @@ class CredentialManager:
             if value:
                 if self.verbose:
                     display_value = "***" if mask else value
-                    print(f"🔑 Using {name} from ${env_var}: {display_value}")
+                    logger.info(f"🔑 Using {name} from ${env_var}: {display_value}")
                 self.cache[name] = value
                 return value
 
@@ -112,8 +116,8 @@ class CredentialManager:
         """Prompt user in terminal."""
         prompt_text = prompt_text or name
 
-        print(f"\n🔑 Credential needed: {name}")
-        print("   (No environment variable found)")
+        logger.info(f"\n🔑 Credential needed: {name}")
+        logger.info("   (No environment variable found)")
 
         if mask:
             value = getpass.getpass(f"   Enter {prompt_text}: ")
@@ -131,7 +135,7 @@ class CredentialManager:
         """Prompt user in browser window."""
         prompt_text = prompt_text or name
 
-        print(f"\n🔑 Asking for {name} in browser...")
+        logger.info(f"\n🔑 Asking for {name} in browser...")
 
         # Wait for page to be ready
         try:
@@ -186,7 +190,7 @@ class CredentialManager:
         """Clear credential cache."""
         self.cache = {}
         if self.verbose:
-            print("🔑 Credential cache cleared")
+            logger.info("🔑 Credential cache cleared")
 
 
 # EOF

@@ -15,6 +15,10 @@ Runs continuously, responds to:
 This is the "watching agent" pattern for true collaboration!
 """
 
+import scitex_logging as logging
+logger = logging.getLogger(__name__)
+
+
 import asyncio
 import signal
 from typing import Callable, Dict, Optional
@@ -38,7 +42,7 @@ class CollaborativeAgent:
         # Define what to do when user provides email
         @agent.on_input("email")
         async def handle_email(email):
-            print(f"Got email: {email}")
+            logger.info(f"Got email: {email}")
             # Automatically navigate to login
 
         await agent.run()  # Runs forever, watching
@@ -83,15 +87,15 @@ class CollaborativeAgent:
         """
         self.running = True
 
-        print("🤖 Collaborative agent started")
-        print("   Watching browser for user actions...")
-        print("   Press Ctrl+C to stop")
+        logger.info("🤖 Collaborative agent started")
+        logger.info("   Watching browser for user actions...")
+        logger.info("   Press Ctrl+C to stop")
 
         # Signal handling
         loop = asyncio.get_event_loop()
 
         def stop_agent(sig, frame):
-            print("\n\n🛑 Stopping agent...")
+            logger.info("\n\n🛑 Stopping agent...")
             self.running = False
 
         signal.signal(signal.SIGINT, stop_agent)
@@ -104,10 +108,10 @@ class CollaborativeAgent:
                 await asyncio.sleep(self.check_interval)
 
         except Exception as e:
-            print(f"❌ Agent error: {e}")
+            logger.info(f"❌ Agent error: {e}")
 
         finally:
-            print("✅ Agent stopped")
+            logger.info("✅ Agent stopped")
 
     async def _check_changes(self):
         """Check for changes and trigger handlers."""

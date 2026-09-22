@@ -20,6 +20,10 @@ Example:
     success = await auth.login_via_google_button(page, 'button:has-text("Continue with Google")')
 """
 
+import scitex_logging as logging
+logger = logging.getLogger(__name__)
+
+
 import os
 import sys
 from typing import Optional
@@ -59,7 +63,7 @@ class GoogleAuthHelper:
     def _log(self, msg: str):
         """Print debug message if debug mode is enabled."""
         if self.debug:
-            print(f"[GoogleAuth] {msg}", file=sys.stderr)
+            logger.info(f"[GoogleAuth] {msg}")
 
     async def login_via_google_button(
         self,

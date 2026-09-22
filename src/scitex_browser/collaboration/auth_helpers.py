@@ -9,6 +9,10 @@ Simple authentication helpers for SharedBrowserSession.
 Start small - just Django login for now.
 """
 
+import scitex_logging as logging
+logger = logging.getLogger(__name__)
+
+
 import os
 from typing import Optional
 
@@ -18,6 +22,12 @@ from playwright.async_api import Page
 class DjangoAuthHelper:
     """
     Simple Django authentication helper.
+
+    Credentials resolve in this order: explicit arguments, then this
+    package's own ``SCITEX_BROWSER_USERNAME`` / ``SCITEX_BROWSER_PASSWORD``
+    plugin-port variables (populate them from your own startup, e.g. by
+    copying the values you use for scitex-cloud). This package never
+    reads another package's ``SCITEX_CLOUD_*`` variables (PS-145).
 
     Example:
         auth = DjangoAuthHelper(
@@ -40,8 +50,8 @@ class DjangoAuthHelper:
         success_indicator: str = "/core/",  # URL contains this after login
     ):
         self.login_url = login_url
-        self.username = username or os.getenv("SCITEX_CLOUD_USERNAME", "")
-        self.password = password or os.getenv("SCITEX_CLOUD_PASSWORD", "")
+        self.username = username or os.getenv("SCITEX_BROWSER_USERNAME", "")
+        self.password = password or os.getenv("SCITEX_BROWSER_PASSWORD", "")
         self.username_field = username_field
         self.password_field = password_field
         self.submit_button = submit_button
@@ -70,11 +80,11 @@ class DjangoAuthHelper:
             # Wait for redirect (success indicator in URL)
             await page.wait_for_url(f"**{self.success_indicator}**", timeout=5000)
 
-            print(f"✅ Logged in as: {self.username}")
+            logger.info(f"✅ Logged in as: {self.username}")
             return True
 
         except Exception as e:
-            print(f"❌ Login failed: {e}")
+            logger.info(f"❌ Login failed: {e}")
             return False
 
     async def is_logged_in(self, page: Page) -> bool:

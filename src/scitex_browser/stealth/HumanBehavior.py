@@ -5,6 +5,10 @@
 # ----------------------------------------
 from __future__ import annotations
 
+import scitex_logging as logging
+logger = logging.getLogger(__name__)
+
+
 import os
 
 __FILE__ = "./src/scitex/browser/stealth/HumanBehavior.py"
@@ -265,15 +269,15 @@ def main(args):
 
             # Navigate with human behavior
             await page.goto("https://www.google.com")
-            print("✓ Navigated to page")
+            logger.info("✓ Navigated to page")
 
             # Simulate human reading the page
             await HumanBehavior.reading_delay_async(500)
-            print("✓ Reading delay complete")
+            logger.info("✓ Reading delay complete")
 
             # Random mouse movements
             await HumanBehavior.random_mouse_movement_async(page)
-            print("✓ Random mouse movements complete")
+            logger.info("✓ Random mouse movements complete")
 
             # Type in search box
             search_box = page.locator('input[name="q"]')
@@ -282,9 +286,9 @@ def main(args):
                 await HumanBehavior.type_text_async(
                     page, selector='input[name="q"]', text="test search"
                 )
-                print("✓ Human-like typing complete")
+                logger.info("✓ Human-like typing complete")
 
-            print("✓ Demo complete")
+            logger.info("✓ Demo complete")
             await browser.close()
 
     asyncio.run(demo())

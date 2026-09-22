@@ -22,6 +22,18 @@ _PROJECT_ROOT = Path(__file__).resolve().parent.parent
 os.environ["COVERAGE_PROCESS_START"] = str(_PROJECT_ROOT / "pyproject.toml")
 os.environ["COVERAGE_FILE"] = str(_PROJECT_ROOT / ".coverage")
 
+# scitex-logging defaults to WARN, which silences log.info — tests that
+# assert on log output need INFO. Set here (not setdefault for the level
+# call: an exported SCITEX_LOGGING_LEVEL=warning in the shell must not
+# mute the suite).
+os.environ.setdefault("SCITEX_LOGGING_LEVEL", "INFO")
+try:
+    import scitex_logging as _slogging
+
+    _slogging.set_level("INFO")
+except Exception:
+    pass
+
 
 def _ensure_subprocess_coverage_shim() -> None:
     """Drop an idempotent ``.pth`` file in site-packages that auto-starts

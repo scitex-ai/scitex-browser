@@ -5,8 +5,15 @@ after upgrading scitex-dev to refresh any pin in [dev].
 """
 
 import shutil
+from pathlib import Path
 
 import pytest
+
+pytestmark = pytest.mark.skipif(
+    shutil.which("scitex-dev") is None,
+    reason="scitex-dev not installed — add `scitex-dev[cli-audit]` "
+    "to [project.optional-dependencies.dev]",
+)
 
 
 def test_audit_all_clean():
@@ -22,11 +29,9 @@ def test_audit_all_clean():
     # Arrange
     # Act
     # Assert
-    if shutil.which("scitex-dev") is None:
-        pytest.skip(
-            "scitex-dev not installed — add `scitex-dev[cli-audit]` "
-            "to [project.optional-dependencies.dev]"
-        )
     from scitex_dev.testing import audit_all_for_package
 
-    audit_all_for_package('scitex-browser')
+    result = audit_all_for_package(
+        "scitex-browser", path=Path(__file__).resolve().parents[2]
+    )
+    assert result is None

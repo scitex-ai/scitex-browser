@@ -25,6 +25,10 @@ Usage in conftest.py:
     )
 """
 
+import scitex_logging as logging
+logger = logging.getLogger(__name__)
+
+
 from datetime import datetime
 from pathlib import Path
 from typing import TYPE_CHECKING
@@ -303,9 +307,9 @@ def save_failure_artifacts(
         screenshot_path = artifacts_path / f"{safe_test_name}_screenshot.png"
         page.screenshot(path=str(screenshot_path), full_page=True)
         saved_files["screenshot"] = screenshot_path
-        print(f"\n[FAILURE] Screenshot saved: {screenshot_path}")
+        logger.info(f"\n[FAILURE] Screenshot saved: {screenshot_path}")
     except Exception as e:
-        print(f"\n[FAILURE] Failed to save screenshot: {e}")
+        logger.info(f"\n[FAILURE] Failed to save screenshot: {e}")
 
     # Save console logs
     try:
@@ -320,9 +324,9 @@ def save_failure_artifacts(
             for log in console_logs:
                 f.write(f"{log}\n")
         saved_files["console_logs"] = logs_path
-        print(f"[FAILURE] Console logs saved: {logs_path}")
+        logger.info(f"[FAILURE] Console logs saved: {logs_path}")
     except Exception as e:
-        print(f"[FAILURE] Failed to save console logs: {e}")
+        logger.info(f"[FAILURE] Failed to save console logs: {e}")
 
     # Save page HTML
     try:
@@ -331,9 +335,9 @@ def save_failure_artifacts(
         with open(html_path, "w") as f:
             f.write(html_content)
         saved_files["page_html"] = html_path
-        print(f"[FAILURE] Page HTML saved: {html_path}")
+        logger.info(f"[FAILURE] Page HTML saved: {html_path}")
     except Exception as e:
-        print(f"[FAILURE] Failed to save page HTML: {e}")
+        logger.info(f"[FAILURE] Failed to save page HTML: {e}")
 
     return saved_files
 

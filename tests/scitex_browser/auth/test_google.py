@@ -191,24 +191,24 @@ class TestGoogleAuthHelperLog:
     """Tests for the _log method."""
 
     def test_log_writes_message_text_to_stderr_when_debug_enabled(
-        self, capsys, google_auth_env_restore
+        self, caplog, google_auth_env_restore
     ):
         # Arrange
         auth = GoogleAuthHelper(debug=True)
         # Act
         auth._log("Test message")
         # Assert
-        assert "Test message" in capsys.readouterr().err
+        assert "Test message" in caplog.text
 
     def test_log_writes_googleauth_tag_to_stderr_when_debug_enabled(
-        self, capsys, google_auth_env_restore
+        self, caplog, google_auth_env_restore
     ):
         # Arrange
         auth = GoogleAuthHelper(debug=True)
         # Act
         auth._log("Test message")
         # Assert
-        assert "[GoogleAuth]" in capsys.readouterr().err
+        assert "[GoogleAuth]" in caplog.text
 
     def test_log_writes_nothing_to_stderr_when_debug_disabled(
         self, capsys, google_auth_env_restore

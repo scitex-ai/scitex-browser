@@ -4,6 +4,10 @@
 # ----------------------------------------
 from __future__ import annotations
 
+import scitex_logging as logging
+logger = logging.getLogger(__name__)
+
+
 import os
 
 __FILE__ = __file__
@@ -261,12 +265,12 @@ def main(args):
 
         # Scrape a page
         content = await browser.scrape_async("https://example.com")
-        print(f"✓ Fetched {len(content)} bytes")
-        print(f"✓ Open tabs: {len(browser.pages)}")
+        logger.info(f"✓ Fetched {len(content)} bytes")
+        logger.info(f"✓ Open tabs: {len(browser.pages)}")
 
         # Close
         await browser.close_all_pages()
-        print("✓ Demo complete")
+        logger.info("✓ Demo complete")
 
     asyncio.run(demo())
     return 0

@@ -848,14 +848,14 @@ class StealthManager:
 
         // Override common responsive breakpoints based on our spoofed dimensions
         if (query.includes('max-width')) {
-            const maxWidth = parseInt(query.match(/max-width:\\s*(\d+)px/)?.[1] || '0');
+            const maxWidth = parseInt(query.match(/max-width:\\s*(\\d+)px/)?.[1] || '0');
             if (maxWidth < TARGET_WINDOW_WIDTH) {
                 Object.defineProperty(result, 'matches', { get: () => false });
             }
         }
 
         if (query.includes('min-width')) {
-            const minWidth = parseInt(query.match(/min-width:\\s*(\d+)px/)?.[1] || '0');
+            const minWidth = parseInt(query.match(/min-width:\\s*(\\d+)px/)?.[1] || '0');
             if (minWidth <= TARGET_WINDOW_WIDTH) {
                 Object.defineProperty(result, 'matches', { get: () => true });
             }
@@ -937,7 +937,7 @@ def main(args):
             await stealth_manager.human_delay_async(2000, 3000)
 
             await page.screenshot(path="/tmp/stealth_test.png")
-            print("✓ Stealth test complete: /tmp/stealth_test.png")
+            logger.info("✓ Stealth test complete: /tmp/stealth_test.png")
 
             await browser.close()
 

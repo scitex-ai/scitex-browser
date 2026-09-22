@@ -14,12 +14,13 @@
 
 <!-- scitex-badges:start -->
 <p align="center">
-  <a href="https://pypi.org/project/scitex-browser/"><img src="https://img.shields.io/pypi/v/scitex-browser.svg" alt="PyPI"></a>
-  <a href="https://pypi.org/project/scitex-browser/"><img src="https://img.shields.io/pypi/pyversions/scitex-browser.svg" alt="Python"></a>
-  <a href="https://github.com/ywatanabe1989/scitex-browser/actions/workflows/test.yml"><img src="https://github.com/ywatanabe1989/scitex-browser/actions/workflows/test.yml/badge.svg" alt="Tests"></a>
-  <a href="https://codecov.io/gh/ywatanabe1989/scitex-browser"><img src="https://codecov.io/gh/ywatanabe1989/scitex-browser/graph/badge.svg" alt="Coverage"></a>
-  <a href="https://scitex-browser.readthedocs.io/en/latest/"><img src="https://readthedocs.org/projects/scitex-browser/badge/?version=latest" alt="Docs"></a>
-  <a href="https://www.gnu.org/licenses/agpl-3.0"><img src="https://img.shields.io/badge/license-AGPL_v3-blue.svg" alt="License: AGPL v3"></a>
+  <a href="https://pypi.org/project/scitex-browser/"><img src="https://img.shields.io/pypi/v/scitex-browser?label=pypi" alt="pypi"></a>
+  <a href="https://pypi.org/project/scitex-browser/"><img src="https://img.shields.io/pypi/pyversions/scitex-browser?label=python" alt="python"></a>
+  <a href="https://scitex-browser.readthedocs.io/en/latest/"><img src="https://img.shields.io/readthedocs/scitex-browser?label=docs" alt="docs"></a>
+</p>
+<p align="center">
+  <a href="https://github.com/ywatanabe1989/scitex-browser/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/ywatanabe1989/scitex-browser/ci.yml?branch=develop&label=tests" alt="tests"></a>
+  <a href="https://codecov.io/gh/ywatanabe1989/scitex-browser"><img src="https://img.shields.io/codecov/c/github/ywatanabe1989/scitex-browser/develop?label=cov" alt="cov"></a>
 </p>
 <!-- scitex-badges:end -->
 
@@ -30,7 +31,7 @@
 | # | Problem | Solution |
 |---|---------|----------|
 | 1 | **Playwright is great but verbose** -- every scraping script reinvents popup dismissal, retry logic, Chrome-PDF-viewer workaround | **Helpers**: `click_with_fallbacks_async([sel1, sel2])`, `save_as_pdf_async`, `close_popups_async`, `inject_visual_effects` — focused wrappers around Playwright |
-| 2 | **Tests fail silently with no artifact** -- `pytest-playwright` doesn't auto-capture screen + DOM on failure | **`TestMonitor` + `create_failure_capture_fixture`** -- captures screenshot + page HTML + console log on every failure |
+| 2 | **Silent test failures** -- `pytest-playwright` doesn't auto-capture screen + DOM on failure | **`TestMonitor`** -- captures screenshot + page HTML + console log on every failure (`create_failure_capture_fixture`) |
 
 ## Features
 
@@ -42,46 +43,71 @@
 - **Collaboration**: Shared browser sessions, credential management
 - **Auth**: Google authentication helpers
 
-## Installation
-
-```bash
-pip install scitex-browser
-```
-
-## Architecture
-
-```
-scitex-browser/
-├── src/scitex_browser/
-│   ├── __init__.py              # save_as_pdf, click_with_fallbacks_async, ...
-│   ├── _compat.py               # Standalone fallback when scitex_config absent
-│   ├── _state.py                # Local-state path helpers (runtime/ layout)
-│   ├── auth/                    # Google OAuth helpers
-│   ├── automation/              # CookieAutoAcceptor
-│   ├── collaboration/           # SharedBrowserSession, CredentialManager
-│   ├── core/                    # BrowserMixin, ChromeProfileManager
-│   ├── debugging/               # TestMonitor, capture_debug, visual overlays
-│   ├── interaction/             # Click/fill with fallbacks, popup handling
-│   ├── pdf/                     # Chrome-PDF-viewer detection, save_as_pdf
-│   ├── remote/                  # ZenRows API + CAPTCHA handling
-│   └── stealth/                 # StealthManager + HumanBehavior
-└── tests/                       # pytest-playwright suite
-```
-
-### Optional extras
-
-```bash
-pip install scitex-browser[dev]   # pytest + scitex-dev for local development
-pip install scitex-browser[docs]  # Sphinx + RTD theme for doc building
-pip install scitex-browser[all]   # dev + docs
-```
-
 ## Quick start
 
 ```python
 from scitex_browser import save_as_pdf, browser_logger
 from scitex_browser.stealth import StealthManager
 ```
+
+## Demo
+
+```mermaid
+sequenceDiagram
+    participant T as pytest test
+    participant H as click_with_fallbacks_async
+    participant P as Playwright Page
+    participant C as capture_debug_artifacts_async
+    T->>H: click(["#accept", ".cookie-ok"])
+    H->>P: try selector 1
+    P-->>H: not found
+    H->>P: try selector 2 -> click
+    H->>C: snapshot before/after
+    C-->>T: screenshot.png + page.html + console.log
+```
+
+<p align="center"><sub><b>Figure 1.</b> Failure-aware click flow: every fallback attempt runs against the Playwright page while the debugging layer snapshots screenshot, HTML, and console output for replay.</sub></p>
+
+## Installation
+
+```bash
+uv pip install "scitex-browser[all]"
+```
+
+<details>
+<summary><b>Per-module extras</b></summary>
+
+<br>
+
+| Extra | Pulls in |
+|---|---|
+| `dev` | pytest, pytest-cov, pytest-asyncio, scitex-dev (test suite + audit tooling) |
+| `docs` | Sphinx + RTD theme + myst-parser (docs build only) |
+| `all` | `dev` + `docs` (recommended) |
+
+```bash
+uv pip install "scitex-browser[dev]"    # test suite + audit tooling
+uv pip install "scitex-browser[docs]"   # docs build only
+uv pip install -e ".[all]"              # editable install for contributors
+```
+
+</details>
+
+## Architecture
+
+```mermaid
+flowchart LR
+    T[Test / script] --> I[interaction: click/fill with fallbacks]
+    I --> P[Playwright Page]
+    S[stealth: StealthManager + HumanBehavior] --> P
+    R[remote: ZenRows + CAPTCHA] --> P
+    A[auth/collaboration: Google OAuth, shared sessions] --> P
+    P --> D[debugging: screenshot + HTML + console capture]
+    P --> F[pdf: Chrome-viewer detection, save_as_pdf]
+    D --> T
+```
+
+<p align="center"><sub><b>Figure 2.</b> Module workflow: every automation path drives a Playwright page (hardened by stealth/remote/auth layers) while the debugging and pdf layers capture artifacts back to the caller.</sub></p>
 
 ## 1 Interfaces
 
@@ -110,22 +136,6 @@ loops. See `_skills/scitex-browser/11_debugging-visuals.md` for the
 full pattern.
 
 </details>
-
-## Demo
-
-```mermaid
-sequenceDiagram
-    participant T as pytest test
-    participant H as click_with_fallbacks_async
-    participant P as Playwright Page
-    participant C as capture_debug_artifacts_async
-    T->>H: click(["#accept", ".cookie-ok"])
-    H->>P: try selector 1
-    P-->>H: not found
-    H->>P: try selector 2 -> click
-    H->>C: snapshot before/after
-    C-->>T: screenshot.png + page.html + console.log
-```
 
 ## Part of SciTeX
 

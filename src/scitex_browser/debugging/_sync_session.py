@@ -22,6 +22,10 @@ Or use the fixture factory:
     browser_session = create_browser_session_fixture()
 """
 
+import scitex_logging as logging
+logger = logging.getLogger(__name__)
+
+
 import atexit
 import os
 import signal
@@ -226,8 +230,8 @@ def create_browser_session_fixture(
 
         browser_session = create_browser_session_fixture(
             timeout=60,
-            setup=lambda page: print(f"Starting test"),
-            teardown=lambda page, success: print(f"Test {'passed' if success else 'failed'}"),
+            setup=lambda page: logger.info(f"Starting test"),
+            teardown=lambda page, success: logger.info(f"Test {'passed' if success else 'failed'}"),
             kill_zombies_on_start=True,
         )
 

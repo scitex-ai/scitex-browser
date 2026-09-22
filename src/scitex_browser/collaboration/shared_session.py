@@ -15,6 +15,10 @@ Key features:
 - Screenshots integrated with scitex.capture
 """
 
+import scitex_logging as logging
+logger = logging.getLogger(__name__)
+
+
 import asyncio
 import time
 from dataclasses import dataclass, field
@@ -133,9 +137,9 @@ class SharedBrowserSession:
             },
         )
 
-        print(f"✅ Shared browser session started: {self.config.session_id}")
-        print(f"   User data: {user_data_dir}")
-        print(f"   Screenshots: {self.screenshot_dir}")
+        logger.info(f"✅ Shared browser session started: {self.config.session_id}")
+        logger.info(f"   User data: {user_data_dir}")
+        logger.info(f"   Screenshots: {self.screenshot_dir}")
 
         # Start auto-screenshot if configured
         if self.config.screenshot_interval:
@@ -239,9 +243,9 @@ class SharedBrowserSession:
             },
         )
 
-        print(f"✅ Shared browser session closed: {self.config.session_id}")
-        print(f"   Duration: {duration:.1f}s")
-        print(f"   Screenshots: {len(self.screenshots)}")
+        logger.info(f"✅ Shared browser session closed: {self.config.session_id}")
+        logger.info(f"   Duration: {duration:.1f}s")
+        logger.info(f"   Screenshots: {len(self.screenshots)}")
 
     async def __aenter__(self):
         """Context manager entry."""
@@ -268,7 +272,7 @@ class SharedBrowserSession:
                 await self.screenshot(message="auto")
                 await asyncio.sleep(self.config.screenshot_interval)
             except Exception as e:
-                print(f"Auto-screenshot error: {e}")
+                logger.info(f"Auto-screenshot error: {e}")
 
     def get_info(self) -> dict:
         """Get session information."""

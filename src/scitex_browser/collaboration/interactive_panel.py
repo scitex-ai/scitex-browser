@@ -20,6 +20,10 @@ AI can:
 - Remember user preferences
 """
 
+import scitex_logging as logging
+logger = logging.getLogger(__name__)
+
+
 import json
 from pathlib import Path
 from typing import Any, Dict, Optional
@@ -332,7 +336,7 @@ class InteractivePanel:
         """
         )
 
-        print("✅ Interactive panel initialized in browser")
+        logger.info("✅ Interactive panel initialized in browser")
 
     async def show_message(self, message: str, type: str = "info"):
         """Show message in panel."""
@@ -361,7 +365,7 @@ class InteractivePanel:
         """
         # Check if already in memory
         if key in self.session_memory:
-            print(f"🔑 Using remembered {key}")
+            logger.info(f"🔑 Using remembered {key}")
             return self.session_memory[key]
 
         # Ask user

@@ -27,6 +27,10 @@ Usage in conftest.py:
         monitor.create_gif()  # Optional: create GIF from screenshots
 """
 
+import scitex_logging as logging
+logger = logging.getLogger(__name__)
+
+
 from datetime import datetime
 from pathlib import Path
 from typing import TYPE_CHECKING, Optional
@@ -86,7 +90,7 @@ class TestMonitor:
             from scitex_capture import CaptureManager
         except ImportError:
             if self.verbose:
-                print("[TestMonitor] scitex.capture not available")
+                logger.info("[TestMonitor] scitex.capture not available")
             return None
 
         # Generate session ID
@@ -112,7 +116,7 @@ class TestMonitor:
         )
 
         if self.verbose:
-            print(f"[TestMonitor] Started: {session_dir} (interval: {self.interval}s)")
+            logger.info(f"[TestMonitor] Started: {session_dir} (interval: {self.interval}s)")
 
         return self.session_id
 
@@ -129,7 +133,7 @@ class TestMonitor:
         status = self.get_status()
 
         if self.verbose and self._worker:
-            print(f"[TestMonitor] Stopped: {self._worker.screenshot_count} screenshots")
+            logger.info(f"[TestMonitor] Stopped: {self._worker.screenshot_count} screenshots")
 
         return status
 
@@ -190,7 +194,7 @@ class TestMonitor:
             )
         except ImportError:
             if self.verbose:
-                print("[TestMonitor] GIF creation requires scitex.capture")
+                logger.info("[TestMonitor] GIF creation requires scitex.capture")
             return None
 
     def get_screenshots(self) -> list:
@@ -243,7 +247,7 @@ def create_test_monitor_fixture(
         if auto_gif:
             gif_path = monitor.create_gif()
             if gif_path:
-                print(f"[TestMonitor] GIF created: {gif_path}")
+                logger.info(f"[TestMonitor] GIF created: {gif_path}")
 
     return test_monitor
 

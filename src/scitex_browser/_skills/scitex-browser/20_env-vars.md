@@ -10,6 +10,8 @@ tags: [scitex-browser-env-vars]
 | Variable | Purpose | Default | Type |
 |---|---|---|---|
 | `SCITEX_BROWSER_CHROME_CACHE_DIR` | Override for the Chromium user-data dir used by Playwright sessions. | `$SCITEX_DIR/browser/runtime/chrome` | path |
+| `SCITEX_BROWSER_USERNAME` | Plugin-port credential for `collaboration.DjangoAuthHelper` (populate from your own startup). | `""` | string |
+| `SCITEX_BROWSER_PASSWORD` | Plugin-port credential for `collaboration.DjangoAuthHelper` (populate from your own startup). | `""` | string |
 
 ## Cross-package vars (read by scitex-browser but owned elsewhere)
 

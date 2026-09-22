@@ -7,6 +7,6 @@ import pytest
 pytest.importorskip("scitex_dev")
 from scitex_dev._skills_quality_pytest import make_skill_quality_tests
 
-test_skills_quality = make_skill_quality_tests(
+test_skills_quality = make_skill_quality_tests(  # PS-206b: import-smoke-allowed
     package_root=Path(__file__).resolve().parents[1]
 )

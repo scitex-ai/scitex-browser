@@ -9,6 +9,10 @@ Standardized user interaction patterns for smooth AI-human collaboration.
 Provides consistent, reusable interaction patterns.
 """
 
+import scitex_logging as logging
+logger = logging.getLogger(__name__)
+
+
 from enum import Enum
 from typing import Any, Optional
 
@@ -187,7 +191,7 @@ class StandardInteractions:
         )
 
         self.initialized = True
-        print("✅ Standard interactions initialized")
+        logger.info("✅ Standard interactions initialized")
 
     async def ask_yes_no(self, question: str) -> bool:
         """

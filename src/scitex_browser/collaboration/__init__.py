@@ -18,6 +18,10 @@ Features:
 Version: 0.1.0-alpha (experimental)
 """
 
+import scitex_logging as logging
+logger = logging.getLogger(__name__)
+
+
 __experimental__ = True
 
 # Re-export auth helpers for convenience
@@ -58,6 +62,6 @@ def _check_compatibility():
 
 _check_compatibility()
 
-print("✅ scitex_browser.collaboration loaded (experimental)")
+logger.info("✅ scitex_browser.collaboration loaded (experimental)")
 
 # EOF

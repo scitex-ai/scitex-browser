@@ -4,6 +4,15 @@
 # See 01_ecosystem_06_local-state-directories.md §4a, §1 (PS-103).
 
 audit:
+  exemptions:
+    PS-224:
+      # CLA must answer attacker-triggerable PR events from forks by design;
+      # callee is the org-owned scitex-ai/.github reusable workflow (pilot
+      # migration 2026-07-10, triggers/permissions preserved verbatim), not
+      # third-party code. Cannot run on a closed runner and still sign CLAs.
+      - path: .github/workflows/cla.yml::call
+        line: 0
+        reason: "org-owned reusable CLA workflow; must run on external PR events by design"
   root-whitelist:
     files:
       # Codecov config is consumed by Codecov GitHub Action; canonical

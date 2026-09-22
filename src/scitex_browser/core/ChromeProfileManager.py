@@ -249,10 +249,10 @@ class ChromeProfileManager:
             logger.error("Chrome not found")
             return False
 
-        print("\n" + "=" * 60)
-        print("Chrome Extension Installation")
-        print("=" * 60)
-        print("Install extensions from the opened Chrome tabs, then press Enter")
+        logger.info("\n" + "=" * 60)
+        logger.info("Chrome Extension Installation")
+        logger.info("=" * 60)
+        logger.info("Install extensions from the opened Chrome tabs, then press Enter")
 
         try:
             input("Press Enter when done...")
@@ -399,25 +399,25 @@ def main(args):
         manager = ChromeProfileManager("system")
 
         # Check extensions
-        print("Checking system profile extensions...")
+        logger.info("Checking system profile extensions...")
         all_installed = manager.check_extensions_installed(verbose=True)
 
         if not all_installed:
-            print("\nInstalling missing extensions...")
+            logger.info("\nInstalling missing extensions...")
             await manager.install_extensions_manually_if_not_installed_async(
                 verbose=True
             )
 
         # Demo profile sync
-        print("\nChecking profile sync capability...")
+        logger.info("\nChecking profile sync capability...")
         test_profile = ChromeProfileManager("test_profile")
         success = test_profile.sync_from_profile("system")
         if success:
-            print("✓ Profile sync test complete")
+            logger.info("✓ Profile sync test complete")
         else:
-            print("✓ Profile sync skipped (source profile not ready)")
+            logger.info("✓ Profile sync skipped (source profile not ready)")
 
-        print("✓ Demo complete")
+        logger.info("✓ Demo complete")
 
     asyncio.run(demo())
     return 0
