@@ -26,6 +26,11 @@ from typing import Optional
 
 from playwright.async_api import Page
 
+import scitex_logging as logging
+
+logger = logging.getLogger(__name__)
+console = logging.getPlainConsole()
+
 
 class GoogleAuthHelper:
     """
@@ -59,7 +64,9 @@ class GoogleAuthHelper:
     def _log(self, msg: str):
         """Print debug message if debug mode is enabled."""
         if self.debug:
-            print(f"[GoogleAuth] {msg}", file=sys.stderr)
+            # stderr preserved (tested contract); PlainConsole.emit keeps the
+            # PS-220-compliant logging API while writing to stderr.
+            console.emit(f"[GoogleAuth] {msg}", stream=sys.stderr)
 
     async def login_via_google_button(
         self,

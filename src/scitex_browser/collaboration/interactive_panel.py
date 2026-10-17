@@ -23,6 +23,9 @@ AI can:
 import json
 from pathlib import Path
 from typing import Any, Dict, Optional
+import scitex_logging as logging
+
+console = logging.getPlainConsole()
 
 from playwright.async_api import Page
 
@@ -332,7 +335,7 @@ class InteractivePanel:
         """
         )
 
-        print("✅ Interactive panel initialized in browser")
+        console.print("✅ Interactive panel initialized in browser")
 
     async def show_message(self, message: str, type: str = "info"):
         """Show message in panel."""
@@ -361,7 +364,7 @@ class InteractivePanel:
         """
         # Check if already in memory
         if key in self.session_memory:
-            print(f"🔑 Using remembered {key}")
+            console.print(f"🔑 Using remembered {key}")
             return self.session_memory[key]
 
         # Ask user

@@ -11,6 +11,9 @@ Provides consistent, reusable interaction patterns.
 
 from enum import Enum
 from typing import Any, Optional
+import scitex_logging as logging
+
+logger = logging.getLogger(__name__)
 
 from playwright.async_api import Page
 
@@ -187,7 +190,7 @@ class StandardInteractions:
         )
 
         self.initialized = True
-        print("✅ Standard interactions initialized")
+        logger.info("✅ Standard interactions initialized")
 
     async def ask_yes_no(self, question: str) -> bool:
         """
