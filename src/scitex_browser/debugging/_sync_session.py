@@ -240,7 +240,12 @@ def create_browser_session_fixture(
     Returns:
         A pytest fixture function
     """
-    import pytest
+    try:
+        import pytest
+    except ImportError:  # test-only helper; pytest lives in the dev extra
+        pytest = None  # type: ignore[assignment]
+        if pytest is None:  # pragma: no cover
+            raise ImportError("pytest is required for this test helper; install scitex-browser[dev]")
 
     _zombies_cleaned = False
 

@@ -30,6 +30,9 @@ Usage in conftest.py:
 from datetime import datetime
 from pathlib import Path
 from typing import TYPE_CHECKING, Optional
+import scitex_logging as logging
+
+logger = logging.getLogger(__name__)
 
 from scitex_browser._state import test_monitor_dir
 
@@ -86,7 +89,7 @@ class TestMonitor:
             from scitex_capture import CaptureManager
         except ImportError:
             if self.verbose:
-                print("[TestMonitor] scitex.capture not available")
+                logger.info("[TestMonitor] scitex.capture not available")
             return None
 
         # Generate session ID
@@ -112,7 +115,7 @@ class TestMonitor:
         )
 
         if self.verbose:
-            print(f"[TestMonitor] Started: {session_dir} (interval: {self.interval}s)")
+            logger.info(f"[TestMonitor] Started: {session_dir} (interval: {self.interval}s)")
 
         return self.session_id
 
@@ -129,7 +132,7 @@ class TestMonitor:
         status = self.get_status()
 
         if self.verbose and self._worker:
-            print(f"[TestMonitor] Stopped: {self._worker.screenshot_count} screenshots")
+            logger.info(f"[TestMonitor] Stopped: {self._worker.screenshot_count} screenshots")
 
         return status
 
@@ -190,7 +193,7 @@ class TestMonitor:
             )
         except ImportError:
             if self.verbose:
-                print("[TestMonitor] GIF creation requires scitex.capture")
+                logger.info("[TestMonitor] GIF creation requires scitex.capture")
             return None
 
     def get_screenshots(self) -> list:
@@ -226,7 +229,12 @@ def create_test_monitor_fixture(
     Returns:
         A pytest fixture function
     """
-    import pytest
+    try:
+        import pytest
+    except ImportError:  # test-only helper; pytest lives in the dev extra
+        pytest = None  # type: ignore[assignment]
+        if pytest is None:  # pragma: no cover
+            raise ImportError("pytest is required for this test helper; install scitex-browser[dev]")
 
     @pytest.fixture
     def test_monitor(request):
@@ -243,7 +251,7 @@ def create_test_monitor_fixture(
         if auto_gif:
             gif_path = monitor.create_gif()
             if gif_path:
-                print(f"[TestMonitor] GIF created: {gif_path}")
+                logger.info(f"[TestMonitor] GIF created: {gif_path}")
 
     return test_monitor
 

@@ -16,6 +16,10 @@ authors = [
 ]
 dependencies = [
     "aiohttp",
+    # matplotlib is imported at runtime (function-level) by the debug-viz
+    # helpers in interaction/, debugging/ and stealth/ (click maps, grids,
+    # highlights). Without it a fresh install breaks on those paths.
+    "matplotlib>=3.8",
     # playwright is imported at module level throughout browser automation code.
     # Without it, `pip install scitex-browser` yields an unimportable package.
     "playwright>=1.40.0",

@@ -937,7 +937,7 @@ def main(args):
             await stealth_manager.human_delay_async(2000, 3000)
 
             await page.screenshot(path="/tmp/stealth_test.png")
-            print("✓ Stealth test complete: /tmp/stealth_test.png")
+            logger.info("✓ Stealth test complete: /tmp/stealth_test.png")
 
             await browser.close()
 

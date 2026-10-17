@@ -11,6 +11,10 @@ Start small - just Django login for now.
 
 import os
 from typing import Optional
+import scitex_logging as logging
+
+logger = logging.getLogger(__name__)
+console = logging.getPlainConsole()
 
 from playwright.async_api import Page
 
@@ -70,11 +74,11 @@ class DjangoAuthHelper:
             # Wait for redirect (success indicator in URL)
             await page.wait_for_url(f"**{self.success_indicator}**", timeout=5000)
 
-            print(f"✅ Logged in as: {self.username}")
+            console.print(f"✅ Logged in as: {self.username}")
             return True
 
         except Exception as e:
-            print(f"❌ Login failed: {e}")
+            logger.warning(f"❌ Login failed: {e}")
             return False
 
     async def is_logged_in(self, page: Page) -> bool:

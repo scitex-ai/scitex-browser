@@ -27,6 +27,10 @@ try:
 except ImportError:
     CookieAutoAcceptor = None
 
+import scitex_logging as logging
+
+logger = logging.getLogger(__name__)
+
 
 class BrowserMixin:
     """Mixin for local browser-based strategies with common functionality.
@@ -261,12 +265,12 @@ def main(args):
 
         # Scrape a page
         content = await browser.scrape_async("https://example.com")
-        print(f"✓ Fetched {len(content)} bytes")
-        print(f"✓ Open tabs: {len(browser.pages)}")
+        logger.info(f"✓ Fetched {len(content)} bytes")
+        logger.info(f"✓ Open tabs: {len(browser.pages)}")
 
         # Close
         await browser.close_all_pages()
-        print("✓ Demo complete")
+        logger.info("✓ Demo complete")
 
     asyncio.run(demo())
     return 0

@@ -28,6 +28,9 @@ Usage in conftest.py:
 from datetime import datetime
 from pathlib import Path
 from typing import TYPE_CHECKING
+import scitex_logging as logging
+
+logger = logging.getLogger(__name__)
 
 if TYPE_CHECKING:
     from playwright.sync_api import Page
@@ -303,9 +306,9 @@ def save_failure_artifacts(
         screenshot_path = artifacts_path / f"{safe_test_name}_screenshot.png"
         page.screenshot(path=str(screenshot_path), full_page=True)
         saved_files["screenshot"] = screenshot_path
-        print(f"\n[FAILURE] Screenshot saved: {screenshot_path}")
+        logger.info(f"\n[FAILURE] Screenshot saved: {screenshot_path}")
     except Exception as e:
-        print(f"\n[FAILURE] Failed to save screenshot: {e}")
+        logger.warning(f"\n[FAILURE] Failed to save screenshot: {e}")
 
     # Save console logs
     try:
@@ -320,9 +323,9 @@ def save_failure_artifacts(
             for log in console_logs:
                 f.write(f"{log}\n")
         saved_files["console_logs"] = logs_path
-        print(f"[FAILURE] Console logs saved: {logs_path}")
+        logger.info(f"[FAILURE] Console logs saved: {logs_path}")
     except Exception as e:
-        print(f"[FAILURE] Failed to save console logs: {e}")
+        logger.warning(f"[FAILURE] Failed to save console logs: {e}")
 
     # Save page HTML
     try:
@@ -331,9 +334,9 @@ def save_failure_artifacts(
         with open(html_path, "w") as f:
             f.write(html_content)
         saved_files["page_html"] = html_path
-        print(f"[FAILURE] Page HTML saved: {html_path}")
+        logger.info(f"[FAILURE] Page HTML saved: {html_path}")
     except Exception as e:
-        print(f"[FAILURE] Failed to save page HTML: {e}")
+        logger.warning(f"[FAILURE] Failed to save page HTML: {e}")
 
     return saved_files
 
@@ -355,7 +358,12 @@ def create_failure_capture_fixture(artifacts_dir: Path | str):
     Returns:
         A pytest fixture function
     """
-    import pytest
+    try:
+        import pytest
+    except ImportError:  # test-only helper; pytest lives in the dev extra
+        pytest = None  # type: ignore[assignment]
+        if pytest is None:  # pragma: no cover
+            raise ImportError("pytest is required for this test helper; install scitex-browser[dev]")
 
     @pytest.fixture(autouse=True)
     def capture_on_failure(request, page):
