@@ -7,6 +7,9 @@ versions follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+- Route release tests/builds through the pinned Browser native profile, using
+  one hosted source resolution and source-named artifacts at both boundaries.
+
 - Add a Browser-owned CI image layer with Chromium and native dependencies,
   plus a fresh-wheel offline interaction check; keep release admission separate.
 

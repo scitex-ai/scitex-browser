@@ -127,6 +127,10 @@ offline fill/value/events/missing-selector probe using Chromium inside the image
 It clears source PYTHONPATH and removes only its own fresh installation afterward.
 No host browser, saved profile, live website or application login is required.
 
-This helper is a qualification operation, not an admitted release workflow.
-Complete Python suites, source/profile registration, image/runtime byte checks
-and publisher trust remain separate requirements before publishing.
+The pinned shared native Browser executor requires this helper after its
+complete artifact build and before upload. The leaf release caller resolves the
+tag, trigger and protected-main source on a hosted runner; native test/build
+operations receive that same source and tag without inheriting secrets.
+Publisher and GitHub Release jobs download the matching source-named artifact
+and retain their final archive and remote-source checks. Actual publisher trust
+and the remaining release requirements must be verified before publishing.

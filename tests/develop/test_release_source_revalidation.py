@@ -64,8 +64,8 @@ def test_github_release_revalidates_same_build_before_creating_assets():
     assert observed == (
         "bash .github/ci/exec-in-sif.sh verify-release-in-sif.sh 3.12",
         {
-            "SCITEX_BROWSER_RELEASE_SOURCE_SHA": "${{ needs.build.outputs.source_sha }}",
-            "SCITEX_BROWSER_RELEASE_VERSION": "${{ needs.build.outputs.version }}",
+            "SCITEX_BROWSER_RELEASE_SOURCE_SHA": "${{ needs.source.outputs.source_sha }}",
+            "SCITEX_BROWSER_RELEASE_VERSION": "${{ needs.source.outputs.version }}",
             "GITHUB_TOKEN": "${{ github.token }}",
         },
         True, "${{ github.token }}",

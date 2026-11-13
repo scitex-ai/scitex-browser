@@ -41,7 +41,8 @@ def test_release_tag_selection(tmp_path, job, event, ref, tag, expected):
         os.environ, GITHUB_EVENT_NAME=event, GITHUB_REF=ref,
         SCITEX_BROWSER_RELEASE_TAG=tag, GITHUB_OUTPUT=str(output),
     )
-    script = _step(job, "Resolve version")["run"]
+    native = _workflow()["jobs"][job]
+    script = _step("source", "Resolve version")["run"]
 
     # Act
     result = subprocess.run(
@@ -50,7 +51,10 @@ def test_release_tag_selection(tmp_path, job, event, ref, tag, expected):
     )
 
     # Assert
-    assert (result.returncode == 0, output.read_text(), (tmp_path / "unexpected-file").exists()) == (*expected, False)
+    assert (
+        result.returncode == 0, output.read_text(),
+        (tmp_path / "unexpected-file").exists(), native["with"]["release_tag"],
+    ) == (*expected, False, "${{ needs.source.outputs.version }}")
 
 
 @pytest.fixture
@@ -88,7 +92,8 @@ def test_release_source_guard(tmp_path, release_repository, job, checkout, trigg
     output.touch()
     env = dict(os.environ, GITHUB_SHA=shas[trigger], GITHUB_OUTPUT=str(output))
     outcomes = {"main": (True, "sha=" + shas["main"] + "\n"), "": (False, "")}
-    script = _step(job, "Verify tagged source matches the tested trigger")["run"]
+    native = _workflow()["jobs"][job]
+    script = _step("source", "Verify tagged source matches the tested trigger")["run"]
 
     # Act
     result = subprocess.run(
@@ -97,7 +102,9 @@ def test_release_source_guard(tmp_path, release_repository, job, checkout, trigg
     )
 
     # Assert
-    assert (result.returncode == 0, output.read_text()) == outcomes[expected]
+    assert (
+        result.returncode == 0, output.read_text(), native["with"]["source_commit"],
+    ) == (*outcomes[expected], "${{ needs.source.outputs.source_sha }}")
 
 
 def test_publisher_uses_recorded_build_source():
@@ -107,7 +114,7 @@ def test_publisher_uses_recorded_build_source():
 
     # Act
     observed = (
-        jobs["build"]["outputs"]["source_sha"],
+        jobs["source"]["outputs"]["source_sha"],
         checkout["with"]["ref"],
         jobs["release"]["steps"][0]["with"]["ref"],
         jobs["publish"]["needs"],
@@ -116,19 +123,23 @@ def test_publisher_uses_recorded_build_source():
     # Assert
     assert observed == (
         "${{ steps.source.outputs.sha }}",
-        "${{ needs.build.outputs.source_sha }}",
-        "${{ needs.build.outputs.source_sha }}",
-        "build",
+        "${{ needs.source.outputs.source_sha }}",
+        "${{ needs.source.outputs.source_sha }}",
+        ["source", "build"],
     )
 
 
 @pytest.mark.parametrize("job", ["test", "build"])
 def test_release_input_is_passed_through_environment(job):
     # Arrange
-    step = _step(job, "Resolve version")
+    native = _workflow()["jobs"][job]
+    step = _step("source", "Resolve version")
 
     # Act
-    observed = step["env"]
+    observed = (step["env"], native["with"]["release_tag"])
 
     # Assert
-    assert observed == {"SCITEX_BROWSER_RELEASE_TAG": "${{ inputs.version }}"}
+    assert observed == (
+        {"SCITEX_BROWSER_RELEASE_TAG": "${{ inputs.version }}"},
+        "${{ needs.source.outputs.version }}",
+    )

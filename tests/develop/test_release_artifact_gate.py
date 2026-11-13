@@ -43,30 +43,23 @@ def test_release_jobs_bind_artifact_expectations_to_source_and_version():
     )
 
     # Act
-    observed = {}
-    for name in ("build", "publish"):
-        step = next(
-            row for row in workflow["jobs"][name]["steps"]
-            if row.get("run", "").endswith(name + "-in-sif.sh 3.12")
-        )
-        observed[name] = {
-            key: step.get("env", {}).get(key)
-            for key in (
-                "SCITEX_BROWSER_RELEASE_SOURCE_SHA", "SCITEX_BROWSER_RELEASE_VERSION",
-            )
-        }
+    jobs = workflow["jobs"]
+    publish = next(
+        row for row in jobs["publish"]["steps"]
+        if row.get("run", "").endswith("publish-in-sif.sh 3.12")
+    )
+    observed = (
+        jobs["build"]["with"]["source_commit"],
+        jobs["build"]["with"]["release_tag"],
+        publish["env"]["SCITEX_BROWSER_RELEASE_SOURCE_SHA"],
+        publish["env"]["SCITEX_BROWSER_RELEASE_VERSION"],
+    )
 
     # Assert
-    assert observed == {
-        "build": {
-            "SCITEX_BROWSER_RELEASE_SOURCE_SHA": "${{ steps.source.outputs.sha }}",
-            "SCITEX_BROWSER_RELEASE_VERSION": "${{ steps.ver.outputs.version }}",
-        },
-        "publish": {
-            "SCITEX_BROWSER_RELEASE_SOURCE_SHA": "${{ needs.build.outputs.source_sha }}",
-            "SCITEX_BROWSER_RELEASE_VERSION": "${{ needs.build.outputs.version }}",
-        },
-    }
+    assert observed == (
+        "${{ needs.source.outputs.source_sha }}", "${{ needs.source.outputs.version }}",
+        "${{ needs.source.outputs.source_sha }}", "${{ needs.source.outputs.version }}",
+    )
 
 
 @pytest.fixture

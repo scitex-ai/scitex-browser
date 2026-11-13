@@ -1,225 +1,151 @@
+# Resolve the protected tagged source once on a hosted runner.
+# Native tests/builds use one pinned, qualified Browser executor.
+# Publication consumes that source and its exact artifact, then revalidates both.
 name: release
-
-# Tag-driven release pipeline — SELF-HOSTED (Spartan CPU) via the scitex-ci SIF.
-#
-# The intended operator flow is:
-#
-#     git tag vX.Y.Z && git push origin vX.Y.Z
-#
-# Everything else fires automatically:
-#
-#   1. test          — matrix pytest INSIDE the SIF. Must pass or the pipeline
-#                      halts; nothing is published until tests are green on the
-#                      tagged commit.
-#   2. build         — wheel + sdist built INSIDE the SIF, uploaded as artifact.
-#   3. publish       — PyPI via MANUAL OIDC trusted publishing INSIDE the SIF.
-#   4. release       — GitHub Release with CHANGELOG notes + artifacts.
-#
-# develop→main promotion is a DELIBERATE, separate PR (operator policy);
-# this pipeline never auto-syncs main.
-#
-# WHY the SIF (operator standardization 2026-06-18, fleet canary 2026-06-21):
-# the Spartan compute runners have NO Python on the bare node, so the old
-# `actions/setup-python@v5` step failed at init ("version 3.x not found for
-# this OS"). The working pytest-matrix CI runs INSIDE the pre-built, reused
-# scitex-ci SIF (`apptainer exec ci-cpu.sif`), which bakes python 3.11/3.12/
-# 3.13 + pip + uv + fd at /opt/venv-<ver>. This release pipeline mirrors that:
-#   - test/build run `bash .github/ci/exec-in-sif.sh <inner>.sh <pyver>`.
-#   - publish CANNOT use pypa/gh-action-pypi-publish (a Docker action; the
-#     compute nodes have no Docker), so it does MANUAL OIDC trusted publishing
-#     inside the SIF (.github/ci/publish-in-sif.sh): GitHub OIDC JWT →
-#     PyPI mint-token → twine upload. Trust config on PyPI is unchanged.
-#   - actions/checkout, upload/download-artifact, codecov are JS actions and
-#     run fine on the self-hosted runner.
-# fail-loud: a missing SIF/shim/interpreter is a HARD error, never a
-# bare-runner fallback.
-#
-# runs-on driven by repo Actions Variable CI_RUNS_ON; SIF + apptainer paths
-# come from SCITEX_CI_SIF / SCITEX_CI_APPTAINER (same as pytest-matrix).
-#
-# Manual re-run: the workflow also accepts a `version` input via
-# workflow_dispatch for an existing tag at the triggering commit on main.
-# Publisher scripts are checked out from the exact tested/build source SHA.
-# Runner/image/artifact qualification remains a separate release requirement.
-
-on:
+'on':
   push:
-    tags: ['v*']
+    tags:
+    - v*
   workflow_dispatch:
     inputs:
       version:
-        description: 'Tag to publish (e.g. v0.10.19) — must already exist on the repo'
+        description: "Tag to publish (e.g. v0.10.19) \u2014 must already exist on the repo"
         required: true
         type: string
-
 env:
   SCITEX_CI_APPTAINER: ${{ vars.SCITEX_CI_APPTAINER }}
   SCITEX_CI_SIF: ${{ vars.SCITEX_CI_SIF }}
   SCITEX_CI_SIF_SHA256: ${{ vars.SCITEX_CI_SIF_SHA256 }}
-
 jobs:
-  test:
-    runs-on: ${{ fromJSON(vars.CI_RUNS_ON || '["self-hosted","Linux","X64","scitex-ci"]') }}
-    strategy:
-      fail-fast: false
-      matrix:
-        python-version: ["3.11", "3.12", "3.13"]
-    steps:
-      - name: Resolve version
-        id: ver
-        env:
-          SCITEX_BROWSER_RELEASE_TAG: ${{ inputs.version }}
-        run: |
-          set -euo pipefail
-          if [[ "$GITHUB_EVENT_NAME" == "push" ]]; then
-            [[ "$GITHUB_REF" == refs/tags/* ]]
-            v="${GITHUB_REF#refs/tags/}"
-          elif [[ "$GITHUB_EVENT_NAME" == "workflow_dispatch" ]]; then
-            v="$SCITEX_BROWSER_RELEASE_TAG"
-          else
-            exit 1
-          fi
-          [[ "$v" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]
-          printf 'version=%s\n' "$v" >> "$GITHUB_OUTPUT"
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
-        with:
-          ref: ${{ steps.ver.outputs.version }}
-          fetch-depth: 0
-      - name: Verify tagged source matches the tested trigger
-        id: source
-        run: |
-          set -euo pipefail
-          git merge-base --is-ancestor HEAD origin/main
-          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
-          browser_release_source_sha="$(git rev-parse HEAD)"
-          printf 'sha=%s\n' "$browser_release_source_sha" >> "$GITHUB_OUTPUT"
-      # SIF-based self-hosted test run — mirrors pytest-matrix exactly. No
-      # setup-python (the bare Spartan node has no Python tool cache; that step
-      # failed "version not found for this OS"); no apt fd-install (fd is baked
-      # in the SIF). exec-in-sif.sh apptainer-execs the reused ci-cpu.sif and
-      # run-in-sif.sh layers THIS (tagged) checkout + [all,dev] into a writable
-      # target, then runs pytest. fail-loud on a missing SIF/shim.
-      - name: Run tests in the reused CI SIF (apptainer exec — deps layered, not on the bare runner)
-        run: bash .github/ci/exec-in-sif.sh run-in-sif.sh ${{ matrix.python-version }}
-
-  build:
-    needs: test
-    runs-on: ${{ fromJSON(vars.CI_RUNS_ON || '["self-hosted","Linux","X64","scitex-ci"]') }}
+  source:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
     outputs:
       version: ${{ steps.ver.outputs.version }}
       source_sha: ${{ steps.source.outputs.sha }}
     steps:
-      - name: Resolve version
-        id: ver
-        env:
-          SCITEX_BROWSER_RELEASE_TAG: ${{ inputs.version }}
-        run: |
-          set -euo pipefail
-          if [[ "$GITHUB_EVENT_NAME" == "push" ]]; then
-            [[ "$GITHUB_REF" == refs/tags/* ]]
-            v="${GITHUB_REF#refs/tags/}"
-          elif [[ "$GITHUB_EVENT_NAME" == "workflow_dispatch" ]]; then
-            v="$SCITEX_BROWSER_RELEASE_TAG"
-          else
-            exit 1
-          fi
-          [[ "$v" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]
-          printf 'version=%s\n' "$v" >> "$GITHUB_OUTPUT"
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
-        with:
-          ref: ${{ steps.ver.outputs.version }}
-          fetch-depth: 0
-      - name: Verify tagged source matches the tested trigger
-        id: source
-        run: |
-          set -euo pipefail
-          git merge-base --is-ancestor HEAD origin/main
-          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
-          browser_release_source_sha="$(git rev-parse HEAD)"
-          printf 'sha=%s\n' "$browser_release_source_sha" >> "$GITHUB_OUTPUT"
-      # Build INSIDE the SIF (no setup-python on the bare Spartan node).
-      # build-in-sif.sh installs the `build` frontend into a writable --target
-      # inside the SIF, then `python -m build` → dist/. fail-loud on empty dist.
-      - name: Build wheel + sdist in the CI SIF (apptainer exec)
-        env:
-          SCITEX_BROWSER_RELEASE_SOURCE_SHA: ${{ steps.source.outputs.sha }}
-          SCITEX_BROWSER_RELEASE_VERSION: ${{ steps.ver.outputs.version }}
-        run: bash .github/ci/exec-in-sif.sh build-in-sif.sh 3.12
-      # upload-artifact is a JS action — runs fine on the self-hosted runner.
-      - uses: actions/upload-artifact@v4
-        with:
-          name: dist
-          path: dist/
-
+    - name: Resolve version
+      id: ver
+      env:
+        SCITEX_BROWSER_RELEASE_TAG: ${{ inputs.version }}
+      run: |
+        set -euo pipefail
+        if [[ "$GITHUB_EVENT_NAME" == "push" ]]; then
+          [[ "$GITHUB_REF" == refs/tags/* ]]
+          v="${GITHUB_REF#refs/tags/}"
+        elif [[ "$GITHUB_EVENT_NAME" == "workflow_dispatch" ]]; then
+          v="$SCITEX_BROWSER_RELEASE_TAG"
+        else
+          exit 1
+        fi
+        [[ "$v" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]
+        printf 'version=%s\n' "$v" >> "$GITHUB_OUTPUT"
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      with:
+        ref: ${{ steps.ver.outputs.version }}
+        fetch-depth: 0
+    - name: Verify tagged source matches the tested trigger
+      id: source
+      run: |
+        set -euo pipefail
+        git merge-base --is-ancestor HEAD origin/main
+        test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+        browser_release_source_sha="$(git rev-parse HEAD)"
+        printf 'sha=%s\n' "$browser_release_source_sha" >> "$GITHUB_OUTPUT"
+    - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+      with:
+        python-version: '3.12'
+    - name: Revalidate protected remote source
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+        SCITEX_BROWSER_RELEASE_SOURCE_SHA: ${{ steps.source.outputs.sha }}
+        SCITEX_BROWSER_RELEASE_VERSION: ${{ steps.ver.outputs.version }}
+      run: python -I -S -B .github/ci/release-source.py --tag "$SCITEX_BROWSER_RELEASE_VERSION" --commit "$SCITEX_BROWSER_RELEASE_SOURCE_SHA"
+  test:
+    needs: source
+    permissions:
+      contents: read
+    uses: scitex-ai/.github/.github/workflows/leaf-release-sif.yml@3b763671ca92ddf9252a68423c777156d9e555ca
+    with:
+      operation: test
+      source_commit: ${{ needs.source.outputs.source_sha }}
+      release_tag: ${{ needs.source.outputs.version }}
+  build:
+    needs:
+    - source
+    - test
+    permissions:
+      contents: read
+    uses: scitex-ai/.github/.github/workflows/leaf-release-sif.yml@3b763671ca92ddf9252a68423c777156d9e555ca
+    with:
+      operation: build
+      source_commit: ${{ needs.source.outputs.source_sha }}
+      release_tag: ${{ needs.source.outputs.version }}
   publish:
-    needs: build
+    needs:
+    - source
+    - build
     runs-on: ${{ fromJSON(vars.CI_RUNS_ON || '["self-hosted","Linux","X64","scitex-ci"]') }}
     environment:
       name: pypi
       url: https://pypi.org/p/scitex-browser
-    # id-token: write is what populates ACTIONS_ID_TOKEN_REQUEST_{TOKEN,URL},
-    # which publish-in-sif.sh uses to mint the OIDC JWT. Keep it.
     permissions:
       contents: read
       id-token: write
     steps:
-      # Need the repo checked out so .github/ci/exec-in-sif.sh +
-      # publish-in-sif.sh are on disk (the build job uploaded only dist/).
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
-        with:
-          ref: ${{ needs.build.outputs.source_sha }}
-      - uses: actions/download-artifact@v4
-        with:
-          name: dist
-          path: dist
-      # Manual OIDC trusted publishing INSIDE the SIF — pypa/gh-action-pypi-
-      # publish is a Docker action and the Spartan compute nodes have no Docker.
-      # publish-in-sif.sh: GitHub OIDC JWT (audience=pypi) → PyPI mint-token →
-      # twine upload dist/*. apptainer exec (no --cleanenv) passes the
-      # ACTIONS_ID_TOKEN_REQUEST_* env vars into the SIF. fail-loud at each step.
-      - name: Publish to PyPI via manual OIDC trusted publishing in the SIF
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-          SCITEX_BROWSER_RELEASE_SOURCE_SHA: ${{ needs.build.outputs.source_sha }}
-          SCITEX_BROWSER_RELEASE_VERSION: ${{ needs.build.outputs.version }}
-        run: bash .github/ci/exec-in-sif.sh publish-in-sif.sh 3.12
-
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      with:
+        ref: ${{ needs.source.outputs.source_sha }}
+    - uses: actions/download-artifact@v4
+      with:
+        name: browser-dist-${{ needs.source.outputs.source_sha }}
+        path: dist
+    - name: Publish to PyPI via manual OIDC trusted publishing in the SIF
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+        SCITEX_BROWSER_RELEASE_SOURCE_SHA: ${{ needs.source.outputs.source_sha }}
+        SCITEX_BROWSER_RELEASE_VERSION: ${{ needs.source.outputs.version }}
+      run: bash .github/ci/exec-in-sif.sh publish-in-sif.sh 3.12
   release:
-    needs: [build, publish]
+    needs:
+    - source
+    - build
+    - publish
     runs-on: ${{ fromJSON(vars.CI_RUNS_ON || '["self-hosted","Linux","X64","scitex-ci"]') }}
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
-        with:
-          ref: ${{ needs.build.outputs.source_sha }}
-      - uses: actions/download-artifact@v4
-        with:
-          name: dist
-          path: dist
-      - name: Extract release notes from CHANGELOG.md
-        run: |
-          VERSION="${{ needs.build.outputs.version }}"
-          VERSION="${VERSION#v}"
-          awk -v v="$VERSION" '
-            $0 ~ "^## \\[" v "\\]" {p=1; next}
-            p && /^## \[/ {exit}
-            p
-          ' CHANGELOG.md > release-notes.md || true
-          if [ ! -s release-notes.md ]; then
-            echo "Release v${VERSION}. See CHANGELOG.md for details." > release-notes.md
-          fi
-      - name: Revalidate release source and archives
-        env:
-          SCITEX_BROWSER_RELEASE_SOURCE_SHA: ${{ needs.build.outputs.source_sha }}
-          SCITEX_BROWSER_RELEASE_VERSION: ${{ needs.build.outputs.version }}
-          GITHUB_TOKEN: ${{ github.token }}
-        run: bash .github/ci/exec-in-sif.sh verify-release-in-sif.sh 3.12
-      - name: Create GitHub Release
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          gh release create "${{ needs.build.outputs.version }}" \
-            --title "${{ needs.build.outputs.version }}" \
-            --notes-file release-notes.md \
-            dist/*
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      with:
+        ref: ${{ needs.source.outputs.source_sha }}
+    - uses: actions/download-artifact@v4
+      with:
+        name: browser-dist-${{ needs.source.outputs.source_sha }}
+        path: dist
+    - name: Extract release notes from CHANGELOG.md
+      run: |
+        VERSION="${{ needs.source.outputs.version }}"
+        VERSION="${VERSION#v}"
+        awk -v v="$VERSION" '
+          $0 ~ "^## \\[" v "\\]" {p=1; next}
+          p && /^## \[/ {exit}
+          p
+        ' CHANGELOG.md > release-notes.md || true
+        if [ ! -s release-notes.md ]; then
+          echo "Release v${VERSION}. See CHANGELOG.md for details." > release-notes.md
+        fi
+    - name: Revalidate release source and archives
+      env:
+        SCITEX_BROWSER_RELEASE_SOURCE_SHA: ${{ needs.source.outputs.source_sha }}
+        SCITEX_BROWSER_RELEASE_VERSION: ${{ needs.source.outputs.version }}
+        GITHUB_TOKEN: ${{ github.token }}
+      run: bash .github/ci/exec-in-sif.sh verify-release-in-sif.sh 3.12
+    - name: Create GitHub Release
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        gh release create "${{ needs.source.outputs.version }}" \
+          --title "${{ needs.source.outputs.version }}" \
+          --notes-file release-notes.md \
+          dist/*
