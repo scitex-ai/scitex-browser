@@ -84,3 +84,12 @@ runtime or publication authority: protected-main source, qualified release
 profiles and actual PyPI publisher registration remain separate requirements.
 
 Private qualification of an already public version must never be uploaded.
+
+
+Before either PyPI minting or GitHub Release creation, the shared SIF gate also
+revalidates the actual remote tag, its metadata/version and protected-main
+ancestry. It reads main before and after qualification and rereads the original
+tag object; movement or disagreement with the recorded build stops the release.
+These GitHub requests reuse the job's existing scoped token at the relevant
+step, without changing job permissions. Read-only source verification does not
+establish actor admission, native runtime qualification or PyPI publisher trust.

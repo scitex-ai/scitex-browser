@@ -25,11 +25,15 @@ def test_publisher_verifies_artifacts_before_requesting_credentials():
     body = source.split("set -euo pipefail", 1)[1]
 
     # Act
-    verification = body.find("verify-proof")
+    verification = body.find("bash .github/ci/verify-release-in-sif.sh")
     request = body.index(': "${ACTIONS_ID_TOKEN_REQUEST_TOKEN')
+    gate = (ROOT / ".github/ci/verify-release-in-sif.sh").read_text()
 
     # Assert
-    assert 0 <= verification < request
+    assert (
+        0 <= verification < request,
+        0 <= gate.find("release-identity.py verify-proof") < gate.find("release-source.py"),
+    ) == (True, True)
 
 
 def test_release_jobs_bind_artifact_expectations_to_source_and_version():
@@ -45,7 +49,12 @@ def test_release_jobs_bind_artifact_expectations_to_source_and_version():
             row for row in workflow["jobs"][name]["steps"]
             if row.get("run", "").endswith(name + "-in-sif.sh 3.12")
         )
-        observed[name] = step.get("env", {})
+        observed[name] = {
+            key: step.get("env", {}).get(key)
+            for key in (
+                "SCITEX_BROWSER_RELEASE_SOURCE_SHA", "SCITEX_BROWSER_RELEASE_VERSION",
+            )
+        }
 
     # Assert
     assert observed == {

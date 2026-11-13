@@ -48,12 +48,8 @@ fi
 echo "=== dist to publish ==="
 ls -l dist
 
-# Source and archives must still match the build proof before token minting.
-: "${SCITEX_BROWSER_RELEASE_SOURCE_SHA:?tested build source is required}"
-: "${SCITEX_BROWSER_RELEASE_VERSION:?tested release version is required}"
-"$PY" -I -S -B .github/ci/release-identity.py verify-proof \
-    --commit "$SCITEX_BROWSER_RELEASE_SOURCE_SHA" \
-    --version "${SCITEX_BROWSER_RELEASE_VERSION#v}" --dist dist
+# Revalidate artifacts and actual protected-main/tag facts before credentials.
+bash .github/ci/verify-release-in-sif.sh "$V"
 
 # --- writable scratch (compute-node HOME is RO inside the container) ---
 TMPDIR="/tmp/publish-scitex_browser-${GITHUB_RUN_ID:-0}-${GITHUB_RUN_ATTEMPT:-0}-$V"

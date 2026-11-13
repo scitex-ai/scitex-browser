@@ -179,6 +179,7 @@ jobs:
       # ACTIONS_ID_TOKEN_REQUEST_* env vars into the SIF. fail-loud at each step.
       - name: Publish to PyPI via manual OIDC trusted publishing in the SIF
         env:
+          GITHUB_TOKEN: ${{ github.token }}
           SCITEX_BROWSER_RELEASE_SOURCE_SHA: ${{ needs.build.outputs.source_sha }}
           SCITEX_BROWSER_RELEASE_VERSION: ${{ needs.build.outputs.version }}
         run: bash .github/ci/exec-in-sif.sh publish-in-sif.sh 3.12
@@ -208,6 +209,12 @@ jobs:
           if [ ! -s release-notes.md ]; then
             echo "Release v${VERSION}. See CHANGELOG.md for details." > release-notes.md
           fi
+      - name: Revalidate release source and archives
+        env:
+          SCITEX_BROWSER_RELEASE_SOURCE_SHA: ${{ needs.build.outputs.source_sha }}
+          SCITEX_BROWSER_RELEASE_VERSION: ${{ needs.build.outputs.version }}
+          GITHUB_TOKEN: ${{ github.token }}
+        run: bash .github/ci/exec-in-sif.sh verify-release-in-sif.sh 3.12
       - name: Create GitHub Release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

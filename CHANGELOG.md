@@ -7,6 +7,8 @@ versions follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+- Revalidate remote tag/version and protected-main identity before both
+  publication boundaries, rejecting movement and mismatched build sources.
 - Verify source-bound archive proofs through the pinned shared core after build
   and before publisher credential requests; keep proof JSON out of PyPI uploads.
 - Bind release tests, builds and publisher scripts to the same tagged commit
