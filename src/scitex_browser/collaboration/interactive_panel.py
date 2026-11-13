@@ -29,6 +29,11 @@ from playwright.async_api import Page
 from scitex_browser._state import memory_dir
 
 
+import scitex_logging as _slogging
+
+_console = _slogging.getConsole(__name__, level=_slogging.INFO)
+
+
 class InteractivePanel:
     """
     Interactive control panel injected into browser.
@@ -332,7 +337,7 @@ class InteractivePanel:
         """
         )
 
-        print("✅ Interactive panel initialized in browser")
+        _console.info("✅ Interactive panel initialized in browser")
 
     async def show_message(self, message: str, type: str = "info"):
         """Show message in panel."""
@@ -361,7 +366,7 @@ class InteractivePanel:
         """
         # Check if already in memory
         if key in self.session_memory:
-            print(f"🔑 Using remembered {key}")
+            _console.info(f"🔑 Using remembered {key}")
             return self.session_memory[key]
 
         # Ask user

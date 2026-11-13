@@ -29,6 +29,11 @@ from playwright.async_api import Browser, BrowserContext, Page, async_playwright
 from scitex_browser._state import persistent_dir
 
 
+import scitex_logging as _slogging
+
+_console = _slogging.getConsole(__name__, level=_slogging.INFO)
+
+
 class PersistentBrowserServer:
     """
     Browser server that stays running.
@@ -64,9 +69,9 @@ class PersistentBrowserServer:
 
         Browser stays open until explicitly stopped.
         """
-        print("=" * 60)
-        print("🌐 Starting Persistent Browser Server")
-        print("=" * 60)
+        _console.info("=" * 60)
+        _console.info("🌐 Starting Persistent Browser Server")
+        _console.info("=" * 60)
 
         self.playwright = await async_playwright().start()
 
@@ -90,21 +95,21 @@ class PersistentBrowserServer:
 
         self.running = True
 
-        print(f"\n✅ Browser server started!")
-        print(f"   Port: {self.port}")
-        print(f"   CDP URL: http://localhost:{self.port}")
-        print(f"   Session dir: {self.session_dir}")
-        print(f"   Headless: {self.headless}")
-        print(f"\n💡 Scripts can now attach to this browser!")
-        print(f"   Chrome DevTools: chrome://inspect")
-        print(f"\n⏸️  Press Ctrl+C to stop the browser server")
-        print("=" * 60 + "\n")
+        _console.info(f"\n✅ Browser server started!")
+        _console.info(f"   Port: {self.port}")
+        _console.info(f"   CDP URL: http://localhost:{self.port}")
+        _console.info(f"   Session dir: {self.session_dir}")
+        _console.info(f"   Headless: {self.headless}")
+        _console.info(f"\n💡 Scripts can now attach to this browser!")
+        _console.info(f"   Chrome DevTools: chrome://inspect")
+        _console.info(f"\n⏸️  Press Ctrl+C to stop the browser server")
+        _console.info("=" * 60 + "\n")
 
         # Handle shutdown gracefully
         loop = asyncio.get_event_loop()
 
         def handle_signal(sig, frame):
-            print("\n\n🛑 Shutting down browser server...")
+            _console.info("\n\n🛑 Shutting down browser server...")
             self.running = False
 
         signal.signal(signal.SIGINT, handle_signal)
@@ -124,7 +129,7 @@ class PersistentBrowserServer:
         if self.playwright:
             await self.playwright.stop()
 
-        print("\n✅ Browser server stopped")
+        _console.info("\n✅ Browser server stopped")
 
 
 async def attach_to_browser(cdp_url: str = "http://localhost:9222") -> Page:
@@ -159,7 +164,7 @@ async def attach_to_browser(cdp_url: str = "http://localhost:9222") -> Page:
         else:
             page = await context.new_page()
 
-        print(f"✅ Attached to browser at {cdp_url}")
+        _console.info(f"✅ Attached to browser at {cdp_url}")
         return page
 
     except Exception as e:

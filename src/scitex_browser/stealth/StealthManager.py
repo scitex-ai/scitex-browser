@@ -35,6 +35,9 @@ logger = logging.getLogger(__name__)
 # Broken Image Dimensions	16x16
 
 
+_console = logging.getConsole(__name__, level=logging.INFO)
+
+
 class StealthManager:
     def __init__(
         self,
@@ -937,7 +940,7 @@ def main(args):
             await stealth_manager.human_delay_async(2000, 3000)
 
             await page.screenshot(path="/tmp/stealth_test.png")
-            print("✓ Stealth test complete: /tmp/stealth_test.png")
+            _console.info("✓ Stealth test complete: /tmp/stealth_test.png")
 
             await browser.close()
 

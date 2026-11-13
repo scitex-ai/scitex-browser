@@ -29,7 +29,7 @@
 
 | # | Problem | Solution |
 |---|---------|----------|
-| 1 | **Playwright is great but verbose** -- every scraping script reinvents popup dismissal, retry logic, Chrome-PDF-viewer workaround | **Helpers**: `click_with_fallbacks_async([sel1, sel2])`, `save_as_pdf_async`, `close_popups_async`, `inject_visual_effects` — focused wrappers around Playwright |
+| 1 | **Playwright is great but verbose** -- every scraping script reinvents popup dismissal, retry logic, Chrome-PDF-viewer workaround | **Helpers**: `await click_with_fallbacks_async(page, "#accept")`, `save_as_pdf_async`, `close_popups_async`, `inject_visual_effects` — focused wrappers around Playwright |
 | 2 | **Tests fail silently with no artifact** -- `pytest-playwright` doesn't auto-capture screen + DOM on failure | **`TestMonitor` + `create_failure_capture_fixture`** -- captures screenshot + page HTML + console log on every failure |
 
 ## Features
@@ -46,6 +46,14 @@
 
 ```bash
 pip install scitex-browser
+```
+
+The base package includes Matplotlib for its plotting entrypoints and pytest
+for its fixture factories. Browser binaries are installed separately. For
+Chromium, use the same Python environment:
+
+```bash
+python -m playwright install chromium
 ```
 
 ## Architecture
@@ -71,7 +79,7 @@ scitex-browser/
 ### Optional extras
 
 ```bash
-pip install scitex-browser[dev]   # pytest + scitex-dev for local development
+pip install scitex-browser[dev]   # coverage, async tests and development audits
 pip install scitex-browser[docs]  # Sphinx + RTD theme for doc building
 pip install scitex-browser[all]   # dev + docs
 ```
@@ -105,9 +113,10 @@ from scitex_browser.debugging import (
 
 `click_with_fallbacks_async` and `fill_with_fallbacks_async` capture
 screenshot + HTML before/after every call by default
-(`capture_debug=True`). Drop `capture_debug=False` only in tight
-loops. See `_skills/scitex-browser/11_debugging-visuals.md` for the
-full pattern.
+(`capture_debug=True`). Set `capture_debug=False` to disable these artifacts.
+Each helper accepts one CSS selector string; the fallbacks are interaction
+methods for that selector. See the [interaction skill](src/scitex_browser/_skills/scitex-browser/13_interaction.md)
+and [debug-capture guide](src/scitex_browser/_skills/scitex-browser/11_debugging-visuals.md).
 
 </details>
 
@@ -119,12 +128,14 @@ sequenceDiagram
     participant H as click_with_fallbacks_async
     participant P as Playwright Page
     participant C as capture_debug_artifacts_async
-    T->>H: click(["#accept", ".cookie-ok"])
-    H->>P: try selector 1
-    P-->>H: not found
-    H->>P: try selector 2 -> click
-    H->>C: snapshot before/after
-    C-->>T: screenshot.png + page.html + console.log
+    T->>H: click(page, "#accept")
+    H->>C: Capture before
+    loop Methods until first success
+        H->>P: Playwright, force, then JavaScript
+        P-->>H: Method result
+    end
+    H->>C: Capture after or failure
+    C-->>T: Screenshot + HTML
 ```
 
 ## Part of SciTeX

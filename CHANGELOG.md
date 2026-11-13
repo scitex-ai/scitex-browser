@@ -7,6 +7,33 @@ versions follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+- Route release tests/builds through the pinned Browser native profile, using
+  one hosted source resolution and source-named artifacts at both boundaries.
+
+- Add a Browser-owned CI image layer with Chromium and native dependencies,
+  plus a fresh-wheel offline interaction check; keep release admission separate.
+
+- Revalidate remote tag/version and protected-main identity before both
+  publication boundaries, rejecting movement and mismatched build sources.
+- Verify source-bound archive proofs through the pinned shared core after build
+  and before publisher credential requests; keep proof JSON out of PyPI uploads.
+- Bind release tests, builds and publisher scripts to the same tagged commit
+  on main, and reject malformed or mismatched manual release selections.
+- Keep CLA automation on an explicit hosted runner with its one required secret.
+- Fail cross-package import checks for missing submodules of installed peers;
+  keep absent optional peers as visible skips.
+- Declare Matplotlib and pytest as runtime dependencies for the packaged
+  plotting entrypoints and pytest fixture factories.
+- Use SciTeX console/logging channels for browser feedback, preserve explicit
+  verbose/debug feedback on stdout/stderr, and silence import-only status.
+- Run the skills-quality gate against the package root instead of skipping it.
+- Require the installed Python auditor even when its CLI is absent from PATH.
+- Verify release SIF digests and use job-owned portable scratch/binds.
+- Pass selector and value as one Playwright evaluate argument so JavaScript
+  fill sets the value and emits input/change events.
+- Correct interaction examples to use scalar CSS selectors, viewport-center
+  clicks and explicit popup methods; align README fallback and artifact details.
+
 ## [0.1.15]
 
 ### Added
