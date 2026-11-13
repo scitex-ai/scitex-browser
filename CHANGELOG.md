@@ -17,6 +17,7 @@ versions follow [Semantic Versioning](https://semver.org/).
 - Use SciTeX console/logging channels for browser feedback, preserve explicit
   verbose/debug feedback on stdout/stderr, and silence import-only status.
 - Run the skills-quality gate against the package root instead of skipping it.
+- Verify release SIF digests and use job-owned portable scratch/binds.
 
 ## [0.1.15]
 

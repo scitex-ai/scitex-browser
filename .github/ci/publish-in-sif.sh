@@ -17,10 +17,10 @@
 #   3. twine upload dist/* with TWINE_USERNAME=__token__ and that minted token.
 #
 # This requires a Trusted Publisher to be configured on PyPI for
-# (project=scitex-browser, owner=ywatanabe1989, repo=scitex-browser,
-#  workflow=pypi-publish-and-github-release-on-tag.yml). It already is — the
-# previous releases published via the Docker action under the same trusted
-# publisher; only the *client* changes here, not PyPI's trust config.
+# (project=scitex-browser, owner=scitex-ai, repo=scitex-browser,
+#  workflow=pypi-publish-and-github-release-on-tag.yml). Verify the current
+# registration and required environment before releasing; historical uploads
+# do not establish that the current trust configuration matches this workflow.
 #
 # curl, python and (after a --target install) twine all live in the SIF.
 #
