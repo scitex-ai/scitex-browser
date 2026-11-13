@@ -38,7 +38,9 @@ name: release
 # come from SCITEX_CI_SIF / SCITEX_CI_APPTAINER (same as pytest-matrix).
 #
 # Manual re-run: the workflow also accepts a `version` input via
-# workflow_dispatch so you can re-publish without re-tagging.
+# workflow_dispatch for an existing tag at the triggering commit on main.
+# Publisher scripts are checked out from the exact tested/build source SHA.
+# Runner/image/artifact qualification remains a separate release requirement.
 
 on:
   push:
@@ -64,17 +66,32 @@ jobs:
     steps:
       - name: Resolve version
         id: ver
+        env:
+          SCITEX_BROWSER_RELEASE_TAG: ${{ inputs.version }}
         run: |
-          if [ "${{ github.event_name }}" = "push" ]; then
+          set -euo pipefail
+          if [[ "$GITHUB_EVENT_NAME" == "push" ]]; then
+            [[ "$GITHUB_REF" == refs/tags/* ]]
             v="${GITHUB_REF#refs/tags/}"
+          elif [[ "$GITHUB_EVENT_NAME" == "workflow_dispatch" ]]; then
+            v="$SCITEX_BROWSER_RELEASE_TAG"
           else
-            v="${{ inputs.version }}"
+            exit 1
           fi
-          echo "version=$v" >> "$GITHUB_OUTPUT"
-      - uses: actions/checkout@v4
+          [[ "$v" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]
+          printf 'version=%s\n' "$v" >> "$GITHUB_OUTPUT"
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           ref: ${{ steps.ver.outputs.version }}
           fetch-depth: 0
+      - name: Verify tagged source matches the tested trigger
+        id: source
+        run: |
+          set -euo pipefail
+          git merge-base --is-ancestor HEAD origin/main
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          browser_release_source_sha="$(git rev-parse HEAD)"
+          printf 'sha=%s\n' "$browser_release_source_sha" >> "$GITHUB_OUTPUT"
       # SIF-based self-hosted test run — mirrors pytest-matrix exactly. No
       # setup-python (the bare Spartan node has no Python tool cache; that step
       # failed "version not found for this OS"); no apt fd-install (fd is baked
@@ -89,20 +106,36 @@ jobs:
     runs-on: ${{ fromJSON(vars.CI_RUNS_ON || '["self-hosted","Linux","X64","scitex-ci"]') }}
     outputs:
       version: ${{ steps.ver.outputs.version }}
+      source_sha: ${{ steps.source.outputs.sha }}
     steps:
       - name: Resolve version
         id: ver
+        env:
+          SCITEX_BROWSER_RELEASE_TAG: ${{ inputs.version }}
         run: |
-          if [ "${{ github.event_name }}" = "push" ]; then
+          set -euo pipefail
+          if [[ "$GITHUB_EVENT_NAME" == "push" ]]; then
+            [[ "$GITHUB_REF" == refs/tags/* ]]
             v="${GITHUB_REF#refs/tags/}"
+          elif [[ "$GITHUB_EVENT_NAME" == "workflow_dispatch" ]]; then
+            v="$SCITEX_BROWSER_RELEASE_TAG"
           else
-            v="${{ inputs.version }}"
+            exit 1
           fi
-          echo "version=$v" >> "$GITHUB_OUTPUT"
-      - uses: actions/checkout@v4
+          [[ "$v" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]
+          printf 'version=%s\n' "$v" >> "$GITHUB_OUTPUT"
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           ref: ${{ steps.ver.outputs.version }}
           fetch-depth: 0
+      - name: Verify tagged source matches the tested trigger
+        id: source
+        run: |
+          set -euo pipefail
+          git merge-base --is-ancestor HEAD origin/main
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          browser_release_source_sha="$(git rev-parse HEAD)"
+          printf 'sha=%s\n' "$browser_release_source_sha" >> "$GITHUB_OUTPUT"
       # Build INSIDE the SIF (no setup-python on the bare Spartan node).
       # build-in-sif.sh installs the `build` frontend into a writable --target
       # inside the SIF, then `python -m build` → dist/. fail-loud on empty dist.
@@ -123,11 +156,14 @@ jobs:
     # id-token: write is what populates ACTIONS_ID_TOKEN_REQUEST_{TOKEN,URL},
     # which publish-in-sif.sh uses to mint the OIDC JWT. Keep it.
     permissions:
+      contents: read
       id-token: write
     steps:
       # Need the repo checked out so .github/ci/exec-in-sif.sh +
       # publish-in-sif.sh are on disk (the build job uploaded only dist/).
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          ref: ${{ needs.build.outputs.source_sha }}
       - uses: actions/download-artifact@v4
         with:
           name: dist
@@ -146,9 +182,9 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
-          ref: ${{ needs.build.outputs.version }}
+          ref: ${{ needs.build.outputs.source_sha }}
       - uses: actions/download-artifact@v4
         with:
           name: dist

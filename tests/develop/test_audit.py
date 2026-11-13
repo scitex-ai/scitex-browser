@@ -5,6 +5,7 @@ after upgrading scitex-dev to refresh any pin in [dev].
 """
 
 import shutil
+from pathlib import Path
 
 import pytest
 
@@ -29,4 +30,4 @@ def test_audit_all_clean():
         )
     from scitex_dev.testing import audit_all_for_package
 
-    audit_all_for_package('scitex-browser')
+    audit_all_for_package('scitex-browser', path=Path(__file__).resolve().parents[2])

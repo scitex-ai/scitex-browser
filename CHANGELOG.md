@@ -7,6 +7,9 @@ versions follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+- Bind release tests, builds and publisher scripts to the same tagged commit
+  on main, and reject malformed or mismatched manual release selections.
+
 ## [0.1.15]
 
 ### Added
