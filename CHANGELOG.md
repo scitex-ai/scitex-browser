@@ -7,6 +7,9 @@ versions follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+- Add a Browser-owned CI image layer with Chromium and native dependencies,
+  plus a fresh-wheel offline interaction check; keep release admission separate.
+
 - Revalidate remote tag/version and protected-main identity before both
   publication boundaries, rejecting movement and mismatched build sources.
 - Verify source-bound archive proofs through the pinned shared core after build

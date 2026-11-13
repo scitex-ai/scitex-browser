@@ -93,3 +93,40 @@ tag object; movement or disagreement with the recorded build stops the release.
 These GitHub requests reuse the job's existing scoped token at the relevant
 step, without changing job permissions. Read-only source verification does not
 establish actor admission, native runtime qualification or PyPI publisher trust.
+
+## Browser image qualification
+
+The generic CI images do not include Chromium's native dependencies. The
+Browser-owned candidate recipe at .github/ci/ci-browser.def layers a pinned
+Playwright installer, matching Chromium and its system libraries on a separately
+qualified base SIF. Set BASE_SIF to that image's absolute path and BASE_SHA256 to
+its independently recorded digest, then build a new output image:
+
+```bash
+apptainer build --build-arg base_image="$BASE_SIF" \
+  --build-arg base_sha256="$BASE_SHA256" \
+  ci-browser.sif .github/ci/ci-browser.def
+```
+
+The recipe verifies the base digest and runs an actual browser launch/page check.
+Its dedicated tooling environment leaves the base Python environments intact.
+It uses container scratch for that check, rather than inheriting a host-only
+temporary directory.
+
+After building source-bound wheel/sdist archives, select the candidate through
+SCITEX_CI_SIF and its recorded SCITEX_CI_SIF_SHA256. With the existing writable
+RUNNER_TEMP and SCITEX_BROWSER_RELEASE_SOURCE_SHA/VERSION expectations set, run:
+
+```bash
+bash .github/ci/exec-in-sif.sh probe-wheel-in-sif.sh 3.12
+```
+
+This verifies the artifact proof, creates a fresh environment, installs the wheel
+with normal base dependencies, checks dependency consistency, and runs the real
+offline fill/value/events/missing-selector probe using Chromium inside the image.
+It clears source PYTHONPATH and removes only its own fresh installation afterward.
+No host browser, saved profile, live website or application login is required.
+
+This helper is a qualification operation, not an admitted release workflow.
+Complete Python suites, source/profile registration, image/runtime byte checks
+and publisher trust remain separate requirements before publishing.
