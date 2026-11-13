@@ -40,6 +40,11 @@ __all__ = [
 ]
 
 
+import scitex_logging as _slogging
+
+_import_logger = _slogging.getLogger(__name__)
+
+
 # Compatibility check - ensure we don't break existing code
 def _check_compatibility():
     """Verify existing scitex.browser still works."""
@@ -58,6 +63,6 @@ def _check_compatibility():
 
 _check_compatibility()
 
-print("✅ scitex_browser.collaboration loaded (experimental)")
+_import_logger.debug("✅ scitex_browser.collaboration loaded (experimental)")
 
 # EOF

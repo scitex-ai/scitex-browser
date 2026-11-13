@@ -14,6 +14,9 @@ versions follow [Semantic Versioning](https://semver.org/).
   keep absent optional peers as visible skips.
 - Declare Matplotlib and pytest as runtime dependencies for the packaged
   plotting entrypoints and pytest fixture factories.
+- Use SciTeX console/logging channels for browser feedback, preserve explicit
+  verbose/debug feedback on stdout/stderr, and silence import-only status.
+- Run the skills-quality gate against the package root instead of skipping it.
 
 ## [0.1.15]
 

@@ -15,6 +15,11 @@ from typing import Any, Optional
 from playwright.async_api import Page
 
 
+import scitex_logging as _slogging
+
+_console = _slogging.getConsole(__name__, level=_slogging.INFO)
+
+
 class UserResponse(Enum):
     """Standardized user responses."""
 
@@ -187,7 +192,7 @@ class StandardInteractions:
         )
 
         self.initialized = True
-        print("✅ Standard interactions initialized")
+        _console.info("✅ Standard interactions initialized")
 
     async def ask_yes_no(self, question: str) -> bool:
         """

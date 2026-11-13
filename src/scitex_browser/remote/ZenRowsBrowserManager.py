@@ -30,6 +30,9 @@ from .ZenRowsAPIClient import ZenRowsAPIBrowser
 logger = logging.getLogger(__name__)
 
 
+_console = logging.getConsole(__name__, level=logging.INFO)
+
+
 class ZenRowsRemoteScholarBrowserManager:
     """
     Manages a connection to the remote ZenRows Scraping Browser service.
@@ -317,9 +320,9 @@ if __name__ == "__main__":
 
         async def test_browser_async(browser_type, browser_manager, use_auth=False):
             """Test a browser with all test sites."""
-            print(f"\n{'=' * 60}")
-            print(f"Testing: {browser_type}")
-            print("=" * 60)
+            _console.info(f"\n{'=' * 60}")
+            _console.info(f"Testing: {browser_type}")
+            _console.info("=" * 60)
 
             results = {}
 
@@ -339,7 +342,7 @@ if __name__ == "__main__":
                     pages_via_context = False
 
                 for test_name, url, description in test_sites:
-                    print(f"\n{test_name}: {description}")
+                    _console.info(f"\n{test_name}: {description}")
 
                     page = None
                     try:
@@ -356,14 +359,14 @@ if __name__ == "__main__":
                         if test_name in ["ip", "headers"]:
                             # Extract text content
                             content = await page.text_content("pre")
-                            print(f"Result: {content.strip()[:200]}...")
+                            _console.info(f"Result: {content.strip()[:200]}...")
 
                             # Parse IP if available
                             if test_name == "ip":
                                 try:
                                     ip_data = json.loads(content)
                                     results["ip"] = ip_data.get("origin", "Unknown")
-                                    print(f"Detected IP: {results['ip']}")
+                                    _console.info(f"Detected IP: {results['ip']}")
                                 except:
                                     results["ip"] = "Parse error"
                         else:
@@ -386,12 +389,12 @@ if __name__ == "__main__":
                             / f"{browser_type.lower().replace(' ', '_')}_{test_name}.png"
                         )
                         await page.screenshot(path=screenshot_path, full_page=True)
-                        print(f"Screenshot saved: {screenshot_path}")
+                        _console.info(f"Screenshot saved: {screenshot_path}")
 
                         results[test_name] = "Success"
 
                     except Exception as e:
-                        print(f"Failed: {str(e)[:100]}...")
+                        _console.info(f"Failed: {str(e)[:100]}...")
                         results[test_name] = f"Failed: {str(e)[:50]}"
                     finally:
                         if page:
@@ -402,7 +405,7 @@ if __name__ == "__main__":
                     await browser_manager.close()
 
             except Exception as e:
-                print(f"Browser initialization failed: {str(e)}")
+                _console.info(f"Browser initialization failed: {str(e)}")
                 results["error"] = str(e)
 
             return results
@@ -417,7 +420,7 @@ if __name__ == "__main__":
         all_results["Regular Browser"] = {"error": "Not available"}
 
         # Test 2: ZenRows Remote Browser (default settings)
-        print("\nInitializing ZenRows Remote Browser...")
+        _console.info("\nInitializing ZenRows Remote Browser...")
         try:
             zenrows_manager = ZenRowsRemoteScholarBrowserManager()
             zenrows_results = await test_browser_async(
@@ -425,11 +428,11 @@ if __name__ == "__main__":
             )
             all_results["ZenRows Remote"] = zenrows_results
         except Exception as e:
-            print(f"ZenRows Remote test failed: {e}")
+            _console.info(f"ZenRows Remote test failed: {e}")
             all_results["ZenRows Remote"] = {"error": str(e)}
 
         # Test 3: ZenRows Remote Browser with country (if supported)
-        print("\nInitializing ZenRows Remote Browser with AU country...")
+        _console.info("\nInitializing ZenRows Remote Browser with AU country...")
         try:
             zenrows_au_manager = ZenRowsRemoteScholarBrowserManager(proxy_country="au")
             zenrows_au_results = await test_browser_async(
@@ -437,57 +440,57 @@ if __name__ == "__main__":
             )
             all_results["ZenRows Remote AU"] = zenrows_au_results
         except Exception as e:
-            print(f"ZenRows Remote AU test failed: {e}")
+            _console.info(f"ZenRows Remote AU test failed: {e}")
             all_results["ZenRows Remote AU"] = {"error": str(e)}
 
         # Test 4: Test the API client as well
-        print("\nTesting ZenRows API Client for comparison...")
+        _console.info("\nTesting ZenRows API Client for comparison...")
         try:
             from .ZenRowsAPIClient import ZenRowsAPIBrowser as ZenRowsAPIClient
 
-            print("Testing basic API request...")
+            _console.info("Testing basic API request...")
             api_client = ZenRowsAPIClient()
             response = api_client.request("https://httpbin.org/ip")
             if response.status_code == 200:
                 ip_data = json.loads(response.text)
-                print(f"API Client IP (Basic): {ip_data.get('origin', 'Unknown')}")
-                print(
+                _console.info(f"API Client IP (Basic): {ip_data.get('origin', 'Unknown')}")
+                _console.info(
                     f"API Cost: {response.headers.get('X-Request-Cost', 'Unknown')} credits"
                 )
                 all_results["API Client Basic"] = {
                     "ip": ip_data.get("origin", "Unknown")
                 }
 
-            print("\nTesting API with Australian proxy...")
+            _console.info("\nTesting API with Australian proxy...")
             api_client_au = ZenRowsAPIClient(default_country="au")
             response_au = api_client_au.request("https://httpbin.org/ip")
             if response_au.status_code == 200:
                 ip_data_au = json.loads(response_au.text)
-                print(f"API Client IP (AU): {ip_data_au.get('origin', 'Unknown')}")
-                print(
+                _console.info(f"API Client IP (AU): {ip_data_au.get('origin', 'Unknown')}")
+                _console.info(
                     f"API Cost: {response_au.headers.get('X-Request-Cost', 'Unknown')} credits"
                 )
                 all_results["API Client AU"] = {
                     "ip": ip_data_au.get("origin", "Unknown")
                 }
         except Exception as e:
-            print(f"API Client test failed: {e}")
+            _console.info(f"API Client test failed: {e}")
             all_results["API Client"] = {"error": str(e)}
 
         # Print summary
-        print("\n" + "=" * 60)
-        print("SUMMARY REPORT")
-        print("=" * 60)
+        _console.info("\n" + "=" * 60)
+        _console.info("SUMMARY REPORT")
+        _console.info("=" * 60)
 
-        print("\nIP Addresses detected:")
+        _console.info("\nIP Addresses detected:")
         for method, data in all_results.items():
             if isinstance(data, dict):
                 ip = data.get("ip", "Not tested")
             else:
                 ip = "Error"
-            print(f"  {method:.<35} {ip}")
+            _console.info(f"  {method:.<35} {ip}")
 
-        print(f"\nScreenshots saved in: {screenshots_dir.absolute()}")
+        _console.info(f"\nScreenshots saved in: {screenshots_dir.absolute()}")
 
         # Save summary report
         summary_path = screenshots_dir / "test_summary.json"
@@ -504,19 +507,19 @@ if __name__ == "__main__":
                 f,
                 indent=2,
             )
-        print(f"Summary report saved: {summary_path}")
+        _console.info(f"Summary report saved: {summary_path}")
 
         # Comparison notes
-        print("\n" + "=" * 60)
-        print("COMPARISON NOTES:")
-        print("=" * 60)
-        print("1. Regular Browser: Uses your local IP, no proxy")
-        print("2. ZenRows Remote: Cloud browser with built-in anti-bot")
-        print("3. ZenRows Remote AU: Attempts Australian IP (experimental)")
-        print("4. API Client Basic: Direct API without country routing")
-        print("5. API Client AU: Guaranteed Australian IP via API mode")
-        print("\nRecommendation: Use API Client for country-specific needs,")
-        print("Remote Browser for complex JavaScript sites.")
+        _console.info("\n" + "=" * 60)
+        _console.info("COMPARISON NOTES:")
+        _console.info("=" * 60)
+        _console.info("1. Regular Browser: Uses your local IP, no proxy")
+        _console.info("2. ZenRows Remote: Cloud browser with built-in anti-bot")
+        _console.info("3. ZenRows Remote AU: Attempts Australian IP (experimental)")
+        _console.info("4. API Client Basic: Direct API without country routing")
+        _console.info("5. API Client AU: Guaranteed Australian IP via API mode")
+        _console.info("\nRecommendation: Use API Client for country-specific needs,")
+        _console.info("Remote Browser for complex JavaScript sites.")
 
     # async def main():
     #     """Example usage of ZenRowsRemoteScholarBrowserManager."""

@@ -17,6 +17,11 @@ from typing import Dict, Optional
 from playwright.async_api import Page
 
 
+import scitex_logging as _slogging
+
+_console = _slogging.getConsole(__name__, level=_slogging.INFO)
+
+
 class CredentialManager:
     """
     Flexible credential retrieval.
@@ -67,7 +72,7 @@ class CredentialManager:
         # Check cache first
         if name in self.cache:
             if self.verbose:
-                print(f"🔑 Using cached {name}")
+                _console.info(f"🔑 Using cached {name}")
             return self.cache[name]
 
         # Try environment variable
@@ -76,7 +81,7 @@ class CredentialManager:
             if value:
                 if self.verbose:
                     display_value = "***" if mask else value
-                    print(f"🔑 Using {name} from ${env_var}: {display_value}")
+                    _console.info(f"🔑 Using {name} from ${env_var}: {display_value}")
                 self.cache[name] = value
                 return value
 
@@ -112,8 +117,8 @@ class CredentialManager:
         """Prompt user in terminal."""
         prompt_text = prompt_text or name
 
-        print(f"\n🔑 Credential needed: {name}")
-        print("   (No environment variable found)")
+        _console.info(f"\n🔑 Credential needed: {name}")
+        _console.info("   (No environment variable found)")
 
         if mask:
             value = getpass.getpass(f"   Enter {prompt_text}: ")
@@ -131,7 +136,7 @@ class CredentialManager:
         """Prompt user in browser window."""
         prompt_text = prompt_text or name
 
-        print(f"\n🔑 Asking for {name} in browser...")
+        _console.info(f"\n🔑 Asking for {name} in browser...")
 
         # Wait for page to be ready
         try:
@@ -186,7 +191,7 @@ class CredentialManager:
         """Clear credential cache."""
         self.cache = {}
         if self.verbose:
-            print("🔑 Credential cache cleared")
+            _console.info("🔑 Credential cache cleared")
 
 
 # EOF
