@@ -48,6 +48,14 @@
 pip install scitex-browser
 ```
 
+The base package includes Matplotlib for its plotting entrypoints and pytest
+for its fixture factories. Browser binaries are installed separately. For
+Chromium, use the same Python environment:
+
+```bash
+python -m playwright install chromium
+```
+
 ## Architecture
 
 ```
@@ -71,7 +79,7 @@ scitex-browser/
 ### Optional extras
 
 ```bash
-pip install scitex-browser[dev]   # pytest + scitex-dev for local development
+pip install scitex-browser[dev]   # coverage, async tests and development audits
 pip install scitex-browser[docs]  # Sphinx + RTD theme for doc building
 pip install scitex-browser[all]   # dev + docs
 ```

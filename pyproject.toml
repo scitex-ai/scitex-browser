@@ -23,11 +23,14 @@ dependencies = [
     # ChromeProfileManager, interaction/, pdf/, remote/, stealth/, etc.
     "scitex-logging>=0.1.0",
     "scitex-config>=0.3.0",
+    # Packaged plotting entrypoints and pytest fixture factories import these
+    # at runtime; a normal base installation must provide their dependencies.
+    "matplotlib>=3.7",
+    "pytest>=7.0",
 ]
 
 [project.optional-dependencies]
 dev = [
-    "pytest",
     "pytest-cov",
     "pytest-asyncio>=0.23.0",
     "scitex-dev>=0.11.7",

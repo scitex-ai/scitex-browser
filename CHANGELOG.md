@@ -12,6 +12,8 @@ versions follow [Semantic Versioning](https://semver.org/).
 - Keep CLA automation on an explicit hosted runner with its one required secret.
 - Fail cross-package import checks for missing submodules of installed peers;
   keep absent optional peers as visible skips.
+- Declare Matplotlib and pytest as runtime dependencies for the packaged
+  plotting entrypoints and pytest fixture factories.
 
 ## [0.1.15]
 
