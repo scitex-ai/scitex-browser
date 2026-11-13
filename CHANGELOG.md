@@ -17,7 +17,12 @@ versions follow [Semantic Versioning](https://semver.org/).
 - Use SciTeX console/logging channels for browser feedback, preserve explicit
   verbose/debug feedback on stdout/stderr, and silence import-only status.
 - Run the skills-quality gate against the package root instead of skipping it.
+- Require the installed Python auditor even when its CLI is absent from PATH.
 - Verify release SIF digests and use job-owned portable scratch/binds.
+- Pass selector and value as one Playwright evaluate argument so JavaScript
+  fill sets the value and emits input/change events.
+- Correct interaction examples to use scalar CSS selectors, viewport-center
+  clicks and explicit popup methods; align README fallback and artifact details.
 
 ## [0.1.15]
 
