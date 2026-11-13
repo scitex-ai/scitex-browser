@@ -22,7 +22,9 @@ permissions:
 
 jobs:
   call:
-    uses: scitex-ai/.github/.github/workflows/cla.yml@main
+    uses: scitex-ai/.github/.github/workflows/cla.yml@49ecabbd7e6876f1712f43c1f6b901aa77f4b1ae
     with:
+      runs_on: '["ubuntu-latest"]'
       owner_allowlist: "bot*,ywatanabe1989,LLEmacs"
-    secrets: inherit
+    secrets:
+      GH_PERSONAL_ACCESS_TOKEN: ${{ secrets.GH_PERSONAL_ACCESS_TOKEN }}

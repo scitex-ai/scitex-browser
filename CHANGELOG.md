@@ -9,6 +9,9 @@ versions follow [Semantic Versioning](https://semver.org/).
 
 - Bind release tests, builds and publisher scripts to the same tagged commit
   on main, and reject malformed or mismatched manual release selections.
+- Keep CLA automation on an explicit hosted runner with its one required secret.
+- Fail cross-package import checks for missing submodules of installed peers;
+  keep absent optional peers as visible skips.
 
 ## [0.1.15]
 

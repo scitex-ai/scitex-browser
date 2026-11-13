@@ -15,6 +15,8 @@ in its source tree. Two outcomes:
   test is SKIPPED via `pytest.importorskip`. The umbrella's CI
   (which installs every peer) catches cross-package renames.
 """
+import importlib
+
 import pytest
 
 # ===== AUTO-GENERATED: cross-package imports =====
@@ -34,6 +36,7 @@ def test_cross_package_import_resolves_to_real_module(module_name):
     # Arrange
     expected_name = module_name
     # Act
-    module = pytest.importorskip(module_name)
+    pytest.importorskip(module_name.split(".")[0])
+    module = importlib.import_module(module_name)
     # Assert
     assert module.__name__ == expected_name
