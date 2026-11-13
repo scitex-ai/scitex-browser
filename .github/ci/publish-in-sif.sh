@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Runs INSIDE the reused scitex-ci SIF (apptainer exec — invoked via
-# exec-in-sif.sh). Publishes ./dist/* to PyPI via MANUAL OIDC Trusted
+# exec-in-sif.sh). Publishes the wheel and sdist to PyPI via MANUAL OIDC Trusted
 # Publishing, then twine upload.
 #
 # WHY manual OIDC (not pypa/gh-action-pypi-publish): that action is a Docker
@@ -14,7 +14,7 @@
 #      apptainer exec (no --cleanenv) passes those host env vars into the SIF.
 #   2. Exchange that JWT at PyPI's mint-token endpoint for a short-lived,
 #      scope-limited PyPI API token.
-#   3. twine upload dist/* with TWINE_USERNAME=__token__ and that minted token.
+#   3. twine uploads only wheel/sdist with the minted token.
 #
 # This requires a Trusted Publisher to be configured on PyPI for
 # (project=scitex-browser, owner=scitex-ai, repo=scitex-browser,
@@ -39,7 +39,7 @@ test -x "$PY" || {
 
 export LC_ALL=C.UTF-8 LANG=C.UTF-8
 
-# dist/ must already hold the artifacts (downloaded by the publish job before
+# dist/ must already hold archives and their source proof (downloaded before
 # this script runs). Fail loud if empty.
 if [ ! -d dist ] || [ -z "$(ls -A dist 2>/dev/null)" ]; then
     echo "::error::dist/ is empty — nothing to publish (download the build artifact first)"
@@ -47,6 +47,13 @@ if [ ! -d dist ] || [ -z "$(ls -A dist 2>/dev/null)" ]; then
 fi
 echo "=== dist to publish ==="
 ls -l dist
+
+# Source and archives must still match the build proof before token minting.
+: "${SCITEX_BROWSER_RELEASE_SOURCE_SHA:?tested build source is required}"
+: "${SCITEX_BROWSER_RELEASE_VERSION:?tested release version is required}"
+"$PY" -I -S -B .github/ci/release-identity.py verify-proof \
+    --commit "$SCITEX_BROWSER_RELEASE_SOURCE_SHA" \
+    --version "${SCITEX_BROWSER_RELEASE_VERSION#v}" --dist dist
 
 # --- writable scratch (compute-node HOME is RO inside the container) ---
 TMPDIR="/tmp/publish-scitex_browser-${GITHUB_RUN_ID:-0}-${GITHUB_RUN_ATTEMPT:-0}-$V"
@@ -102,8 +109,8 @@ uv pip install --python "$PY" --target="$TMPDIR/site" twine ||
     "$PY" -m pip install --target="$TMPDIR/site" twine
 export PYTHONPATH="$TMPDIR/site${PYTHONPATH:+:$PYTHONPATH}"
 
-echo "=== twine upload dist/* ==="
+echo "=== twine upload wheel + sdist ==="
 TWINE_USERNAME="__token__" TWINE_PASSWORD="$MINTED" \
-    "$PY" -m twine upload --non-interactive --disable-progress-bar dist/*
+    "$PY" -m twine upload --non-interactive --disable-progress-bar dist/*.whl dist/*.tar.gz
 
-echo "PUBLISH-OK: scitex-browser dist/* uploaded to PyPI via manual OIDC trusted publishing"
+echo "PUBLISH-OK: scitex-browser wheel + sdist uploaded to PyPI via manual OIDC trusted publishing"

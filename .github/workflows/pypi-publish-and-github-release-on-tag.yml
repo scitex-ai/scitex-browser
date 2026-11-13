@@ -141,6 +141,9 @@ jobs:
       # build-in-sif.sh installs the `build` frontend into a writable --target
       # inside the SIF, then `python -m build` → dist/. fail-loud on empty dist.
       - name: Build wheel + sdist in the CI SIF (apptainer exec)
+        env:
+          SCITEX_BROWSER_RELEASE_SOURCE_SHA: ${{ steps.source.outputs.sha }}
+          SCITEX_BROWSER_RELEASE_VERSION: ${{ steps.ver.outputs.version }}
         run: bash .github/ci/exec-in-sif.sh build-in-sif.sh 3.12
       # upload-artifact is a JS action — runs fine on the self-hosted runner.
       - uses: actions/upload-artifact@v4
@@ -175,6 +178,9 @@ jobs:
       # twine upload dist/*. apptainer exec (no --cleanenv) passes the
       # ACTIONS_ID_TOKEN_REQUEST_* env vars into the SIF. fail-loud at each step.
       - name: Publish to PyPI via manual OIDC trusted publishing in the SIF
+        env:
+          SCITEX_BROWSER_RELEASE_SOURCE_SHA: ${{ needs.build.outputs.source_sha }}
+          SCITEX_BROWSER_RELEASE_VERSION: ${{ needs.build.outputs.version }}
         run: bash .github/ci/exec-in-sif.sh publish-in-sif.sh 3.12
 
   release:

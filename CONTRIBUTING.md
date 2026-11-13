@@ -67,3 +67,20 @@ pytest tests/ -x -q
 By contributing, you agree to the terms of the [CLA](CLA.md), which includes
 licensing under AGPL-3.0 (see [LICENSE](LICENSE)) and the dual-licensing
 provisions described therein.
+
+
+## Release artifact verification
+
+Release helpers require Python 3.11 or newer, as supplied by the release SIF.
+The build records source identity, generated metadata and archive hashes in
+dist/release-proof.json. The publisher recomputes that proof before requesting
+OIDC credentials, and uploads only the wheel and sdist to PyPI.
+
+The archive algorithms come from the fixed shared release core at
+12f0e6bd5654bd89dd82165d5fe5aa0a9d9b0607. Every module is checked against its
+recorded SHA256 before execution. Artifacts that differ from the selected Git
+source, expected version or recorded proof refuse, as do unexpected dist members. The proof grants no tag, native
+runtime or publication authority: protected-main source, qualified release
+profiles and actual PyPI publisher registration remain separate requirements.
+
+Private qualification of an already public version must never be uploaded.

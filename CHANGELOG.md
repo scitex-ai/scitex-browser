@@ -7,6 +7,8 @@ versions follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+- Verify source-bound archive proofs through the pinned shared core after build
+  and before publisher credential requests; keep proof JSON out of PyPI uploads.
 - Bind release tests, builds and publisher scripts to the same tagged commit
   on main, and reject malformed or mismatched manual release selections.
 - Keep CLA automation on an explicit hosted runner with its one required secret.
