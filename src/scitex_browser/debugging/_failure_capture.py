@@ -84,6 +84,18 @@ CONSOLE_INTERCEPTOR_JS = """
         }).join(' ');
     }
 
+    // Keep both representations bounded for every captured event path.
+    function storeEntry(entry, simpleMessage) {
+        window._scitex_console_history.push(entry);
+        if (window._scitex_console_history.length > maxHistory) {
+            window._scitex_console_history.shift();
+        }
+        window._scitex_console_logs.push(simpleMessage);
+        if (window._scitex_console_logs.length > 500) {
+            window._scitex_console_logs.shift();
+        }
+    }
+
     // Capture log entry
     function capture(level, args) {
         const message = formatMessage(args);
@@ -96,16 +108,7 @@ CONSOLE_INTERCEPTOR_JS = """
             url: window.location.href
         };
 
-        window._scitex_console_history.push(entry);
-        if (window._scitex_console_history.length > maxHistory) {
-            window._scitex_console_history.shift();
-        }
-
-        // Also store simple format for backwards compatibility
-        window._scitex_console_logs.push(`[${level.toUpperCase()}] ${source ? source + ' ' : ''}${message}`);
-        if (window._scitex_console_logs.length > 500) {
-            window._scitex_console_logs.shift();
-        }
+        storeEntry(entry, `[${level.toUpperCase()}] ${source ? source + ' ' : ''}${message}`);
     }
 
     // Intercept console methods
@@ -143,8 +146,7 @@ CONSOLE_INTERCEPTOR_JS = """
             };
         }
         if (entry) {
-            window._scitex_console_history.push(entry);
-            window._scitex_console_logs.push(`[ERROR] ${entry.source} ${entry.message}`);
+            storeEntry(entry, `[ERROR] ${entry.source} ${entry.message}`);
         }
     }, true);
 
@@ -157,8 +159,7 @@ CONSOLE_INTERCEPTOR_JS = """
             timestamp: Date.now(),
             url: window.location.href
         };
-        window._scitex_console_history.push(entry);
-        window._scitex_console_logs.push(`[ERROR] Uncaught (in promise): ${event.reason}`);
+        storeEntry(entry, `[ERROR] Uncaught (in promise): ${event.reason}`);
     });
 
     window._scitex_console_interceptor_setup = true;

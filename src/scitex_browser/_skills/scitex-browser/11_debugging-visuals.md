@@ -105,11 +105,24 @@ depend on the injected script.
 ## Console capture
 
 ```python
-logs = setup_console_interceptor(page)
+setup_console_interceptor(page)
 # ... run test ...
 rich = collect_console_logs_detailed(page)
 print(format_logs_devtools_style(rich))
 ```
+
+Newly installed interceptors retain the newest 2,000 detailed entries and 500
+simple strings across console calls, script/resource errors and unhandled
+rejections. These are entry-count caps, not message-byte or total-memory limits.
+`setup_console_interceptor` installs capture and returns `None`; repeated setup
+on the same page preserves the existing interceptor and its records. It does
+not upgrade an already installed older script in place.
+
+The implementation is `debugging/_failure_capture.py`. Owning controls in
+`tests/scitex_browser/debugging/test__failure_capture.py` execute the actual
+interceptor JavaScript in an owned Node VM, checking boundaries, retained order,
+entry schema and native-console forwarding. Live sites, message-size limits
+and every browser engine require separate coverage.
 
 ## Failure artifacts
 

@@ -1,3 +1,14 @@
+import json
+import os
+from pathlib import Path
+import subprocess
+
+import playwright
+import pytest
+
+from scitex_browser.debugging._failure_capture import CONSOLE_INTERCEPTOR_JS
+
+
 def test_module_importable_mod_is_not_none():
     """Smoke test: parent module imports without error."""
     # Arrange
@@ -8,7 +19,59 @@ def test_module_importable_mod_is_not_none():
     assert mod is not None
 
 
-# Add your tests here
+_CONSOLE_CASE = r"""
+const input = JSON.parse(require('fs').readFileSync(0, 'utf8'));
+const handlers = {}, forwarded = [];
+const context = {window: {location: {href: 'about:blank'},
+    addEventListener: (name, cb) => { handlers[name] = cb; }}, console: {}};
+for (const name of ['log','info','warn','error','debug'])
+    context.console[name] = () => forwarded.push(name);
+require('vm').runInNewContext('(' + input.script + ')()', context);
+for (let i = 0; i < input.count; i++) {
+    const mode = input.kind === 'mixed' ? ['console','script','resource','rejection'][i % 4] : input.kind;
+    if (mode === 'console') context.console.log('console-' + i);
+    else if (mode === 'script') handlers.error({message: 'script-' + i, filename: 'owned.js', lineno: 1, colno: 2});
+    else if (mode === 'resource') handlers.error({target: {tagName: 'IMG', src: 'owned-' + i + '.png'}});
+    else handlers.unhandledrejection({reason: 'reject-' + i});
+}
+const history = context.window._scitex_console_history;
+const logs = context.window._scitex_console_logs;
+const index = text => Number(text.match(/(\d+)(?:\.png)?$/)[1]);
+process.stdout.write(JSON.stringify({lengths: [history.length, logs.length],
+    history: history.length ? [index(history[0].message), index(history.at(-1).message)] : null,
+    logs: logs.length ? [index(logs[0]), index(logs.at(-1))] : null,
+    schema: history.every(e => typeof e.message === 'string' && typeof e.source === 'string'
+        && typeof e.level === 'string' && typeof e.timestamp === 'number' && e.url === 'about:blank'),
+    forwarded: forwarded.length}));
+"""
+
+
+@pytest.mark.parametrize("kind", ["console", "script", "resource", "rejection", "mixed"])
+@pytest.mark.parametrize("count", [0, 1, 500, 501, 2000, 2001, 2501])
+def test_interceptor_keeps_newest_bounded_entries(kind, count):
+    # Arrange
+    node = Path(playwright.__file__).parent / "driver" / (
+        "node.exe" if os.name == "nt" else "node"
+    )
+    payload = json.dumps({"script": CONSOLE_INTERCEPTOR_JS, "kind": kind, "count": count})
+    expected = {
+        "lengths": [min(count, 2000), min(count, 500)],
+        "history": [max(0, count - 2000), count - 1] if count else None,
+        "logs": [max(0, count - 500), count - 1] if count else None,
+        "schema": True,
+        "forwarded": count if kind == "console" else (count + 3) // 4 if kind == "mixed" else 0,
+    }
+    # Act
+    result = subprocess.run(
+        [str(node), "-e", _CONSOLE_CASE], input=payload,
+        capture_output=True, text=True, timeout=30,
+    )
+    actual = json.loads(result.stdout) if result.returncode == 0 else None
+    # Assert
+    assert (result.returncode, actual) == (0, expected), result.stdout + result.stderr
+
+
+
 
 if __name__ == "__main__":
     import os
