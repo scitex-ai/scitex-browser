@@ -62,6 +62,17 @@ jobs:
         SCITEX_BROWSER_RELEASE_SOURCE_SHA: ${{ steps.source.outputs.sha }}
         SCITEX_BROWSER_RELEASE_VERSION: ${{ steps.ver.outputs.version }}
       run: python -I -S -B .github/ci/release-source.py --tag "$SCITEX_BROWSER_RELEASE_VERSION" --commit "$SCITEX_BROWSER_RELEASE_SOURCE_SHA"
+    - name: Validate publication runtime settings
+      run: |
+        set -euo pipefail
+        if [[ -z "${SCITEX_CI_SIF:-}" ]]; then
+          echo "::error::SCITEX_CI_SIF must identify the publication image before release tests/builds start."
+          exit 1
+        fi
+        if [[ ! "${SCITEX_CI_SIF_SHA256:-}" =~ ^[0-9a-f]{64}$ ]]; then
+          echo "::error::SCITEX_CI_SIF_SHA256 must be the qualified publication image digest (64 lowercase hex characters). Verify publisher runtime settings before release tests/builds start."
+          exit 1
+        fi
   test:
     needs: source
     permissions:
