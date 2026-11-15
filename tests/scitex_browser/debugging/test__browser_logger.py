@@ -14,6 +14,7 @@ stale/duplicate tests have been dropped or consolidated.
 
 from __future__ import annotations
 
+import logging
 import os
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -25,7 +26,19 @@ from scitex_browser.debugging._browser_logger import (
     BrowserLogger,
     browser_logger,
     log_page_async,
+    logger as visual_logger,
 )
+
+
+@pytest.fixture(autouse=True)
+def explicit_visual_logger_level():
+    """Declare visibility for these tests without changing the embedding root."""
+    original = visual_logger.level
+    visual_logger.setLevel(logging.INFO)
+    try:
+        yield
+    finally:
+        visual_logger.setLevel(original)
 
 
 # ---------------------------------------------------------------------------
@@ -642,3 +655,27 @@ class TestGlobalBrowserLoggerInstance:
 
 if __name__ == "__main__":
     pytest.main([os.path.abspath(__file__), "-v"])
+
+
+@pytest.mark.parametrize("threshold,level,visible", [
+    (logging.INFO, "info", True),
+    (logging.WARNING, "info", False),
+    (logging.WARNING, "error", True),
+    (logging.ERROR, "warning", False),
+    (logging.ERROR, "error", True),
+])
+@pytest.mark.asyncio
+async def test_visual_feedback_obeys_explicit_logger_threshold(tmp_path, threshold, level, visible):
+    # Arrange
+    page = FakePage()
+    shots = tmp_path / "threshold-shots"
+    visual_logger.setLevel(threshold)
+    # Act
+    result = await log_page_async(
+        page=page, message="threshold control", verbose=True, level=level,
+        take_screenshot=True, screenshot_dir=shots,
+    )
+    # Assert
+    assert (result, bool(page.evaluate_calls), bool(page.screenshot_paths), shots.is_dir()) == (
+        True, visible, visible, visible,
+    )
