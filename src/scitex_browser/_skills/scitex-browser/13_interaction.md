@@ -21,6 +21,17 @@ clicked = await click_with_fallbacks_async(page, selector="button.submit")
 await click_center_async(page)
 ```
 
+`click_center_async` uses the configured viewport when available. If
+`page.viewport_size` is `None` (for example, a context with `no_viewport=True`),
+it measures the current page's `window.innerWidth` and `window.innerHeight`
+for each call. Coordinates use integer division; the mouse click result and
+existing post-click wait are preserved. A measurement error propagates before
+any click.
+
+The implementation is `interaction/click_center.py`; owning recording-Page
+controls are in `tests/scitex_browser/interaction/test_click_center.py`.
+These checks do not establish behavior on live sites or every browser engine.
+
 With `method="auto"`, clicking tries Playwright, a forced Playwright click,
 then JavaScript. It returns `True` after the first method completes successfully,
 or `False` when all methods fail.

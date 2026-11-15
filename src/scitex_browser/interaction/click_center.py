@@ -44,7 +44,8 @@ async def click_center_async(
     """Click the center of the viewport.
 
     Args:
-        page: Playwright page object
+        page: Playwright page object. When no fixed viewport is configured,
+            use the page's current innerWidth and innerHeight.
         verbose: Enable visual feedback (default False)
 
     Returns:
@@ -60,6 +61,10 @@ async def click_center_async(
         )
 
     viewport_size = page.viewport_size
+    if viewport_size is None:
+        viewport_size = await page.evaluate(
+            "() => ({width: window.innerWidth, height: window.innerHeight})"
+        )
     center_x = viewport_size["width"] // 2
     center_y = viewport_size["height"] // 2
     clicked = await page.mouse.click(center_x, center_y)
