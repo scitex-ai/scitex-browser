@@ -105,14 +105,91 @@ depend on the injected script.
 ## Console capture
 
 ```python
-logs = setup_console_interceptor(page)
+from scitex_browser.debugging import (
+    setup_console_interceptor, collect_console_logs_detailed,
+    format_logs_devtools_style,
+)
+
+setup_console_interceptor(page)
 # ... run test ...
 rich = collect_console_logs_detailed(page)
 print(format_logs_devtools_style(rich))
 ```
 
-## Failure artifacts
+Newly installed interceptors retain the newest 2,000 detailed entries and 500
+simple strings across console calls, script/resource errors and unhandled
+rejections. These are entry-count caps, not message-byte or total-memory limits.
+`setup_console_interceptor` installs capture and returns `None`; repeated setup
+on the same page preserves the existing interceptor and its records. It does
+not upgrade an already installed older script in place.
 
-`save_failure_artifacts(page, out_dir)` dumps screenshot + full HTML +
-console trace. `create_failure_capture_fixture(...)` is the pytest
-plug-in form.
+The implementation is `debugging/_failure_capture.py`. Owning controls in
+`tests/scitex_browser/debugging/test__failure_capture.py` execute the actual
+interceptor JavaScript in an owned Node VM, checking boundaries, retained order,
+entry schema and native-console forwarding. Live sites, message-size limits
+and every browser engine require separate coverage.
+
+## Failure artifacts — synchronous Page
+
+Manual capture needs the page, a test name and an output directory:
+
+```python
+from scitex_browser.debugging import save_failure_artifacts
+
+saved = save_failure_artifacts(
+    page, test_name="login::submit", artifacts_dir="artifacts",
+)
+```
+
+The helper writes into a timestamped subdirectory. The returned dictionary
+contains `Path` values under `screenshot`, `console_logs` and `page_html` for
+successful writes. Individual screenshot/log/HTML failures are caught, so the
+result can be partial or empty; directory creation can still raise an error.
+Console capture must have been installed before the events to retain them.
+This helper uses a synchronous Playwright Page; `capture_debug_artifacts_async`
+above is the separate async screenshot/HTML helper.
+
+### Automatic capture with pytest
+
+Put the following in `conftest.py`, alongside an existing synchronous `page`
+fixture (for example, one supplied by your Playwright test configuration):
+
+```python
+from pathlib import Path
+import pytest
+from scitex_browser.debugging import create_failure_capture_fixture
+
+capture_on_failure = create_failure_capture_fixture(
+    Path(__file__).parent / "artifacts",
+)
+
+@pytest.hookimpl(tryfirst=True, hookwrapper=True)
+def pytest_runtest_makereport(item, call):
+    outcome = yield
+    rep = outcome.get_result()
+    setattr(item, f"rep_{rep.when}", rep)
+```
+
+Both the fixture assignment and report hook are needed. The factory returns
+an autouse fixture that installs console capture, yields to the test, then
+saves artifacts when `request.node.rep_call.failed` is true. Without a report
+hook that sets `rep_call`, it silently has no failure outcome to inspect.
+This condition covers failures in the test call; it does not automatically
+capture setup or teardown failures. Passing tests produce no failure artifacts.
+Keep the page alive until this fixture finishes its teardown.
+
+Implementation: [`debugging/_failure_capture.py`](../../debugging/_failure_capture.py).
+The source checkout supplies a real offline browser/pytest probe:
+
+```bash
+python .github/ci/probe-failure-capture.py \
+  --executable /existing/chromium --output /new/owned/artifact-directory
+```
+
+The probe checks manual screenshot/HTML/console output and actual pytest runs
+with and without the report hook. Each child run intentionally has one passing
+and one failing test; the probe checks that expected outcome rather than
+claiming the child tests all pass. With the hook, only the failed call produces
+all three artifacts; without it, neither does. It installs nothing and uses
+owned pages with network blocked. Async Pages, setup/teardown failure capture,
+live sites and installed-skill delivery need separate verification.

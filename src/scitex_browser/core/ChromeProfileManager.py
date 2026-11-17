@@ -30,6 +30,9 @@ _DEFAULT_CHROME_CACHE = Path(
 )
 
 
+_console = logging.getConsole(__name__, level=logging.INFO)
+
+
 class ChromeProfileManager:
     """Manages Chrome profile especially extensions for automated literature search."""
 
@@ -249,10 +252,10 @@ class ChromeProfileManager:
             logger.error("Chrome not found")
             return False
 
-        print("\n" + "=" * 60)
-        print("Chrome Extension Installation")
-        print("=" * 60)
-        print("Install extensions from the opened Chrome tabs, then press Enter")
+        _console.info("\n" + "=" * 60)
+        _console.info("Chrome Extension Installation")
+        _console.info("=" * 60)
+        _console.info("Install extensions from the opened Chrome tabs, then press Enter")
 
         try:
             input("Press Enter when done...")
@@ -399,25 +402,25 @@ def main(args):
         manager = ChromeProfileManager("system")
 
         # Check extensions
-        print("Checking system profile extensions...")
+        _console.info("Checking system profile extensions...")
         all_installed = manager.check_extensions_installed(verbose=True)
 
         if not all_installed:
-            print("\nInstalling missing extensions...")
+            _console.info("\nInstalling missing extensions...")
             await manager.install_extensions_manually_if_not_installed_async(
                 verbose=True
             )
 
         # Demo profile sync
-        print("\nChecking profile sync capability...")
+        _console.info("\nChecking profile sync capability...")
         test_profile = ChromeProfileManager("test_profile")
         success = test_profile.sync_from_profile("system")
         if success:
-            print("✓ Profile sync test complete")
+            _console.info("✓ Profile sync test complete")
         else:
-            print("✓ Profile sync skipped (source profile not ready)")
+            _console.info("✓ Profile sync skipped (source profile not ready)")
 
-        print("✓ Demo complete")
+        _console.info("✓ Demo complete")
 
     asyncio.run(demo())
     return 0

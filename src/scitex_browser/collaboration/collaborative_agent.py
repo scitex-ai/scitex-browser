@@ -26,6 +26,11 @@ from scitex_browser.debugging import browser_logger
 from .interactive_panel import InteractivePanel
 
 
+import scitex_logging as _slogging
+
+_console = _slogging.getConsole(__name__, level=_slogging.INFO)
+
+
 class CollaborativeAgent:
     """
     Agent that watches browser and responds to user.
@@ -83,15 +88,15 @@ class CollaborativeAgent:
         """
         self.running = True
 
-        print("🤖 Collaborative agent started")
-        print("   Watching browser for user actions...")
-        print("   Press Ctrl+C to stop")
+        _console.info("🤖 Collaborative agent started")
+        _console.info("   Watching browser for user actions...")
+        _console.info("   Press Ctrl+C to stop")
 
         # Signal handling
         loop = asyncio.get_event_loop()
 
         def stop_agent(sig, frame):
-            print("\n\n🛑 Stopping agent...")
+            _console.info("\n\n🛑 Stopping agent...")
             self.running = False
 
         signal.signal(signal.SIGINT, stop_agent)
@@ -104,10 +109,10 @@ class CollaborativeAgent:
                 await asyncio.sleep(self.check_interval)
 
         except Exception as e:
-            print(f"❌ Agent error: {e}")
+            _console.info(f"❌ Agent error: {e}")
 
         finally:
-            print("✅ Agent stopped")
+            _console.info("✅ Agent stopped")
 
     async def _check_changes(self):
         """Check for changes and trigger handlers."""

@@ -21,10 +21,14 @@ Example:
 """
 
 import os
-import sys
 from typing import Optional
 
 from playwright.async_api import Page
+
+
+import scitex_logging as _slogging
+
+_diagnostic = _slogging.getDiagnostic(__name__, level=_slogging.INFO)
 
 
 class GoogleAuthHelper:
@@ -57,9 +61,9 @@ class GoogleAuthHelper:
         self.debug = debug or bool(os.getenv("GOOGLE_AUTH_DEBUG"))
 
     def _log(self, msg: str):
-        """Print debug message if debug mode is enabled."""
+        """Emit stderr feedback when debug mode is enabled."""
         if self.debug:
-            print(f"[GoogleAuth] {msg}", file=sys.stderr)
+            _diagnostic.info(f"[GoogleAuth] {msg}")
 
     async def login_via_google_button(
         self,

@@ -22,6 +22,11 @@ from playwright.async_api import Page
 from ..debugging import browser_logger
 
 
+import scitex_logging as _slogging
+
+_console = _slogging.getConsole(__name__, level=_slogging.INFO)
+
+
 class HumanBehavior:
     """Simulates human-like behavior patterns for browser automation."""
 
@@ -265,15 +270,15 @@ def main(args):
 
             # Navigate with human behavior
             await page.goto("https://www.google.com")
-            print("✓ Navigated to page")
+            _console.info("✓ Navigated to page")
 
             # Simulate human reading the page
             await HumanBehavior.reading_delay_async(500)
-            print("✓ Reading delay complete")
+            _console.info("✓ Reading delay complete")
 
             # Random mouse movements
             await HumanBehavior.random_mouse_movement_async(page)
-            print("✓ Random mouse movements complete")
+            _console.info("✓ Random mouse movements complete")
 
             # Type in search box
             search_box = page.locator('input[name="q"]')
@@ -282,9 +287,9 @@ def main(args):
                 await HumanBehavior.type_text_async(
                     page, selector='input[name="q"]', text="test search"
                 )
-                print("✓ Human-like typing complete")
+                _console.info("✓ Human-like typing complete")
 
-            print("✓ Demo complete")
+            _console.info("✓ Demo complete")
             await browser.close()
 
     asyncio.run(demo())

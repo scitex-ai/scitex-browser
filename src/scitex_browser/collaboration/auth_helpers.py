@@ -15,6 +15,11 @@ from typing import Optional
 from playwright.async_api import Page
 
 
+import scitex_logging as _slogging
+
+_console = _slogging.getConsole(__name__, level=_slogging.INFO)
+
+
 class DjangoAuthHelper:
     """
     Simple Django authentication helper.
@@ -70,11 +75,11 @@ class DjangoAuthHelper:
             # Wait for redirect (success indicator in URL)
             await page.wait_for_url(f"**{self.success_indicator}**", timeout=5000)
 
-            print(f"✅ Logged in as: {self.username}")
+            _console.info(f"✅ Logged in as: {self.username}")
             return True
 
         except Exception as e:
-            print(f"❌ Login failed: {e}")
+            _console.info(f"❌ Login failed: {e}")
             return False
 
     async def is_logged_in(self, page: Page) -> bool:

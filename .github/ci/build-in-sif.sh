@@ -67,3 +67,11 @@ test -n "$(ls -A dist 2>/dev/null)" || {
     echo "::error::python -m build produced no artifacts in dist/"
     exit 1
 }
+
+
+# A proof accompanies the immutable archives; the publisher recomputes it
+# before acquiring credentials. Private builds use their actual Git metadata.
+SOURCE_SHA="${SCITEX_BROWSER_RELEASE_SOURCE_SHA:-$(git rev-parse HEAD)}"
+EXPECTED_VERSION="${SCITEX_BROWSER_RELEASE_VERSION:-$("$PY" -I -S -c 'import pathlib,tomllib; print(tomllib.loads(pathlib.Path("pyproject.toml").read_text())["project"]["version"])')}"
+"$PY" -I -S -B .github/ci/release-identity.py write-proof \
+    --commit "$SOURCE_SHA" --version "${EXPECTED_VERSION#v}" --dist dist

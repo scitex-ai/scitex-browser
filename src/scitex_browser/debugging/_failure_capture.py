@@ -84,6 +84,18 @@ CONSOLE_INTERCEPTOR_JS = """
         }).join(' ');
     }
 
+    // Keep both representations bounded for every captured event path.
+    function storeEntry(entry, simpleMessage) {
+        window._scitex_console_history.push(entry);
+        if (window._scitex_console_history.length > maxHistory) {
+            window._scitex_console_history.shift();
+        }
+        window._scitex_console_logs.push(simpleMessage);
+        if (window._scitex_console_logs.length > 500) {
+            window._scitex_console_logs.shift();
+        }
+    }
+
     // Capture log entry
     function capture(level, args) {
         const message = formatMessage(args);
@@ -96,16 +108,7 @@ CONSOLE_INTERCEPTOR_JS = """
             url: window.location.href
         };
 
-        window._scitex_console_history.push(entry);
-        if (window._scitex_console_history.length > maxHistory) {
-            window._scitex_console_history.shift();
-        }
-
-        // Also store simple format for backwards compatibility
-        window._scitex_console_logs.push(`[${level.toUpperCase()}] ${source ? source + ' ' : ''}${message}`);
-        if (window._scitex_console_logs.length > 500) {
-            window._scitex_console_logs.shift();
-        }
+        storeEntry(entry, `[${level.toUpperCase()}] ${source ? source + ' ' : ''}${message}`);
     }
 
     // Intercept console methods
@@ -143,8 +146,7 @@ CONSOLE_INTERCEPTOR_JS = """
             };
         }
         if (entry) {
-            window._scitex_console_history.push(entry);
-            window._scitex_console_logs.push(`[ERROR] ${entry.source} ${entry.message}`);
+            storeEntry(entry, `[ERROR] ${entry.source} ${entry.message}`);
         }
     }, true);
 
@@ -157,13 +159,17 @@ CONSOLE_INTERCEPTOR_JS = """
             timestamp: Date.now(),
             url: window.location.href
         };
-        window._scitex_console_history.push(entry);
-        window._scitex_console_logs.push(`[ERROR] Uncaught (in promise): ${event.reason}`);
+        storeEntry(entry, `[ERROR] Uncaught (in promise): ${event.reason}`);
     });
 
     window._scitex_console_interceptor_setup = true;
 }
 """
+
+
+import scitex_logging as _slogging
+
+_console = _slogging.getConsole(__name__, level=_slogging.INFO)
 
 
 def setup_console_interceptor(page: "Page") -> None:
@@ -303,9 +309,9 @@ def save_failure_artifacts(
         screenshot_path = artifacts_path / f"{safe_test_name}_screenshot.png"
         page.screenshot(path=str(screenshot_path), full_page=True)
         saved_files["screenshot"] = screenshot_path
-        print(f"\n[FAILURE] Screenshot saved: {screenshot_path}")
+        _console.info(f"\n[FAILURE] Screenshot saved: {screenshot_path}")
     except Exception as e:
-        print(f"\n[FAILURE] Failed to save screenshot: {e}")
+        _console.info(f"\n[FAILURE] Failed to save screenshot: {e}")
 
     # Save console logs
     try:
@@ -320,9 +326,9 @@ def save_failure_artifacts(
             for log in console_logs:
                 f.write(f"{log}\n")
         saved_files["console_logs"] = logs_path
-        print(f"[FAILURE] Console logs saved: {logs_path}")
+        _console.info(f"[FAILURE] Console logs saved: {logs_path}")
     except Exception as e:
-        print(f"[FAILURE] Failed to save console logs: {e}")
+        _console.info(f"[FAILURE] Failed to save console logs: {e}")
 
     # Save page HTML
     try:
@@ -331,9 +337,9 @@ def save_failure_artifacts(
         with open(html_path, "w") as f:
             f.write(html_content)
         saved_files["page_html"] = html_path
-        print(f"[FAILURE] Page HTML saved: {html_path}")
+        _console.info(f"[FAILURE] Page HTML saved: {html_path}")
     except Exception as e:
-        print(f"[FAILURE] Failed to save page HTML: {e}")
+        _console.info(f"[FAILURE] Failed to save page HTML: {e}")
 
     return saved_files
 

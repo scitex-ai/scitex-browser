@@ -1,3 +1,10 @@
+import asyncio
+
+import pytest
+
+from scitex_browser import click_center_async
+
+
 def test_module_importable_mod_is_not_none():
     """Smoke test: parent module imports without error."""
     # Arrange
@@ -8,7 +15,81 @@ def test_module_importable_mod_is_not_none():
     assert mod is not None
 
 
-# Add your tests here
+class _CenterMouse:
+    def __init__(self):
+        self.calls = []
+        self.result = object()
+
+    async def click(self, x, y):
+        self.calls.append((x, y))
+        return self.result
+
+
+class _CenterPage:
+    def __init__(self, viewport, live):
+        self.viewport_size = viewport
+        self.live = live
+        self.mouse = _CenterMouse()
+        self.evaluations = 0
+        self.waits = []
+        self.error = None
+
+    async def evaluate(self, script):
+        self.evaluations += 1
+        if self.error is not None:
+            raise self.error
+        return dict(self.live)
+
+    async def wait_for_timeout(self, delay):
+        self.waits.append(delay)
+
+
+@pytest.mark.parametrize("viewport,live,center,evaluations", [
+    ({"width": 800, "height": 600}, None, (400, 300), 0),
+    ({"width": 801, "height": 601}, None, (400, 300), 0),
+    (None, {"width": 800, "height": 600}, (400, 300), 1),
+    (None, {"width": 801, "height": 601}, (400, 300), 1),
+    (None, {"width": 1, "height": 1}, (0, 0), 1),
+])
+def test_center_uses_configured_or_live_viewport(viewport, live, center, evaluations):
+    # Arrange
+    page = _CenterPage(viewport, live)
+    # Act
+    result = asyncio.run(click_center_async(page))
+    # Assert
+    assert (page.mouse.calls, page.evaluations, page.waits, result is page.mouse.result) == (
+        [center], evaluations, [1000], True,
+    )
+
+
+def test_live_viewport_is_measured_again_for_each_click():
+    # Arrange
+    page = _CenterPage(None, {"width": 800, "height": 600})
+    # Act
+    asyncio.run(click_center_async(page))
+    page.live = {"width": 1001, "height": 701}
+    asyncio.run(click_center_async(page))
+    # Assert
+    assert (page.mouse.calls, page.evaluations, page.waits) == (
+        [(400, 300), (500, 350)], 2, [1000, 1000],
+    )
+
+
+def test_live_viewport_error_propagates_before_any_click():
+    # Arrange
+    page = _CenterPage(None, None)
+    page.error = RuntimeError("owned page unavailable")
+    caught = None
+    # Act
+    try:
+        asyncio.run(click_center_async(page))
+    except Exception as error:
+        caught = error
+    # Assert
+    assert (caught is page.error, page.mouse.calls, page.waits) == (True, [], [])
+
+
+
 
 if __name__ == "__main__":
     import os

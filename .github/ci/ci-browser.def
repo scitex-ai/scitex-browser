@@ -1,0 +1,49 @@
+# Browser-owned CI layer. Build only from a separately qualified base image.
+# Required build args: base_image (absolute SIF path), base_sha256 (its digest).
+# This candidate does not register an image or authorize publication.
+Bootstrap: localimage
+From: {{ base_image }}
+
+%setup
+    set -eu
+    printf '%s  %s\n' '{{ base_sha256 }}' '{{ base_image }}' | sha256sum -c -
+
+%post
+    set -eu
+    export DEBIAN_FRONTEND=noninteractive
+    export UV_CACHE_DIR=/tmp/browser-image-uv
+    export PLAYWRIGHT_BROWSERS_PATH=/opt/playwright
+    # A dedicated tooling venv leaves all three base interpreters unchanged.
+    uv venv --python /opt/venv-3.12/bin/python /opt/browser-tools
+    uv pip install --python /opt/browser-tools/bin/python playwright==1.65.1
+    # Install the matching browser and its distribution-specific native libs.
+    # Installing Python dependencies alone does not supply NSS, ATK, X11, etc.
+    /opt/browser-tools/bin/python -m playwright install --with-deps chromium
+    chmod -R a+rX /opt/playwright /opt/browser-tools
+    rm -rf /var/lib/apt/lists/* /tmp/browser-image-uv
+
+%environment
+    export PLAYWRIGHT_BROWSERS_PATH=/opt/playwright
+
+%test
+    export TMPDIR=/tmp
+    export PLAYWRIGHT_BROWSERS_PATH=/opt/playwright
+    /opt/browser-tools/bin/python - <<'PY'
+from playwright.sync_api import sync_playwright
+
+with sync_playwright() as playwright:
+    browser = playwright.chromium.launch(args=["--no-sandbox"])
+    try:
+        page = browser.new_page()
+        page.set_content("<title>Browser image check</title>")
+        assert page.title() == "Browser image check"
+        print("Chromium launched:", browser.version)
+    finally:
+        browser.close()
+PY
+
+%labels
+    org.scitex.browser.layer ci-browser
+    org.scitex.browser.playwright 1.65.1
+    org.scitex.parent.sha256 {{ base_sha256 }}
+

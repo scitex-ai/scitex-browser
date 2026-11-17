@@ -117,7 +117,7 @@ async def _fill_with_typing(page: Page, selector: str, value: str) -> bool:
 async def _fill_with_js(page: Page, selector: str, value: str) -> bool:
     try:
         result = await page.evaluate(
-            """(selector, value) => {
+            """({selector, value}) => {
                 const element = document.querySelector(selector);
                 if (element) {
                     element.value = value;
@@ -127,8 +127,7 @@ async def _fill_with_js(page: Page, selector: str, value: str) -> bool:
                 }
                 return 'element not found';
             }""",
-            selector,
-            value,
+            {"selector": selector, "value": value},
         )
         return result == "success"
     except Exception:
