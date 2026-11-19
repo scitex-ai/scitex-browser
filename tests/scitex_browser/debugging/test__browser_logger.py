@@ -15,8 +15,7 @@ stale/duplicate tests have been dropped or consolidated.
 from __future__ import annotations
 
 import os
-from dataclasses import dataclass, field
-from pathlib import Path
+from dataclasses import dataclass
 
 import pytest
 
@@ -25,7 +24,19 @@ from scitex_browser.debugging._browser_logger import (
     BrowserLogger,
     browser_logger,
     log_page_async,
+    logger,
 )
+
+
+@pytest.fixture(autouse=True)
+def browser_feedback_log_level():
+    """Exercise INFO feedback regardless of pytest's root WARNING threshold."""
+    previous = logger.level
+    logger.setLevel(20)
+    try:
+        yield
+    finally:
+        logger.setLevel(previous)
 
 
 # ---------------------------------------------------------------------------

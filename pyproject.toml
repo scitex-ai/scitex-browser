@@ -78,7 +78,3 @@ target-version = "py310"
 [tool.ruff.lint]
 select = ["E", "F", "W", "I"]
 ignore = ["E501"]
-
-dependencies = [
-    "scitex-dev>=0.17.8",
-]
