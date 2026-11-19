@@ -21,10 +21,11 @@ capture must never break the caller's flow. Returns the
 
 from __future__ import annotations
 
-import logging
 from datetime import datetime
 from pathlib import Path
 from typing import TYPE_CHECKING, Tuple
+
+import scitex_logging as logging
 
 from scitex_browser._state import cache_dir
 

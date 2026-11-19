@@ -12,7 +12,10 @@ Provides consistent, reusable interaction patterns.
 from enum import Enum
 from typing import Any, Optional
 
+import scitex_logging as _output_logging
 from playwright.async_api import Page
+
+_output = _output_logging.getPlainConsole(__name__)
 
 
 class UserResponse(Enum):
@@ -187,7 +190,7 @@ class StandardInteractions:
         )
 
         self.initialized = True
-        print("✅ Standard interactions initialized")
+        _output.emit("✅ Standard interactions initialized")
 
     async def ask_yes_no(self, question: str) -> bool:
         """

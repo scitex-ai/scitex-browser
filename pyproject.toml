@@ -21,8 +21,10 @@ dependencies = [
     "playwright>=1.40.0",
     # scitex-logging provides .success/.fail logger methods used throughout
     # ChromeProfileManager, interaction/, pdf/, remote/, stealth/, etc.
-    "scitex-logging>=0.1.0",
+    "scitex-logging>=0.3.0",
     "scitex-config>=0.3.0",
+    "matplotlib",
+    "pytest",
 ]
 
 [project.optional-dependencies]

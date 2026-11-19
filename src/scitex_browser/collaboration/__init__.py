@@ -18,6 +18,8 @@ Features:
 Version: 0.1.0-alpha (experimental)
 """
 
+import scitex_logging as _output_logging
+
 __experimental__ = True
 
 # Re-export auth helpers for convenience
@@ -41,6 +43,9 @@ __all__ = [
 
 
 # Compatibility check - ensure we don't break existing code
+_output = _output_logging.getPlainConsole(__name__)
+
+
 def _check_compatibility():
     """Verify existing scitex.browser still works."""
     try:
@@ -58,6 +63,6 @@ def _check_compatibility():
 
 _check_compatibility()
 
-print("✅ scitex_browser.collaboration loaded (experimental)")
+_output.emit("✅ scitex_browser.collaboration loaded (experimental)")
 
 # EOF

@@ -22,9 +22,12 @@ from datetime import datetime
 from pathlib import Path
 from typing import Callable, List, Optional
 
+import scitex_logging as _output_logging
 from playwright.async_api import Browser, BrowserContext, Page, async_playwright
 
 from scitex_browser._state import capture_dir, sessions_dir
+
+_output = _output_logging.getPlainConsole(__name__)
 
 
 @dataclass
@@ -133,9 +136,9 @@ class SharedBrowserSession:
             },
         )
 
-        print(f"✅ Shared browser session started: {self.config.session_id}")
-        print(f"   User data: {user_data_dir}")
-        print(f"   Screenshots: {self.screenshot_dir}")
+        _output.emit(f"✅ Shared browser session started: {self.config.session_id}")
+        _output.emit(f"   User data: {user_data_dir}")
+        _output.emit(f"   Screenshots: {self.screenshot_dir}")
 
         # Start auto-screenshot if configured
         if self.config.screenshot_interval:
@@ -239,9 +242,9 @@ class SharedBrowserSession:
             },
         )
 
-        print(f"✅ Shared browser session closed: {self.config.session_id}")
-        print(f"   Duration: {duration:.1f}s")
-        print(f"   Screenshots: {len(self.screenshots)}")
+        _output.emit(f"✅ Shared browser session closed: {self.config.session_id}")
+        _output.emit(f"   Duration: {duration:.1f}s")
+        _output.emit(f"   Screenshots: {len(self.screenshots)}")
 
     async def __aenter__(self):
         """Context manager entry."""
@@ -268,7 +271,7 @@ class SharedBrowserSession:
                 await self.screenshot(message="auto")
                 await asyncio.sleep(self.config.screenshot_interval)
             except Exception as e:
-                print(f"Auto-screenshot error: {e}")
+                _output.emit(f"Auto-screenshot error: {e}")
 
     def get_info(self) -> dict:
         """Get session information."""
