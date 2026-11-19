@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 try:
-    from importlib.metadata import version as _v, PackageNotFoundError
+    from importlib.metadata import PackageNotFoundError
+    from importlib.metadata import version as _v
+
     try:
         __version__ = _v("scitex-browser")
     except PackageNotFoundError:
@@ -20,7 +22,26 @@ except ImportError:  # pragma: no cover — only on ancient Pythons
 # registered as attributes on the parent package — required by tests that
 # do unittest.mock.patch("scitex_browser.debugging.<module>.<name>").
 
-from . import debugging, interaction, pdf  # register submodules as attributes
+from . import content as content
+from . import debugging as debugging
+from . import interaction as interaction
+from . import pdf as pdf
+from .content import (
+    ChatExtractionError,
+    extract_chat,
+    extract_chat_async,
+    fetch_content,
+    fetch_content_async,
+    format_transcript,
+    get_html,
+    get_html_async,
+    get_text,
+    get_text_async,
+    save_as_html,
+    save_as_html_async,
+    save_as_text,
+    save_as_text_async,
+)
 from .debugging import (
     SyncBrowserSession,
     TestMonitor,
@@ -111,6 +132,22 @@ __all__ = [
     "save_as_pdf_async",
     "detect_chrome_pdf_viewer_async",
     "click_download_for_chrome_pdf_viewer_async",
+    # Content capture (HTML / text)
+    "fetch_content",
+    "fetch_content_async",
+    "get_html",
+    "get_html_async",
+    "get_text",
+    "get_text_async",
+    "save_as_html",
+    "save_as_html_async",
+    "save_as_text",
+    "save_as_text_async",
+    # Chat thread extraction
+    "extract_chat",
+    "extract_chat_async",
+    "format_transcript",
+    "ChatExtractionError",
     # Interaction
     "click_center_async",
     "click_with_fallbacks_async",

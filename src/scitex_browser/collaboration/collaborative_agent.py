@@ -19,11 +19,14 @@ import asyncio
 import signal
 from typing import Callable, Dict, Optional
 
+import scitex_logging as _output_logging
 from playwright.async_api import Page
 
 from scitex_browser.debugging import browser_logger
 
 from .interactive_panel import InteractivePanel
+
+_output = _output_logging.getPlainConsole(__name__)
 
 
 class CollaborativeAgent:
@@ -83,15 +86,15 @@ class CollaborativeAgent:
         """
         self.running = True
 
-        print("🤖 Collaborative agent started")
-        print("   Watching browser for user actions...")
-        print("   Press Ctrl+C to stop")
+        _output.emit("🤖 Collaborative agent started")
+        _output.emit("   Watching browser for user actions...")
+        _output.emit("   Press Ctrl+C to stop")
 
         # Signal handling
         loop = asyncio.get_event_loop()
 
         def stop_agent(sig, frame):
-            print("\n\n🛑 Stopping agent...")
+            _output.emit("\n\n🛑 Stopping agent...")
             self.running = False
 
         signal.signal(signal.SIGINT, stop_agent)
@@ -104,10 +107,10 @@ class CollaborativeAgent:
                 await asyncio.sleep(self.check_interval)
 
         except Exception as e:
-            print(f"❌ Agent error: {e}")
+            _output.emit(f"❌ Agent error: {e}")
 
         finally:
-            print("✅ Agent stopped")
+            _output.emit("✅ Agent stopped")
 
     async def _check_changes(self):
         """Check for changes and trigger handlers."""

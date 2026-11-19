@@ -31,10 +31,15 @@ from datetime import datetime
 from pathlib import Path
 from typing import TYPE_CHECKING, Optional
 
+import scitex_logging as _output_logging
+
 from scitex_browser._state import test_monitor_dir
 
 if TYPE_CHECKING:
     from playwright.sync_api import Page
+
+
+_output = _output_logging.getPlainConsole(__name__)
 
 
 class TestMonitor:
@@ -86,7 +91,7 @@ class TestMonitor:
             from scitex_capture import CaptureManager
         except ImportError:
             if self.verbose:
-                print("[TestMonitor] scitex.capture not available")
+                _output.emit("[TestMonitor] scitex.capture not available")
             return None
 
         # Generate session ID
@@ -112,7 +117,7 @@ class TestMonitor:
         )
 
         if self.verbose:
-            print(f"[TestMonitor] Started: {session_dir} (interval: {self.interval}s)")
+            _output.emit(f"[TestMonitor] Started: {session_dir} (interval: {self.interval}s)")
 
         return self.session_id
 
@@ -129,7 +134,7 @@ class TestMonitor:
         status = self.get_status()
 
         if self.verbose and self._worker:
-            print(f"[TestMonitor] Stopped: {self._worker.screenshot_count} screenshots")
+            _output.emit(f"[TestMonitor] Stopped: {self._worker.screenshot_count} screenshots")
 
         return status
 
@@ -190,7 +195,7 @@ class TestMonitor:
             )
         except ImportError:
             if self.verbose:
-                print("[TestMonitor] GIF creation requires scitex.capture")
+                _output.emit("[TestMonitor] GIF creation requires scitex.capture")
             return None
 
     def get_screenshots(self) -> list:
@@ -243,7 +248,7 @@ def create_test_monitor_fixture(
         if auto_gif:
             gif_path = monitor.create_gif()
             if gif_path:
-                print(f"[TestMonitor] GIF created: {gif_path}")
+                _output.emit(f"[TestMonitor] GIF created: {gif_path}")
 
     return test_monitor
 
