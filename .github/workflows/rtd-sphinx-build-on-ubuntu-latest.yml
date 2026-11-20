@@ -1,0 +1,98 @@
+name: docs-caller
+
+# Calls the org reusable `rtd-sphinx-build`, and publishes what it builds.
+#
+# PS-231 conversion of the prior `rtd-sphinx-build-on-ubuntu-latest.yml`
+# leaf. `src/scitex_browser/_sphinx_html/` is NOT a build artifact: hatch
+# wheels `src/scitex_browser` wholesale, so the bundle SHIPS INSIDE THE
+# WHEEL. The reusable is deliberately build-only and hands the HTML back as
+# an artifact, so this caller vendors and commits under its OWN
+# `contents: write` (develop pushes only; main receives the bundle through
+# the develop -> main PR, keeping main linear-via-PR).
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+
+jobs:
+  sphinx-via-org-reusable:
+    # Loop-breaker: skip when HEAD is the bot's own docs auto-commit.
+    if: "!contains(github.event.head_commit.message, 'docs(sphinx_html): refresh from CI build')"
+    uses: scitex-ai/.github/.github/workflows/rtd-sphinx-build.yml@main
+    with:
+      # .readthedocs.yaml pins build.tools.python 3.11; without this CI and
+      # RTD would build on different interpreters and could disagree.
+      python_version: "3.11"
+      # `-W` on PULL REQUESTS ONLY. A warning must block a PR; it must NOT
+      # block a push to develop, where failing would also stop the vendored
+      # bundle from refreshing at all.
+      fail_on_warning: ${{ github.event_name == 'pull_request' }}
+      upload_artifact: true
+      artifact_name: sphinx-html
+
+  sphinx-vendor-and-commit:
+    needs: sphinx-via-org-reusable
+    if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: sphinx-html
+          path: .sphinx-html-artifact
+
+      - name: Refresh the vendored bundle, and ASSERT WHAT WAS DONE
+        # "No commit" is ambiguous (identical content vs. a copy that wrote
+        # nowhere, which freezes in-wheel docs with green CI). Failing loudly
+        # on empty sides collapses the ambiguity: afterwards, "no commit" can
+        # ONLY mean identical content.
+        run: |
+          set -euo pipefail
+          vendored=src/scitex_browser/_sphinx_html
+
+          downloaded=$(find .sphinx-html-artifact -type f | wc -l)
+          echo "artifact files downloaded: ${downloaded}"
+          if [ "${downloaded}" -eq 0 ]; then
+            echo "::error::the sphinx-html artifact is empty - nothing to vendor" >&2
+            exit 1
+          fi
+
+          before=$(find "${vendored}" -type f 2>/dev/null | wc -l || true)
+          echo "vendored files before: ${before}"
+
+          rm -rf "${vendored}"
+          mkdir -p "${vendored}"
+          cp -rf .sphinx-html-artifact/. "${vendored}"/
+          rm -rf .sphinx-html-artifact
+
+          # sphinx-build writes its internal cache to <outdir>/.doctrees —
+          # never served, drags pickles into the wheel. Drop it.
+          rm -rf "${vendored}"/.doctrees
+          touch "${vendored}"/.nojekyll
+
+          after=$(find "${vendored}" -type f | wc -l)
+          echo "vendored files after: ${after}"
+          if [ "${after}" -eq 0 ]; then
+            echo "::error::${vendored} is empty after the refresh - the copy wrote nowhere" >&2
+            exit 1
+          fi
+
+      - name: Commit refreshed HTML if it changed
+        continue-on-error: true
+        run: |
+          set -euo pipefail
+          if [ -n "$(git status --porcelain src/scitex_browser/_sphinx_html)" ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add src/scitex_browser/_sphinx_html
+            git commit -m "docs(sphinx_html): refresh from CI build"
+            git push
+          else
+            echo "vendored bundle unchanged - nothing to commit"
+          fi
