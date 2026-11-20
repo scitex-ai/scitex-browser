@@ -1,0 +1,23 @@
+{
+  "purpose": "Integrate main history into develop and promote canonical CI",
+  "base_main": "fd80f384fb37b3d8f33f66dce347f42ffc676fe1",
+  "base_develop": "323e71b1f8a2d88227541953af14601d1a7cffa3",
+  "validation": {
+    "pytest": "======================== 250 passed, 2 skipped in 6.97s ========================",
+    "skips": [
+      "optional scitex peer unavailable",
+      "optional scitex_capture peer unavailable"
+    ],
+    "audit": "0 errors, 0 masked exceptions; warning findings remain",
+    "wheel_probe": {
+      "status": "PASS",
+      "package": "/home/ywatanabe/proj/scitex-browser/.dev/workflow-repair/wheel-env/lib/python3.12/site-packages/scitex_browser/__init__.py",
+      "browser": "Playwright Chromium",
+      "scope": "normally installed wheel, real loopback HTTP, rendered content extraction",
+      "title": "Offline integration",
+      "text": "Browser integration OK"
+    }
+  },
+  "publication": "Not performed. Private same-version 0.1.15 artifacts must not be uploaded.",
+  "draft_pr_26": "Unmodified and remains draft; release qualification is separate."
+}

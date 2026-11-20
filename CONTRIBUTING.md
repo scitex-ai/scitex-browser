@@ -34,6 +34,9 @@ pip install -e ".[dev]"
 - `main` — stable releases only. Do not push directly.
 - `develop` — integration branch. PRs target here.
 - Feature branches — create from `develop`, name as `feature/<description>`.
+- Merge validated features into `develop`, then promote `develop` into `main` through PRs.
+- Keep `develop` at least as advanced as `main`; synchronize release history through PRs.
+- Preserve the release workflow filename and `pypi` environment used by Trusted Publishing.
 
 ```bash
 git checkout develop
