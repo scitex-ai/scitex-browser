@@ -24,12 +24,10 @@ import os
 import sys
 from typing import Optional
 
+import scitex_logging as _output_logging
 from playwright.async_api import Page
 
-import scitex_logging as logging
-
-logger = logging.getLogger(__name__)
-console = logging.getPlainConsole()
+_output = _output_logging.getPlainConsole(__name__)
 
 
 class GoogleAuthHelper:
@@ -64,9 +62,7 @@ class GoogleAuthHelper:
     def _log(self, msg: str):
         """Print debug message if debug mode is enabled."""
         if self.debug:
-            # stderr preserved (tested contract); PlainConsole.emit keeps the
-            # PS-220-compliant logging API while writing to stderr.
-            console.emit(f"[GoogleAuth] {msg}", stream=sys.stderr)
+            _output.emit(f"[GoogleAuth] {msg}", stream=sys.stderr)
 
     async def login_via_google_button(
         self,

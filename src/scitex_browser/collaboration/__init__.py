@@ -4,7 +4,6 @@
 # File: ./src/scitex/browser/collaboration/__init__.py
 # ----------------------------------------
 """
-
 scitex_browser.collaboration - Interactive browser automation for AI-human teams.
 
 This is a NEW module that does NOT affect existing scitex.browser functionality.
@@ -19,11 +18,9 @@ Features:
 Version: 0.1.0-alpha (experimental)
 """
 
+import scitex_logging as _output_logging
+
 __experimental__ = True
-
-import scitex_logging as logging
-
-logger = logging.getLogger(__name__)
 
 # Re-export auth helpers for convenience
 from scitex_browser.auth import GoogleAuthHelper, google_login
@@ -46,6 +43,9 @@ __all__ = [
 
 
 # Compatibility check - ensure we don't break existing code
+_output = _output_logging.getPlainConsole(__name__)
+
+
 def _check_compatibility():
     """Verify existing scitex.browser still works."""
     try:
@@ -63,6 +63,6 @@ def _check_compatibility():
 
 _check_compatibility()
 
-logger.info("✅ scitex_browser.collaboration loaded (experimental)")
+_output.emit("✅ scitex_browser.collaboration loaded (experimental)")
 
 # EOF

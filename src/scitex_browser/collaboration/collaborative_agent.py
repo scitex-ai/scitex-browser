@@ -19,15 +19,14 @@ import asyncio
 import signal
 from typing import Callable, Dict, Optional
 
+import scitex_logging as _output_logging
 from playwright.async_api import Page
 
 from scitex_browser.debugging import browser_logger
 
 from .interactive_panel import InteractivePanel
-import scitex_logging as logging
 
-logger = logging.getLogger(__name__)
-console = logging.getPlainConsole()
+_output = _output_logging.getPlainConsole(__name__)
 
 
 class CollaborativeAgent:
@@ -42,7 +41,7 @@ class CollaborativeAgent:
         # Define what to do when user provides email
         @agent.on_input("email")
         async def handle_email(email):
-            logger.info(f"Got email: {email}")
+            print(f"Got email: {email}")
             # Automatically navigate to login
 
         await agent.run()  # Runs forever, watching
@@ -87,15 +86,15 @@ class CollaborativeAgent:
         """
         self.running = True
 
-        console.print("🤖 Collaborative agent started")
-        console.print("   Watching browser for user actions...")
-        console.print("   Press Ctrl+C to stop")
+        _output.emit("🤖 Collaborative agent started")
+        _output.emit("   Watching browser for user actions...")
+        _output.emit("   Press Ctrl+C to stop")
 
         # Signal handling
         loop = asyncio.get_event_loop()
 
         def stop_agent(sig, frame):
-            console.print("\n\n🛑 Stopping agent...")
+            _output.emit("\n\n🛑 Stopping agent...")
             self.running = False
 
         signal.signal(signal.SIGINT, stop_agent)
@@ -108,10 +107,10 @@ class CollaborativeAgent:
                 await asyncio.sleep(self.check_interval)
 
         except Exception as e:
-            logger.warning(f"❌ Agent error: {e}")
+            _output.emit(f"❌ Agent error: {e}")
 
         finally:
-            console.print("✅ Agent stopped")
+            _output.emit("✅ Agent stopped")
 
     async def _check_changes(self):
         """Check for changes and trigger handlers."""

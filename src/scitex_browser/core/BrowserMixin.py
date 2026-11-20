@@ -6,6 +6,8 @@ from __future__ import annotations
 
 import os
 
+import scitex_logging as _output_logging
+
 __FILE__ = __file__
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
@@ -27,9 +29,8 @@ try:
 except ImportError:
     CookieAutoAcceptor = None
 
-import scitex_logging as logging
 
-logger = logging.getLogger(__name__)
+_output = _output_logging.getPlainConsole(__name__)
 
 
 class BrowserMixin:
@@ -265,12 +266,12 @@ def main(args):
 
         # Scrape a page
         content = await browser.scrape_async("https://example.com")
-        logger.info(f"✓ Fetched {len(content)} bytes")
-        logger.info(f"✓ Open tabs: {len(browser.pages)}")
+        _output.emit(f"✓ Fetched {len(content)} bytes")
+        _output.emit(f"✓ Open tabs: {len(browser.pages)}")
 
         # Close
         await browser.close_all_pages()
-        logger.info("✓ Demo complete")
+        _output.emit("✓ Demo complete")
 
     asyncio.run(demo())
     return 0
@@ -291,7 +292,6 @@ def run_main() -> None:
     import sys
 
     import matplotlib.pyplot as plt
-
     import scitex as stx
 
     args = parse_args()

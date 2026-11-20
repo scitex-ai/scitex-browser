@@ -7,6 +7,8 @@ from __future__ import annotations
 
 import os
 
+import scitex_logging as _output_logging
+
 __FILE__ = __file__
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
@@ -28,6 +30,9 @@ except ImportError:
 from .ZenRowsAPIClient import ZenRowsAPIBrowser
 
 logger = logging.getLogger(__name__)
+
+
+_output = _output_logging.getPlainConsole(__name__)
 
 
 class ZenRowsRemoteScholarBrowserManager:
@@ -317,9 +322,9 @@ if __name__ == "__main__":
 
         async def test_browser_async(browser_type, browser_manager, use_auth=False):
             """Test a browser with all test sites."""
-            logger.info(f"\n{'=' * 60}")
-            logger.info(f"Testing: {browser_type}")
-            logger.info("=" * 60)
+            _output.emit(f"\n{'=' * 60}")
+            _output.emit(f"Testing: {browser_type}")
+            _output.emit("=" * 60)
 
             results = {}
 
@@ -339,7 +344,7 @@ if __name__ == "__main__":
                     pages_via_context = False
 
                 for test_name, url, description in test_sites:
-                    logger.info(f"\n{test_name}: {description}")
+                    _output.emit(f"\n{test_name}: {description}")
 
                     page = None
                     try:
@@ -356,14 +361,14 @@ if __name__ == "__main__":
                         if test_name in ["ip", "headers"]:
                             # Extract text content
                             content = await page.text_content("pre")
-                            logger.info(f"Result: {content.strip()[:200]}...")
+                            _output.emit(f"Result: {content.strip()[:200]}...")
 
                             # Parse IP if available
                             if test_name == "ip":
                                 try:
                                     ip_data = json.loads(content)
                                     results["ip"] = ip_data.get("origin", "Unknown")
-                                    logger.info(f"Detected IP: {results['ip']}")
+                                    _output.emit(f"Detected IP: {results['ip']}")
                                 except:
                                     results["ip"] = "Parse error"
                         else:
@@ -386,12 +391,12 @@ if __name__ == "__main__":
                             / f"{browser_type.lower().replace(' ', '_')}_{test_name}.png"
                         )
                         await page.screenshot(path=screenshot_path, full_page=True)
-                        logger.info(f"Screenshot saved: {screenshot_path}")
+                        _output.emit(f"Screenshot saved: {screenshot_path}")
 
                         results[test_name] = "Success"
 
                     except Exception as e:
-                        logger.warning(f"Failed: {str(e)[:100]}...")
+                        _output.emit(f"Failed: {str(e)[:100]}...")
                         results[test_name] = f"Failed: {str(e)[:50]}"
                     finally:
                         if page:
@@ -402,7 +407,7 @@ if __name__ == "__main__":
                     await browser_manager.close()
 
             except Exception as e:
-                logger.warning(f"Browser initialization failed: {str(e)}")
+                _output.emit(f"Browser initialization failed: {str(e)}")
                 results["error"] = str(e)
 
             return results
@@ -417,7 +422,7 @@ if __name__ == "__main__":
         all_results["Regular Browser"] = {"error": "Not available"}
 
         # Test 2: ZenRows Remote Browser (default settings)
-        logger.info("\nInitializing ZenRows Remote Browser...")
+        _output.emit("\nInitializing ZenRows Remote Browser...")
         try:
             zenrows_manager = ZenRowsRemoteScholarBrowserManager()
             zenrows_results = await test_browser_async(
@@ -425,11 +430,11 @@ if __name__ == "__main__":
             )
             all_results["ZenRows Remote"] = zenrows_results
         except Exception as e:
-            logger.warning(f"ZenRows Remote test failed: {e}")
+            _output.emit(f"ZenRows Remote test failed: {e}")
             all_results["ZenRows Remote"] = {"error": str(e)}
 
         # Test 3: ZenRows Remote Browser with country (if supported)
-        logger.info("\nInitializing ZenRows Remote Browser with AU country...")
+        _output.emit("\nInitializing ZenRows Remote Browser with AU country...")
         try:
             zenrows_au_manager = ZenRowsRemoteScholarBrowserManager(proxy_country="au")
             zenrows_au_results = await test_browser_async(
@@ -437,57 +442,57 @@ if __name__ == "__main__":
             )
             all_results["ZenRows Remote AU"] = zenrows_au_results
         except Exception as e:
-            logger.warning(f"ZenRows Remote AU test failed: {e}")
+            _output.emit(f"ZenRows Remote AU test failed: {e}")
             all_results["ZenRows Remote AU"] = {"error": str(e)}
 
         # Test 4: Test the API client as well
-        logger.info("\nTesting ZenRows API Client for comparison...")
+        _output.emit("\nTesting ZenRows API Client for comparison...")
         try:
             from .ZenRowsAPIClient import ZenRowsAPIBrowser as ZenRowsAPIClient
 
-            logger.info("Testing basic API request...")
+            _output.emit("Testing basic API request...")
             api_client = ZenRowsAPIClient()
             response = api_client.request("https://httpbin.org/ip")
             if response.status_code == 200:
                 ip_data = json.loads(response.text)
-                logger.info(f"API Client IP (Basic): {ip_data.get('origin', 'Unknown')}")
-                logger.info(
+                _output.emit(f"API Client IP (Basic): {ip_data.get('origin', 'Unknown')}")
+                _output.emit(
                     f"API Cost: {response.headers.get('X-Request-Cost', 'Unknown')} credits"
                 )
                 all_results["API Client Basic"] = {
                     "ip": ip_data.get("origin", "Unknown")
                 }
 
-            logger.info("\nTesting API with Australian proxy...")
+            _output.emit("\nTesting API with Australian proxy...")
             api_client_au = ZenRowsAPIClient(default_country="au")
             response_au = api_client_au.request("https://httpbin.org/ip")
             if response_au.status_code == 200:
                 ip_data_au = json.loads(response_au.text)
-                logger.info(f"API Client IP (AU): {ip_data_au.get('origin', 'Unknown')}")
-                logger.info(
+                _output.emit(f"API Client IP (AU): {ip_data_au.get('origin', 'Unknown')}")
+                _output.emit(
                     f"API Cost: {response_au.headers.get('X-Request-Cost', 'Unknown')} credits"
                 )
                 all_results["API Client AU"] = {
                     "ip": ip_data_au.get("origin", "Unknown")
                 }
         except Exception as e:
-            logger.warning(f"API Client test failed: {e}")
+            _output.emit(f"API Client test failed: {e}")
             all_results["API Client"] = {"error": str(e)}
 
         # Print summary
-        logger.info("\n" + "=" * 60)
-        logger.info("SUMMARY REPORT")
-        logger.info("=" * 60)
+        _output.emit("\n" + "=" * 60)
+        _output.emit("SUMMARY REPORT")
+        _output.emit("=" * 60)
 
-        logger.info("\nIP Addresses detected:")
+        _output.emit("\nIP Addresses detected:")
         for method, data in all_results.items():
             if isinstance(data, dict):
                 ip = data.get("ip", "Not tested")
             else:
                 ip = "Error"
-            logger.info(f"  {method:.<35} {ip}")
+            _output.emit(f"  {method:.<35} {ip}")
 
-        logger.info(f"\nScreenshots saved in: {screenshots_dir.absolute()}")
+        _output.emit(f"\nScreenshots saved in: {screenshots_dir.absolute()}")
 
         # Save summary report
         summary_path = screenshots_dir / "test_summary.json"
@@ -504,20 +509,87 @@ if __name__ == "__main__":
                 f,
                 indent=2,
             )
-        logger.info(f"Summary report saved: {summary_path}")
+        _output.emit(f"Summary report saved: {summary_path}")
 
         # Comparison notes
-        logger.info("\n" + "=" * 60)
-        logger.info("COMPARISON NOTES:")
-        logger.info("=" * 60)
-        logger.info("1. Regular Browser: Uses your local IP, no proxy")
-        logger.info("2. ZenRows Remote: Cloud browser with built-in anti-bot")
-        logger.info("3. ZenRows Remote AU: Attempts Australian IP (experimental)")
-        logger.info("4. API Client Basic: Direct API without country routing")
-        logger.info("5. API Client AU: Guaranteed Australian IP via API mode")
-        logger.info("\nRecommendation: Use API Client for country-specific needs,")
-        logger.info("Remote Browser for complex JavaScript sites.")
+        _output.emit("\n" + "=" * 60)
+        _output.emit("COMPARISON NOTES:")
+        _output.emit("=" * 60)
+        _output.emit("1. Regular Browser: Uses your local IP, no proxy")
+        _output.emit("2. ZenRows Remote: Cloud browser with built-in anti-bot")
+        _output.emit("3. ZenRows Remote AU: Attempts Australian IP (experimental)")
+        _output.emit("4. API Client Basic: Direct API without country routing")
+        _output.emit("5. API Client AU: Guaranteed Australian IP via API mode")
+        _output.emit("\nRecommendation: Use API Client for country-specific needs,")
+        _output.emit("Remote Browser for complex JavaScript sites.")
 
+    # async def main():
+    #     """Example usage of ZenRowsRemoteScholarBrowserManager."""
+    #     # Get API key from environment or use a test key
+    #     api_key = os.getenv(
+    #         "SCITEX_SCHOLAR_ZENROWS_API_KEY", "your_api_key_here"
+    #     )
+
+    #     # Initialize remote browser manager
+    #     async with ZenRowsRemoteScholarBrowserManager(api_key=api_key) as manager:
+    #         try:
+    #             # Connect to ZenRows Scraping Browser
+    #             browser = await manager.connect()
+    #             print("Connected to ZenRows Scraping Browser")
+
+    #             # Get the browser context
+    #             context = await manager.get_context()
+
+    #             # Create a new page
+    #             page = await context.new_page()
+
+    #             # Navigate to a site with anti-bot protection
+    #             print("Navigating to protected site...")
+    #             await page.goto("https://httpbin.org/headers", wait_until="domcontentloaded", timeout=30000)
+
+    #             # Get page content
+    #             content = await page.content()
+    #             print("Page loaded successfully")
+
+    #             # Check headers to verify we're using ZenRows
+    #             import json
+
+    #             try:
+    #                 # Extract JSON from pre tag
+    #                 pre_element = await page.query_selector("pre")
+    #                 if pre_element:
+    #                     text = await pre_element.inner_text()
+    #                     headers = json.loads(text)
+    #                     print("\nRequest headers seen by server:")
+    #                     for key, value in headers.get("headers", {}).items():
+    #                         print(f"  {key}: {value}")
+    #             except Exception as e:
+    #                 print(f"Could not parse headers: {e}")
+
+    #             # Example: Navigate to a site that requires authentication
+    #             print("\nNavigating to academic site...")
+    #             await page.goto("https://scholar.google.com", wait_until="domcontentloaded", timeout=30000)
+    #             await page.wait_for_timeout(2000)
+
+    #             # Take screenshot
+    #             await page.screenshot(path="zenrows_remote_screenshot.png")
+    #             print("Screenshot saved as zenrows_remote_screenshot.png")
+
+    #             # Example: Handle dynamic content
+    #             print("\nTesting dynamic content handling...")
+    #             await page.goto("https://example.com", wait_until="domcontentloaded", timeout=30000)
+    #             title = await page.title()
+    #             print(f"Page title: {title}")
+
+    #         except Exception as e:
+    #             print(f"Error during browser operation: {e}")
+    #             import traceback
+
+    #             traceback.print_exc()
+
+    #     print("\nZenRows browser session closed")
+
+    # Run the example
     asyncio.run(main())
 
 # python -m scitex.scholar.browser.remote._ZenRowsRemoteScholarBrowserManager

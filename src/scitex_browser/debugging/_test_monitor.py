@@ -30,14 +30,16 @@ Usage in conftest.py:
 from datetime import datetime
 from pathlib import Path
 from typing import TYPE_CHECKING, Optional
-import scitex_logging as logging
 
-logger = logging.getLogger(__name__)
+import scitex_logging as _output_logging
 
 from scitex_browser._state import test_monitor_dir
 
 if TYPE_CHECKING:
     from playwright.sync_api import Page
+
+
+_output = _output_logging.getPlainConsole(__name__)
 
 
 class TestMonitor:
@@ -89,7 +91,7 @@ class TestMonitor:
             from scitex_capture import CaptureManager
         except ImportError:
             if self.verbose:
-                logger.info("[TestMonitor] scitex.capture not available")
+                _output.emit("[TestMonitor] scitex.capture not available")
             return None
 
         # Generate session ID
@@ -115,7 +117,7 @@ class TestMonitor:
         )
 
         if self.verbose:
-            logger.info(f"[TestMonitor] Started: {session_dir} (interval: {self.interval}s)")
+            _output.emit(f"[TestMonitor] Started: {session_dir} (interval: {self.interval}s)")
 
         return self.session_id
 
@@ -132,7 +134,7 @@ class TestMonitor:
         status = self.get_status()
 
         if self.verbose and self._worker:
-            logger.info(f"[TestMonitor] Stopped: {self._worker.screenshot_count} screenshots")
+            _output.emit(f"[TestMonitor] Stopped: {self._worker.screenshot_count} screenshots")
 
         return status
 
@@ -193,7 +195,7 @@ class TestMonitor:
             )
         except ImportError:
             if self.verbose:
-                logger.info("[TestMonitor] GIF creation requires scitex.capture")
+                _output.emit("[TestMonitor] GIF creation requires scitex.capture")
             return None
 
     def get_screenshots(self) -> list:
@@ -229,12 +231,7 @@ def create_test_monitor_fixture(
     Returns:
         A pytest fixture function
     """
-    try:
-        import pytest
-    except ImportError:  # test-only helper; pytest lives in the dev extra
-        pytest = None  # type: ignore[assignment]
-        if pytest is None:  # pragma: no cover
-            raise ImportError("pytest is required for this test helper; install scitex-browser[dev]")
+    import pytest
 
     @pytest.fixture
     def test_monitor(request):
@@ -251,7 +248,7 @@ def create_test_monitor_fixture(
         if auto_gif:
             gif_path = monitor.create_gif()
             if gif_path:
-                logger.info(f"[TestMonitor] GIF created: {gif_path}")
+                _output.emit(f"[TestMonitor] GIF created: {gif_path}")
 
     return test_monitor
 

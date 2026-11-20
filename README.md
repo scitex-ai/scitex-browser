@@ -36,6 +36,7 @@
 
 - **Debugging**: Visual cursor feedback, popup logging, failure capture, test monitoring
 - **PDF**: Chrome PDF viewer detection, save-as-PDF automation
+- **Content**: Rendered HTML/text capture and chat thread extraction
 - **Interaction**: Click/fill with fallbacks, popup handling
 - **Stealth**: Human-like behavior simulation, stealth browser management
 - **Remote**: ZenRows API integration, CAPTCHA handling
@@ -47,6 +48,20 @@
 ```bash
 pip install scitex-browser
 ```
+
+## Capture rendered content
+
+Install the browser binary with `python -m playwright install chromium`, then:
+
+```python
+from scitex_browser import get_text, save_as_html
+
+text = get_text("https://example.com")
+save_as_html("https://example.com", "example.html")
+```
+
+The async equivalents are `get_text_async` and `save_as_html_async`. For pages
+that require an existing login, pass `cdp_url` for a browser session you own.
 
 ## Architecture
 

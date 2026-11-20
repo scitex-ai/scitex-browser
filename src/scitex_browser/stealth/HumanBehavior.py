@@ -7,6 +7,8 @@ from __future__ import annotations
 
 import os
 
+import scitex_logging as _output_logging
+
 __FILE__ = "./src/scitex/browser/stealth/HumanBehavior.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
@@ -16,13 +18,12 @@ __FILE__ = __file__
 import asyncio
 import random
 from typing import Optional
-import scitex_logging as logging
-
-logger = logging.getLogger(__name__)
 
 from playwright.async_api import Page
 
 from ..debugging import browser_logger
+
+_output = _output_logging.getPlainConsole(__name__)
 
 
 class HumanBehavior:
@@ -268,15 +269,15 @@ def main(args):
 
             # Navigate with human behavior
             await page.goto("https://www.google.com")
-            logger.info("✓ Navigated to page")
+            _output.emit("✓ Navigated to page")
 
             # Simulate human reading the page
             await HumanBehavior.reading_delay_async(500)
-            logger.info("✓ Reading delay complete")
+            _output.emit("✓ Reading delay complete")
 
             # Random mouse movements
             await HumanBehavior.random_mouse_movement_async(page)
-            logger.info("✓ Random mouse movements complete")
+            _output.emit("✓ Random mouse movements complete")
 
             # Type in search box
             search_box = page.locator('input[name="q"]')
@@ -285,9 +286,9 @@ def main(args):
                 await HumanBehavior.type_text_async(
                     page, selector='input[name="q"]', text="test search"
                 )
-                logger.info("✓ Human-like typing complete")
+                _output.emit("✓ Human-like typing complete")
 
-            logger.info("✓ Demo complete")
+            _output.emit("✓ Demo complete")
             await browser.close()
 
     asyncio.run(demo())
@@ -309,7 +310,6 @@ def run_main() -> None:
     import sys
 
     import matplotlib.pyplot as plt
-
     import scitex as stx
 
     args = parse_args()

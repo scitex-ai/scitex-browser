@@ -7,6 +7,12 @@ versions follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+- Rendered HTML/text capture through `fetch_content`, `get_text`, `get_html`,
+  `save_as_html`, and `save_as_text`, with matching async functions.
+- Chat thread extraction through an existing CDP browser session, with
+  transcript formatting and explicit extraction errors.
+
 ## [0.1.15]
 
 ### Added

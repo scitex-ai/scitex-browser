@@ -1,12 +1,12 @@
 name: CLA Assistant
 
-# Org-level reusable-workflow caller (scitex-ai/.github#claremont, 2026-07-10).
+# PILOT: org-level reusable-workflow caller (scitex-ai/.github, 2026-07-10).
 # Triggers/permissions preserved verbatim from the prior local file.
-# Reusable defaults (owner_login=ywatanabe1989,
-# owner_allowlist="bot*,ywatanabe1989", default_branch=main) match this
-# repo's prior hardcoded values, so no input overrides are needed.
-# The PAT remap (CLA_PERSONAL_ACCESS_TOKEN -> GH_PERSONAL_ACCESS_TOKEN)
-# is expressed as the explicit secret mapping below, never `secrets: inherit`.
+# Reusable workflow defaults (owner_login=ywatanabe1989,
+# default_branch=main) already match this repo's prior hardcoded values.
+# owner_allowlist differs from the reusable default ("bot*,ywatanabe1989")
+# — this repo additionally allowlists "LLEmacs" — so it is passed as an
+# explicit `with:` override below.
 
 on:
   issue_comment:
@@ -23,9 +23,7 @@ permissions:
 jobs:
   call:
     uses: scitex-ai/.github/.github/workflows/cla.yml@main
-    # Pass the ONE secret the callee declares, never `secrets: inherit`.
-    # This job is startable by an outsider (`issue_comment`,
-    # `pull_request_target`); inheriting would forward every secret this
-    # repo holds into it.
+    with:
+      owner_allowlist: "bot*,ywatanabe1989,LLEmacs"
     secrets:
       GH_PERSONAL_ACCESS_TOKEN: ${{ secrets.GH_PERSONAL_ACCESS_TOKEN }}

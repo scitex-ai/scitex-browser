@@ -7,6 +7,8 @@ from __future__ import annotations
 
 import os
 
+import scitex_logging as _output_logging
+
 __FILE__ = "./src/scitex/browser/stealth/StealthManager.py"
 __DIR__ = os.path.dirname(__FILE__)
 # ----------------------------------------
@@ -16,9 +18,8 @@ __FILE__ = __file__
 import asyncio
 import random
 
-from playwright.async_api import Browser, BrowserContext, Page
-
 import scitex_logging as logging
+from playwright.async_api import Browser, BrowserContext, Page
 
 logger = logging.getLogger(__name__)
 
@@ -33,6 +34,9 @@ logger = logging.getLogger(__name__)
 # WebGL Vendor	Google Inc. (AMD)
 # WebGL Renderer	ANGLE (AMD, AMD Radeon(TM) Graphics (0x00001636) Direct3D11 vs_5_0 ps_5_0, D3D11)
 # Broken Image Dimensions	16x16
+
+
+_output = _output_logging.getPlainConsole(__name__)
 
 
 class StealthManager:
@@ -937,7 +941,7 @@ def main(args):
             await stealth_manager.human_delay_async(2000, 3000)
 
             await page.screenshot(path="/tmp/stealth_test.png")
-            logger.info("✓ Stealth test complete: /tmp/stealth_test.png")
+            _output.emit("✓ Stealth test complete: /tmp/stealth_test.png")
 
             await browser.close()
 
@@ -960,7 +964,6 @@ def run_main() -> None:
     import sys
 
     import matplotlib.pyplot as plt
-
     import scitex as stx
 
     args = parse_args()

@@ -16,17 +16,15 @@ authors = [
 ]
 dependencies = [
     "aiohttp",
-    # matplotlib is imported at runtime (function-level) by the debug-viz
-    # helpers in interaction/, debugging/ and stealth/ (click maps, grids,
-    # highlights). Without it a fresh install breaks on those paths.
-    "matplotlib>=3.8",
     # playwright is imported at module level throughout browser automation code.
     # Without it, `pip install scitex-browser` yields an unimportable package.
     "playwright>=1.40.0",
     # scitex-logging provides .success/.fail logger methods used throughout
     # ChromeProfileManager, interaction/, pdf/, remote/, stealth/, etc.
-    "scitex-logging>=0.1.0",
+    "scitex-logging>=0.3.0",
     "scitex-config>=0.3.0",
+    "matplotlib",
+    "pytest",
 ]
 
 [project.optional-dependencies]
@@ -82,7 +80,3 @@ target-version = "py310"
 [tool.ruff.lint]
 select = ["E", "F", "W", "I"]
 ignore = ["E501"]
-
-dependencies = [
-    "scitex-dev>=0.17.8",
-]

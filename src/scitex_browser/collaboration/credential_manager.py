@@ -14,10 +14,10 @@ import getpass
 import os
 from typing import Dict, Optional
 
+import scitex_logging as _output_logging
 from playwright.async_api import Page
-import scitex_logging as logging
 
-console = logging.getPlainConsole()
+_output = _output_logging.getPlainConsole(__name__)
 
 
 class CredentialManager:
@@ -70,7 +70,7 @@ class CredentialManager:
         # Check cache first
         if name in self.cache:
             if self.verbose:
-                console.print(f"🔑 Using cached {name}")
+                _output.emit(f"🔑 Using cached {name}")
             return self.cache[name]
 
         # Try environment variable
@@ -79,7 +79,7 @@ class CredentialManager:
             if value:
                 if self.verbose:
                     display_value = "***" if mask else value
-                    console.print(f"🔑 Using {name} from ${env_var}: {display_value}")
+                    _output.emit(f"🔑 Using {name} from ${env_var}: {display_value}")
                 self.cache[name] = value
                 return value
 
@@ -115,8 +115,8 @@ class CredentialManager:
         """Prompt user in terminal."""
         prompt_text = prompt_text or name
 
-        console.print(f"\n🔑 Credential needed: {name}")
-        console.print("   (No environment variable found)")
+        _output.emit(f"\n🔑 Credential needed: {name}")
+        _output.emit("   (No environment variable found)")
 
         if mask:
             value = getpass.getpass(f"   Enter {prompt_text}: ")
@@ -134,7 +134,7 @@ class CredentialManager:
         """Prompt user in browser window."""
         prompt_text = prompt_text or name
 
-        console.print(f"\n🔑 Asking for {name} in browser...")
+        _output.emit(f"\n🔑 Asking for {name} in browser...")
 
         # Wait for page to be ready
         try:
@@ -189,7 +189,7 @@ class CredentialManager:
         """Clear credential cache."""
         self.cache = {}
         if self.verbose:
-            console.print("🔑 Credential cache cleared")
+            _output.emit("🔑 Credential cache cleared")
 
 
 # EOF

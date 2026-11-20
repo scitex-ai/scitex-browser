@@ -35,9 +35,7 @@ def test_cross_package_import_resolves_to_real_module(module_name):
     """Importing scitex-browser's declared cross-package dependency must succeed."""
     # Arrange
     expected_name = module_name
-    # Act: skip on the ROOT (peer legitimately absent in a lean install),
-    # then HARD-import the FULL path so a renamed submodule fails loudly
-    # instead of skipping green (PS-140).
+    # Act
     pytest.importorskip(module_name.split(".")[0])
     module = importlib.import_module(module_name)
     # Assert
