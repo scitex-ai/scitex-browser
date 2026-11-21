@@ -9,6 +9,11 @@ tags: [scitex-browser-auth-stealth-remote]
 
 ## auth — Google OAuth
 
+For an account with interactive sign-in or MFA, use the dedicated profile
+workflow in [Session Lifecycle](10_session-lifecycle.md#authenticated-windows-chrome-from-wsl).
+Headless mode keeps the work off the desktop. Set up authentication first in
+the regular browser window with the account owner.
+
 ```python
 from scitex_browser.auth import GoogleAuthHelper, google_login
 
