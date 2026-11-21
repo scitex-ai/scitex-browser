@@ -1,9 +1,9 @@
 ---
 name: scitex-browser
 description: |
-  [WHAT] Playwright wrappers for scientific web scraping + AI-agent browsing — adds debugging visuals (cursor/click overlays, step markers, grid), popup/cookie handling, PDF capture (including the notoriously-hidden Chrome PDF viewer), resilient click/fill with selector fallbacks, test-monitor fixtures, and browser-session management. Public API (~36 symbols) — sessions (`SyncBrowserSession`…
-  [WHEN] Use whenever the user asks to "save a webpage as PDF", "download from Chrome's PDF viewer", "click this element with fallback selectors", "handle GDPR/cookie popups", "add cursor/click overlays for debug video", "collect browser console logs DevTools-style", "wrap a test with a browser-session fixture", "set up failure-artifact capture", or mentions `scitex.
-  [HOW] browser`, Playwright for scientific scraping, AI-agent browser automation.
+  [WHAT] Playwright wrappers for rendered content and PDF capture, resilient browser interactions, session management, and test diagnostics.
+  [WHEN] Use for browser automation with scitex-browser, including reading authenticated pages, handling popups, and capturing browser-test failures.
+  [HOW] Use the Python API. For authenticated Windows Chrome from WSL, start with the isolated browser workflow in Session Lifecycle.
 tags: [scitex-browser]
 primary_interface: python
 interfaces:
@@ -51,7 +51,7 @@ rule and empirical verification table.
 * [01_installation](01_installation.md) — pip install + `playwright install`
 * [02_quick-start](02_quick-start.md) — Minimal save-as-pdf / session / visuals
 * [03_python-api](03_python-api.md) — Public symbols grouped by sub-package
-* [10_session-lifecycle](10_session-lifecycle.md) — Sync/shared sessions, fixtures
+* [10_session-lifecycle](10_session-lifecycle.md) — Fresh and shared sessions, authenticated Windows Chrome from WSL, fixtures
 
 ### Sub-packages
 
