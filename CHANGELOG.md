@@ -7,6 +7,24 @@ versions follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.1.17] - 2026-11-27
+
+First PyPI release since 0.1.15. `v0.1.16` was tagged but never published to
+PyPI: its tag-triggered release workflow failed in the test job before build,
+because `.github/ci/exec-in-sif.sh` hardcoded Spartan HPC paths
+(`/data/gpfs/projects/punim0264/...`) that do not exist on the current runners.
+0.1.17 ships everything listed under 0.1.16 below.
+
+### Changed
+- Release CI: ported scitex-clew's tag-driven release pipeline and its
+  `.github/ci` scripts (Postgres-specific parts removed). Tag tests run natively
+  under uv with job-owned state (`native-job.sh`); build and publish run in the
+  digest-verified CI SIF (`exec-in-sif.sh`) with no host-specific paths; the
+  build checks that the tag owns the commit and that wheel/sdist/installed
+  metadata match `pyproject.toml` (`check-dist.py`) before OIDC trusted
+  publishing (`publish-oidc.py`).
+- Removed the Spartan-specific `run-in-sif.sh` test entry point.
+
 ## [0.1.16] - 2026-11-27
 
 ### Fixed
