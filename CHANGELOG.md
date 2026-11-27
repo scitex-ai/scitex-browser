@@ -7,6 +7,8 @@ versions follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.1.16] - 2026-11-27
+
 ### Fixed
 - Configure subprocess coverage via coverage.py `patch = ["subprocess"]` instead of installing a `.pth` hook into site-packages or overwriting `COVERAGE_PROCESS_START` / `COVERAGE_FILE` at test collection time.
 
