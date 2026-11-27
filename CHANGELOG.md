@@ -7,6 +7,9 @@ versions follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Fixed
+- Configure subprocess coverage via coverage.py `patch = ["subprocess"]` instead of installing a `.pth` hook into site-packages or overwriting `COVERAGE_PROCESS_START` / `COVERAGE_FILE` at test collection time.
+
 ### Added
 - Rendered HTML/text capture through `fetch_content`, `get_text`, `get_html`,
   `save_as_html`, and `save_as_text`, with matching async functions.
