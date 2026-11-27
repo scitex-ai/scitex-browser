@@ -59,6 +59,7 @@ rule and empirical verification table.
 * [12_pdf-capture](12_pdf-capture.md) — `save_as_pdf`, Chrome PDF viewer
 * [13_interaction](13_interaction.md) — Resilient click/fill, popup handling
 * [14_auth-stealth-remote](14_auth-stealth-remote.md) — OAuth, stealth, ZenRows, CAPTCHA
+* [15_flows-dedicated-profile](15_flows-dedicated-profile.md) — Dedicated-profile launcher; GitHub fine-grained token flow (value to a callback only)
 
 
 ## Environment
