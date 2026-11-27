@@ -2,7 +2,7 @@
 description: |
   [TOPIC] Reusable flows on a dedicated signed-in profile
   [DETAILS] Launch or attach a dedicated Chrome profile with loopback DevTools (WSL to Windows included), open a private tab, and create GitHub fine-grained tokens with the value handed only to a callback.
-tags: [scitex-browser-flows]
+tags: [scitex-browser-flows-dedicated-profile]
 ---
 
 # Flows on a dedicated profile
